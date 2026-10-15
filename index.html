@@ -92,7 +92,24 @@ section.day.now h2::before{content:""; width:10px; height:10px; border-radius:50
 .title{all:unset; cursor:pointer; font-weight:600; font-size:17px; line-height:1.25; display:block; text-wrap:pretty}
 .title:hover{text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:3px}
 .title:focus-visible{outline:2px solid var(--azul); outline-offset:2px}
-.venue{color:var(--muted); margin-top:2px; font-size:14px}
+.venue{all:unset; cursor:pointer; color:var(--muted); margin-top:2px; font-size:14px; display:inline-flex; flex-wrap:wrap; align-items:baseline; gap:0 4px}
+.venue:hover b{text-decoration:underline; text-underline-offset:3px}
+.venue:focus-visible{outline:2px solid var(--azul); outline-offset:2px; border-radius:3px}
+.chev{display:inline-block; font-size:12px; color:var(--azul); transition:transform .18s ease}
+.ev.open .chev{transform:rotate(180deg)}
+.ev{cursor:pointer}
+.ev .acts, .ev .det{cursor:auto}
+.sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+.addr{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px 16px; padding-bottom:10px; margin-bottom:10px; border-bottom:1px dashed var(--line)}
+.addr-txt{display:grid; gap:1px; min-width:0}
+.addr-txt .lbl{font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); font-weight:600}
+.addr-txt strong{font-size:16px; font-weight:600; user-select:all}
+.addr-txt span:last-child{color:var(--muted)}
+.addr-btns{display:flex; gap:6px; flex-wrap:wrap}
+a.act{text-decoration:none; color:var(--ink)}
+.det:not([hidden]){animation:drop .18s ease-out}
+@keyframes drop{from{opacity:0; transform:translateY(-6px)}}
+@media (prefers-reduced-motion: reduce){ .det:not([hidden]){animation:none} .chev{transition:none} }
 .venue b{color:var(--ink); font-weight:500}
 .meta{display:flex; flex-wrap:wrap; gap:6px; margin-top:7px}
 .tagp{font-size:12px; padding:2px 8px; border-radius:4px; background:var(--azul-soft); color:var(--ink); display:inline-flex; align-items:center; gap:5px; font-weight:500}
@@ -517,11 +534,13 @@ function evRow(x){
   const src = srcUrl(e.s);
   const ig = v.ig ? `<a href="https://www.instagram.com/${v.ig}/" target="_blank" rel="noopener">@${esc(v.ig)}</a>` : "";
   const timeHtml = e.tbd ? `<span class="tbd" title="horário ainda não divulgado">a&nbsp;def.</span>` : `${e.ap?'<span class="ap" title="horário aproximado">≈</span>':""}${hhmm(x.start)}`;
-  return `<article class="ev ${gg?"going":""}" data-key="${x.key}">
+  const did = "det-"+x.key.replace(/[^a-z0-9]/gi,"-");
+  const full = v.a+", "+v.b.split(" · ")[0]+", Rio de Janeiro";
+  return `<article class="ev ${gg?"going":""} ${op?"open":""}" data-key="${x.key}">
     <div class="time">${timeHtml}</div>
     <div class="main">
-      <button class="title" data-open="${x.key}" aria-expanded="${op}">${esc(e.t)}</button>
-      <div class="venue"><b>${esc(v.n)}</b> · ${esc(v.b)}</div>
+      <button class="title" data-open="${x.key}" aria-expanded="${op}" aria-controls="${did}">${esc(e.t)}</button>
+      <button class="venue" data-open="${x.key}" aria-expanded="${op}" aria-controls="${did}"><b>${esc(v.n)}</b> · ${esc(v.b)} <span class="chev" aria-hidden="true">▾</span><span class="sr">mostrar endereço</span></button>
       <div class="meta">${price}${cats}${conf}${ck}</div>
     </div>
     <div class="acts">
@@ -529,11 +548,15 @@ function evRow(x){
       <button class="act vou" data-going="${x.key}" aria-pressed="${gg}">Vou</button>
       <button class="act x" data-hide="${e.id}" title="Ocultar este evento em todas as datas">Não curto</button>
     </div>
-    ${op ? `<div class="det">
+    <div class="det" id="${did}" ${op?"":"hidden"}>
+      <div class="addr">
+        <div class="addr-txt"><span class="lbl">Endereço</span><strong>${esc(v.a)}</strong><span>${esc(v.b)}, Rio de Janeiro</span></div>
+        <div class="addr-btns"><a class="act" href="${mapsUrl(v)}" target="_blank" rel="noopener">Abrir no mapa</a><button class="act" data-copy="${esc(full)}">Copiar</button></div>
+      </div>
+      <p><b>${esc(sched(e))}</b>, ${e.tbd?"horário ainda não divulgado":(e.ap?"por volta das ":"a partir das ")+hhmm(x.start)} · ${TIPO[v.t]}</p>
       <p>${esc(e.x)}</p>
-      <p><b>${esc(sched(e))}</b>, ${e.tbd?"horário ainda não divulgado":(e.ap?"por volta das ":"a partir das ")+hhmm(x.start)} · ${esc(v.a)}, ${esc(v.b)}</p>
-      <div class="links"><a href="${mapsUrl(v)}" target="_blank" rel="noopener">Abrir no Google Maps</a>${ig}${src && !src.includes("instagram.com")?`<a href="${src}" target="_blank" rel="noopener">Fonte</a>`:""}</div>
-    </div>` : ""}
+      ${(ig || (src && !src.includes("instagram.com"))) ? `<div class="links">${ig}${src && !src.includes("instagram.com")?`<a href="${src}" target="_blank" rel="noopener">Fonte</a>`:""}</div>` : ""}
+    </div>
   </article>`;
 }
 
@@ -676,16 +699,38 @@ function render(){
 }
 
 // ---------- events ----------
+function toggleRow(key){
+  const open = !ST.open.has(key);
+  open ? ST.open.add(key) : ST.open.delete(key);
+  const art = [...document.querySelectorAll("article.ev")].find(a=>a.dataset.key===key);
+  if(!art) return;
+  art.classList.toggle("open", open);
+  art.querySelectorAll("[data-open]").forEach(b=>b.setAttribute("aria-expanded", String(open)));
+  const det = art.querySelector(".det"); if(det) det.hidden = !open;
+}
 document.addEventListener("click", ev=>{
+  if(ev.target.closest("a")) return;
+  const cp = ev.target.closest("[data-copy]");
+  if(cp){
+    const txt = cp.dataset.copy;
+    const done = ()=>{ cp.textContent = "Copiado"; setTimeout(()=>{ cp.textContent = "Copiar"; }, 1600); };
+    const fallback = ()=>{ const s = cp.closest(".addr").querySelector("strong"); const r = document.createRange(); r.selectNodeContents(s); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); cp.textContent = "Selecionado"; setTimeout(()=>{ cp.textContent = "Copiar"; }, 1600); };
+    try{ navigator.clipboard.writeText(txt).then(done, fallback); }catch(e){ fallback(); }
+    return;
+  }
   const t = ev.target.closest("button, .pin");
-  if(!t) return;
+  if(!t){
+    const row = ev.target.closest("article.ev");
+    if(row && !ev.target.closest(".det") && !(getSelection && String(getSelection()).length)) toggleRow(row.dataset.key);
+    return;
+  }
   const d = t.dataset;
   if(d.tab){ ST.tab = d.tab; save("tab", ST.tab); render(); window.scrollTo({top:0}); return; }
   if(d.when){ ST.when = d.when; render(); return; }
   if(t.id==="freeBtn"){ ST.free = !ST.free; render(); return; }
   if(d.cat){ ST.cat = ST.cat===d.cat ? null : d.cat; render(); return; }
   if(d.reg){ ST.reg = ST.reg===d.reg ? null : d.reg; render(); return; }
-  if(d.open){ ST.open.has(d.open) ? ST.open.delete(d.open) : ST.open.add(d.open); render(); return; }
+  if(d.open){ toggleRow(d.open); return; }
   if(d.save){ S.saved.has(d.save) ? S.saved.delete(d.save) : S.saved.add(d.save); persist(); render(); return; }
   if(d.going){ S.going.has(d.going) ? S.going.delete(d.going) : S.going.add(d.going); persist(); render(); return; }
   if(d.hide){ S.hidden.add(d.hide); persist(); render(); return; }
