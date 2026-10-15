@@ -1,4 +1,4 @@
-# Esquina Rio
+# Exquina Rio
 
 Agenda de rodas de samba, choro, jazz, forró e karaokê em bares e botecos do Rio de Janeiro, organizada por dia.
 
