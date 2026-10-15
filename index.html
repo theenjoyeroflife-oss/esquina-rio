@@ -1,0 +1,708 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Rodas de samba, choro, jazz, forró e karaokê em bares e botecos do Rio, organizadas por dia.">
+<meta property="og:title" content="Esquina Rio">
+<meta property="og:description" content="Tem roda rolando na esquina. Bares e botecos do Rio com música ao vivo, por dia.">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)} body{margin:0;font:14px system-ui,sans-serif} img{max-width:100%} [hidden]{display:none!important}</style>
+<title>Esquina Rio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: one narrow agenda column like a bar's chalkboard; calçadão wave band under the header; sticky "quando" bar. */
+:root{
+  --bg:#f2f4f3; --surface:#ffffff; --ink:#121a20; --muted:#58656d; --line:#d8dfe1;
+  --azul:#1b4c9a; --azul-soft:#e2eaf6; --gelada:#f1c232; --gelada-ink:#3a2c00;
+  --c-samba:#1b4c9a; --c-choro:#2f7d4f; --c-jazz:#6b3fa0; --c-bossa:#0f7c86; --c-forro:#b5541b;
+  --c-pagode:#b03366; --c-karaoke:#a2780e; --c-rock:#454f57; --c-feijoada:#6d4a2b;
+  --f-display:"Big Shoulders Display", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --f-body:"Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0c1217; --surface:#141c23; --ink:#e7edf0; --muted:#94a3ad; --line:#26323c;
+  --azul:#80a8ee; --azul-soft:#1a2a40; --gelada:#f1c232; --gelada-ink:#2b2000;
+  --c-samba:#80a8ee; --c-choro:#6cc490; --c-jazz:#b694e6; --c-bossa:#5cc6cf; --c-forro:#ec9a63;
+  --c-pagode:#ec84ad; --c-karaoke:#e2bb4c; --c-rock:#a9b5bd; --c-feijoada:#cfa47c;
+  color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0c1217; --surface:#141c23; --ink:#e7edf0; --muted:#94a3ad; --line:#26323c;
+  --azul:#80a8ee; --azul-soft:#1a2a40; --gelada:#f1c232; --gelada-ink:#2b2000;
+  --c-samba:#80a8ee; --c-choro:#6cc490; --c-jazz:#b694e6; --c-bossa:#5cc6cf; --c-forro:#ec9a63;
+  --c-pagode:#ec84ad; --c-karaoke:#e2bb4c; --c-rock:#a9b5bd; --c-feijoada:#cfa47c;
+  color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); font-family:var(--f-body); font-size:15px; line-height:1.45;
+  padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px));}
+body::before{content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top, 0px); z-index:10; background:var(--bg)}
+.wrap{max-width:760px; margin:0 auto}
+a{color:var(--azul)}
+button{font:inherit; color:inherit}
+:focus-visible{outline:2px solid var(--azul); outline-offset:2px; border-radius:4px}
+
+/* Header */
+header.top{padding-block:22px 0; display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:8px 20px}
+.brand{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap}
+.wordmark{font-family:var(--f-display); font-weight:800; font-size:clamp(44px, 9vw, 64px); line-height:.85; letter-spacing:.01em; margin:0; text-transform:lowercase}
+.city{font-family:var(--f-display); font-weight:600; font-size:22px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)}
+.city b{color:var(--ink); font-weight:600}
+.tag{margin:6px 0 0; color:var(--muted); max-width:46ch}
+nav.tabs{display:flex; gap:4px; flex-wrap:wrap}
+nav.tabs button{border:0; background:none; padding:6px 10px; border-radius:999px; cursor:pointer; color:var(--muted); font-weight:500}
+nav.tabs button[aria-selected="true"]{background:var(--ink); color:var(--bg)}
+nav.tabs .n{font-variant-numeric:tabular-nums; font-size:12px; opacity:.8; margin-left:4px}
+
+.calcadao{height:16px; margin-top:18px; background:var(--ink); opacity:.92;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='16'%3E%3Cpath d='M0 9 C8 9 8 2 16 2 S24 9 32 9 S40 2 48 2 V16 H0Z' fill='black'/%3E%3C/svg%3E") repeat-x left top / 48px 16px;
+          mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='16'%3E%3Cpath d='M0 9 C8 9 8 2 16 2 S24 9 32 9 S40 2 48 2 V16 H0Z' fill='black'/%3E%3C/svg%3E") repeat-x left top / 48px 16px}
+
+/* Filter bar */
+.bar{position:sticky; top:env(safe-area-inset-top, 0px); z-index:5; background:var(--bg); padding-block:12px 10px; border-bottom:1px solid var(--line)}
+.row{display:flex; gap:6px; overflow-x:auto; scrollbar-width:none; padding-bottom:2px}
+.row::-webkit-scrollbar{display:none}
+.row + .row{margin-top:8px}
+.chip{flex:none; border:1px solid var(--line); background:var(--surface); padding:6px 12px; border-radius:999px; cursor:pointer; font-size:14px; white-space:nowrap; display:inline-flex; align-items:center; gap:6px}
+.chip[aria-pressed="true"]{background:var(--ink); color:var(--bg); border-color:var(--ink)}
+.chip.when{font-weight:600}
+.chip.free[aria-pressed="true"]{background:var(--gelada); color:var(--gelada-ink); border-color:var(--gelada)}
+.chip.sm{font-size:13px; padding:4px 10px}
+.dot{width:8px; height:8px; border-radius:50%; background:var(--cc, var(--muted)); flex:none}
+.sep{flex:none; width:1px; background:var(--line); margin:4px 2px}
+
+.note{margin:16px 0 0; padding:10px 12px; border:1px dashed var(--line); border-radius:8px; color:var(--muted); font-size:13px}
+.note b{color:var(--ink); font-weight:600}
+
+/* Agenda */
+section.day{margin-top:26px}
+section.day h2{font-family:var(--f-display); font-weight:800; font-size:30px; line-height:1; margin:0 0 4px; display:flex; align-items:baseline; gap:10px; text-transform:uppercase; letter-spacing:.02em; text-wrap:balance}
+section.day h2 .c{font-family:var(--f-body); font-size:13px; font-weight:500; color:var(--muted); letter-spacing:0; text-transform:none; font-variant-numeric:tabular-nums}
+section.day.now h2::before{content:""; width:10px; height:10px; border-radius:50%; background:var(--gelada); box-shadow:0 0 0 4px color-mix(in srgb, var(--gelada) 30%, transparent); align-self:center; animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 7px color-mix(in srgb, var(--gelada) 10%, transparent)}}
+@media (prefers-reduced-motion: reduce){ section.day.now h2::before{animation:none} }
+
+.ev{display:grid; grid-template-columns:62px minmax(0,1fr) auto; gap:4px 14px; padding-block:14px; border-bottom:1px solid var(--line)}
+.ev.going{background:linear-gradient(90deg, color-mix(in srgb, var(--gelada) 16%, transparent), transparent 70%)}
+.time{font-family:var(--f-display); font-weight:800; font-size:26px; line-height:1; font-variant-numeric:tabular-nums; padding-top:2px}
+.time .ap{font-size:16px; color:var(--muted); margin-right:1px; font-weight:600}
+.main{min-width:0}
+.title{all:unset; cursor:pointer; font-weight:600; font-size:17px; line-height:1.25; display:block; text-wrap:pretty}
+.title:hover{text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:3px}
+.title:focus-visible{outline:2px solid var(--azul); outline-offset:2px}
+.venue{color:var(--muted); margin-top:2px; font-size:14px}
+.venue b{color:var(--ink); font-weight:500}
+.meta{display:flex; flex-wrap:wrap; gap:6px; margin-top:7px}
+.tagp{font-size:12px; padding:2px 8px; border-radius:4px; background:var(--azul-soft); color:var(--ink); display:inline-flex; align-items:center; gap:5px; font-weight:500}
+.tagp.free{background:var(--gelada); color:var(--gelada-ink)}
+.tagp.chk{background:transparent; border:1px solid var(--line); color:var(--muted)}
+.tagp.ok{background:transparent; border:1px solid var(--azul); color:var(--azul)}
+.time .tbd{font-size:15px; color:var(--muted); font-weight:600; letter-spacing:.02em}
+.acts{display:flex; gap:4px; align-items:flex-start}
+.act{border:1px solid var(--line); background:var(--surface); border-radius:999px; padding:5px 10px; font-size:13px; cursor:pointer; white-space:nowrap}
+.act[aria-pressed="true"]{background:var(--ink); color:var(--bg); border-color:var(--ink)}
+.act.vou[aria-pressed="true"]{background:var(--gelada); color:var(--gelada-ink); border-color:var(--gelada)}
+.act.x{color:var(--muted)}
+.det{grid-column:2 / -1; margin-top:8px; padding:10px 12px; background:var(--surface); border:1px solid var(--line); border-radius:8px; font-size:14px}
+.det p{margin:0 0 6px}
+.det .links{display:flex; flex-wrap:wrap; gap:14px; margin-top:6px}
+@media (max-width:560px){
+  .ev{grid-template-columns:52px minmax(0,1fr)}
+  .time{font-size:22px}
+  .acts{grid-column:2}
+  .det{grid-column:1 / -1}
+}
+.empty{padding:40px 0; color:var(--muted); text-align:center}
+.empty b{display:block; font-family:var(--f-display); font-size:26px; color:var(--ink); margin-bottom:4px}
+.hiddeninfo{margin-top:18px; font-size:13px; color:var(--muted)}
+.linkbtn{border:0; background:none; color:var(--azul); cursor:pointer; padding:0; text-decoration:underline}
+
+/* Lugares */
+.reg{margin-top:28px}
+.reg h2{font-family:var(--f-display); font-weight:800; font-size:30px; text-transform:uppercase; margin:0 0 6px}
+.place{padding-block:14px; border-bottom:1px solid var(--line)}
+.place h3{margin:0; font-size:17px}
+.place .sub{color:var(--muted); font-size:14px}
+.place ul{list-style:none; padding:0; margin:8px 0 0; display:grid; gap:4px}
+.place li{font-size:14px; display:grid; grid-template-columns:minmax(0,1fr); }
+.place li .when{color:var(--muted)}
+.place .links{display:flex; gap:14px; margin-top:8px; font-size:13px; flex-wrap:wrap}
+
+/* Mapa */
+.mapwrap{margin-top:16px}
+.maptools{display:flex; gap:6px; flex-wrap:wrap; align-items:center}
+.maptools .hint{color:var(--muted); font-size:13px; margin-left:auto}
+.mapbox{margin-top:10px; background:var(--surface); border:1px solid var(--line); border-radius:10px; overflow:hidden}
+.mapbox svg{display:block; width:100%; height:auto; max-height:76vh}
+.mlabel{fill:var(--muted); font-family:var(--f-display); font-weight:600; letter-spacing:.08em; text-transform:uppercase}
+.water{fill:var(--azul); opacity:.55; font-family:var(--f-body); font-style:italic}
+.grid line{stroke:var(--line); stroke-width:1}
+.pin{cursor:pointer}
+.pin circle.b{fill:var(--azul); stroke:var(--surface); stroke-width:2}
+.pin.vazio circle.b{fill:var(--surface); stroke:var(--muted); stroke-width:2}
+.pin.sel circle.b{fill:var(--gelada); stroke:var(--ink)}
+.pin:focus-visible circle.b{stroke:var(--ink); stroke-width:3}
+.mapcard{margin-top:12px}
+footer{margin-top:40px; padding-block:18px 32px; border-top:1px solid var(--line); color:var(--muted); font-size:13px}
+footer p{margin:0 0 8px; max-width:68ch}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="brand">
+        <h1 class="wordmark">esquina</h1>
+        <span class="city"><b>Rio</b> · <span id="clock">hoje</span></span>
+      </div>
+      <p class="tag">Tem roda rolando na esquina. Bares, botecos e calçadas do Rio com samba, choro, jazz e forró, organizados por dia.</p>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Seções">
+      <button role="tab" id="t-agenda" data-tab="agenda" aria-selected="true">Agenda</button>
+      <button role="tab" id="t-voce" data-tab="voce" aria-selected="false">Pra você<span class="n" id="n-voce"></span></button>
+      <button role="tab" id="t-mapa" data-tab="mapa" aria-selected="false">Mapa</button>
+      <button role="tab" id="t-lugares" data-tab="lugares" aria-selected="false">Lugares</button>
+    </nav>
+  </header>
+  <div class="calcadao" aria-hidden="true"></div>
+
+  <div class="bar" id="bar">
+    <div class="row" id="whenRow" aria-label="Quando"></div>
+    <div class="row" id="catRow" aria-label="Tipo"></div>
+  </div>
+
+  <main id="view"></main>
+
+  <footer>
+    <p><b>Como funciona.</b> A agenda junta duas coisas: a programação fixa de cada lugar (toda segunda, 1º sábado do mês etc.), recalculada todo dia, e as datas avulsas lidas nos perfis de Instagram das casas em 15/10/2026. Quando um post anuncia a atração de uma noite, ele substitui a linha genérica daquele dia. ≈ marca horário aproximado; "a def." é horário ainda não divulgado; "confira" marca programação de fontes mais antigas ou que varia muito.</p>
+    <p>Rodas de rua cancelam com chuva, mudam de dia e às vezes acabam. Antes de sair, veja o perfil da roda ou da casa. Fontes: Mapa das Rodas de Samba 2025 (Prefeitura do Rio), Riotur, Time Out Rio, Catraca Livre, Diário do Rio, Sopa Cultural, O Globo e outras, linkadas em cada evento.</p>
+    <p>Salvos, "vou" e ocultos ficam guardados só neste navegador.</p>
+  </footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+const TZ = "America/Sao_Paulo";
+const SRC = {
+  mapa: "https://cultura.prefeitura.rio/wp-content/uploads/sites/38/2025/01/MAPA-DAS-RODAS-DE-SAMBA-2025-2.pdf",
+  trab: "https://riotur.rio/?p=52027",
+  becoSeg: "https://riotur.rio/editorial/confira-todos-os-sambas-de-segunda-feira-no-rio/",
+  becoProg: "https://sopacultural.com/fim-de-semana-no-beco-do-rato-tem-joao-martins-e-grupo-arruda/",
+  becoSab: "https://diariodorio.com/beco-do-rato-estreia-roda-de-samba-e-feijoada-aos-sabados-a-tarde-na-lapa/",
+  ranking: "https://www.tribunadosertao.com.br/rj-em-foco/2026/06/12/920177-as-melhores-rodas-de-samba-2026-juri-do-globo-elege-os-pagodes-imperdiveis-do-rio-veja-ranking",
+  bip: "https://catracalivre.com.br/agenda/bar-bip-bip-rio/",
+  bip26: "https://www.tribunadosertao.com.br/rj-em-foco/2026/06/13/920587-veja-a-programacao-das-rodas-de-samba-no-rio-no-fim-de-semana-de-estreia-do-brasil-na-copa",
+  peixe: "http://www.lacumbuca.com/2026/10/agenda-de-shows-em-outubro-de-2026-no.html",
+  omar: "https://www.timeout.com/rio-de-janeiro/bars/bar-do-omar",
+  vaca: "https://www.timeout.com/rio-de-janeiro/bars/vaca-atolada",
+  gema: "https://sopacultural.com/carioca-da-gema-lanca-happy-hour-como-novidade-para-o-verao-2026/",
+  trap: "https://catracalivre.com.br/samba-em-rede/trapiche-gamboa-recebe-as-rodas-samba-de-fato-e-razoes-africanas/",
+  cacique: "https://www.tribunadosertao.com.br/rj-em-foco/2026/06/13/920567-rodas-de-samba-no-rio-tem-programacao-especial-em-fim-de-semana-de-jogo-do-brasil",
+  fds26: "https://www.tribunadosertao.com.br/rj-em-foco/2026/06/20/925196-confira-a-programacao-das-melhores-rodas-de-samba-do-rio-neste-fim-de-semana-monte-o-ranking-das-suas-favoritas",
+  volta: "https://tribunadosertao.com.br/cultura-pop/2026/08/08/955913-da-rua-do-ouvidor-para-o-mundo-samba-da-volta-lanca-album-com-a-energia-da-roda",
+  ssalv: "https://www.timeout.com/pt/rio-de-janeiro/atraccoes/praca-sao-salvador",
+  blue: "https://www.portaltela.com/entretenimento/musica/2025/02/07/blue-note-rio-apresenta-shows-gratuitos-com-grandes-artistas-no-piano-bar/",
+  bottle: "https://rollingstone.com.br/noticia/apos-restauracao-lendaria-travessa-beco-das-garrafas-volta-funcionar-e-tera-show-da-banda-francesa-nouvelle-vague/",
+  maze: "https://www.lonelyplanet.com/pois/1054912",
+  karaoke: "https://www.timeout.com/pt/rio-de-janeiro/coisas-para-fazer/melhores-karaokes-do-rio-de-janeiro",
+  buko: "https://sopacultural.com/bar-bukowski-celebra-28-anos-com-festa-regada-a-rock-e-premiacoes-para-o-publico/",
+  forro: "https://diariodorio.com/6-locais-para-dancar-forro-no-rio-de-janeiro/",
+  lgbt: "https://all.accor.com/a/pt-br/limitless/thematics/lifestyle-trends/spots-lgbt-no-rio-de-janeiro.html",
+  comedy: "https://www.riofilmcommission.com/en/?p=31159",
+  feira: "https://diariodorio.com/6-locais-para-dancar-forro-no-rio-de-janeiro/"
+};
+
+const CATS = {
+  samba:{n:"roda de samba", c:"--c-samba"}, pagode:{n:"pagode", c:"--c-pagode"}, choro:{n:"choro", c:"--c-choro"},
+  bossa:{n:"bossa nova", c:"--c-bossa"}, jazz:{n:"jazz", c:"--c-jazz"}, forro:{n:"forró", c:"--c-forro"},
+  karaoke:{n:"karaokê", c:"--c-karaoke"}, rock:{n:"rock / DJ", c:"--c-rock"}, feijoada:{n:"feijoada", c:"--c-feijoada"}
+};
+const REGS = {centro:"Centro e Lapa", sul:"Zona Sul", norte:"Zona Norte", oeste:"Zona Oeste"};
+const TIPO = {bar:"bar", rua:"roda de rua", praca:"praça", clube:"clube", quadra:"quadra", feira:"feira", quintal:"quintal", laje:"laje"};
+
+// Lugares. Coordenadas aproximadas.
+const V = [
+ {id:"pedra", n:"Pedra do Sal", b:"Saúde", r:"centro", t:"rua", a:"Rua Argemiro Bulcão, aos pés da Pedra do Sal", lat:-22.8977, lng:-43.1857, ig:"rodadesambadapedradosal"},
+ {id:"renas", n:"Renascença Clube", b:"Andaraí", r:"norte", t:"clube", a:"Rua Barão de São Francisco, 54", lat:-22.9246, lng:-43.2478, ig:"moacyrluzesambadotrabalhador"},
+ {id:"beco", n:"Beco do Rato", b:"Lapa", r:"centro", t:"bar", a:"Rua Joaquim Silva, 11", lat:-22.9144, lng:-43.1794, ig:"becodorato"},
+ {id:"clementina", n:"Quintal da Clementina", b:"Centro", r:"centro", t:"quintal", a:"Rua do Senado, 20", lat:-22.9081, lng:-43.1835},
+ {id:"bip", n:"Bip Bip", b:"Copacabana", r:"sul", t:"bar", a:"Rua Almirante Gonçalves, 50", lat:-22.9745, lng:-43.1885},
+ {id:"teles", n:"Arco do Teles", b:"Centro · Praça XV", r:"centro", t:"rua", a:"Travessa do Comércio, 15", lat:-22.9031, lng:-43.1743, ig:"sambadoteles"},
+ {id:"lsf", n:"Largo de São Francisco de Paula", b:"Centro", r:"centro", t:"rua", a:"Largo de São Francisco de Paula, s/n", lat:-22.9046, lng:-43.1812},
+ {id:"tira", n:"Praça Tiradentes", b:"Centro", r:"centro", t:"praca", a:"Praça Tiradentes", lat:-22.9068, lng:-43.1826},
+ {id:"ouv", n:"Rua do Ouvidor × Rua do Mercado", b:"Centro", r:"centro", t:"rua", a:"Rua do Ouvidor, esquina com Rua do Mercado", lat:-22.9024, lng:-43.1757},
+ {id:"alfa", n:"Al Farabi (Alfa Bar)", b:"Centro · Boulevard Olímpico", r:"centro", t:"bar", a:"Rua do Mercado, 34", lat:-22.9013, lng:-43.1749, ig:"alfa_bar_e_cultura"},
+ {id:"sen", n:"Armazém Senado", b:"Centro", r:"centro", t:"bar", a:"Rua do Senado, esquina com Av. Gomes Freire", lat:-22.9094, lng:-43.1848},
+ {id:"omar", n:"Bar do Omar", b:"Santo Cristo", r:"centro", t:"bar", a:"Rua Sara, 114 · Morro do Pinto", lat:-22.9001, lng:-43.2028, ig:"bardoomar"},
+ {id:"vaca", n:"Vaca Atolada", b:"Lapa", r:"centro", t:"bar", a:"Av. Gomes Freire, 533", lat:-22.9127, lng:-43.1859, ig:"vacaatolada.oficial"},
+ {id:"gema", n:"Carioca da Gema", b:"Lapa", r:"centro", t:"bar", a:"Av. Mem de Sá, 79", lat:-22.9131, lng:-43.1812, ig:"barcariocadagema"},
+ {id:"trap", n:"Trapiche Gamboa", b:"Saúde", r:"centro", t:"bar", a:"Rua Sacadura Cabral, 155", lat:-22.8984, lng:-43.1843},
+ {id:"cac", n:"Cacique de Ramos", b:"Olaria", r:"norte", t:"quadra", a:"Rua Uranos, 1326", lat:-22.8456, lng:-43.2654, ig:"cacique_de_ramos"},
+ {id:"mang", n:"Terreiro de Mangueira", b:"Mangueira", r:"norte", t:"laje", a:"Rua Visconde de Niterói, 512", lat:-22.9069, lng:-43.2301, ig:"terreirodemangueira"},
+ {id:"glo", n:"Feira da Glória · Praça Edson Cortes", b:"Glória", r:"centro", t:"feira", a:"Av. Augusto Severo", lat:-22.9196, lng:-43.1752, ig:"gloriosa_rodasamba"},
+ {id:"volta", n:"Espaço Luiz Gama", b:"Centro", r:"centro", t:"rua", a:"Rua da Constituição, 54", lat:-22.9059, lng:-43.1841, ig:"osambadavolta",
+   var:"Samba da Volta: domingos alternados, a cada três semanas, a partir das 15h. A última foi em 11/10 e a próxima ainda não foi anunciada no perfil.", cats:["samba"], src:"volta"},
+ {id:"crioulo", n:"Terreiro de Crioulo", b:"Realengo", r:"oeste", t:"quintal", a:"Rua do Imperador, 1075", lat:-22.8781, lng:-43.4301, ig:"terreirodecrioulo"},
+ {id:"glic", n:"Praça do Choro (General Glicério)", b:"Laranjeiras", r:"sul", t:"feira", a:"Rua General Glicério, em frente ao 224", lat:-22.9378, lng:-43.1921},
+ {id:"gavea", n:"Praça Santos Dumont", b:"Gávea", r:"sul", t:"praca", a:"Praça Santos Dumont", lat:-22.9757, lng:-43.2266},
+ {id:"ssalv", n:"Praça São Salvador", b:"Laranjeiras", r:"sul", t:"praca", a:"Praça São Salvador (coreto)", lat:-22.9331, lng:-43.1808},
+ {id:"santero", n:"Sambantero", b:"Leblon", r:"sul", t:"bar", a:"Av. Ataulfo de Paiva, 802", lat:-22.9842, lng:-43.2201},
+ {id:"blue", n:"Blue Note Rio", b:"Copacabana", r:"sul", t:"bar", a:"Av. Atlântica, 1910", lat:-22.9678, lng:-43.1808, ig:"bluenoterio",
+   var:"Fechado para reforma desde o início de outubro de 2026, sem data de reabertura anunciada.", cats:["jazz","bossa"]},
+ {id:"bottle", n:"Bottles Bar e Little Club · Beco das Garrafas", b:"Copacabana", r:"sul", t:"bar", a:"Rua Duvivier, 37", lat:-22.9652, lng:-43.1793, ig:"becodasgarrafas"},
+ {id:"maze", n:"The Maze", b:"Catete · Tavares Bastos", r:"sul", t:"bar", a:"Rua Tavares Bastos, 414, casa 66", lat:-22.9292, lng:-43.1803, ig:"themaze_rio",
+   var:"Hoje funciona como centro cultural, mirante e hostel (visitação qua e sex a dom, 12h–17h). As noites de jazz mensais não aparecem mais na programação.", cats:["jazz"]},
+ {id:"bigben", n:"Big Ben Pub", b:"Botafogo", r:"sul", t:"bar", a:"Rua Muniz Barreto, 374", lat:-22.9476, lng:-43.1836},
+ {id:"buko", n:"Bar Bukowski", b:"Botafogo", r:"sul", t:"bar", a:"Rua Álvaro Ramos, 270", lat:-22.9536, lng:-43.1881, ig:"barbukowski"},
+ {id:"feira", n:"Feira de São Cristóvão", b:"São Cristóvão", r:"norte", t:"feira", a:"Campo de São Cristóvão, s/n", lat:-22.8976, lng:-43.2216},
+ {id:"amend", n:"Bar da Amendoeira", b:"Maria da Graça", r:"norte", t:"bar", a:"Rua Conde de Azambuja, 881", lat:-22.8856, lng:-43.2664},
+ {id:"divino", n:"Divino Samba", b:"Piedade", r:"norte", t:"rua", a:"Rua José Mariano, 48", lat:-22.8914, lng:-43.3091},
+ {id:"alvinho", n:"Quintal do Alvinho", b:"Madureira", r:"norte", t:"quintal", a:"Estrada do Portela, 329", lat:-22.8708, lng:-43.3421},
+ {id:"calcada", n:"Samba na Calçada", b:"Madureira", r:"norte", t:"rua", a:"Rua Francisco Batista", lat:-22.8731, lng:-43.3369},
+ {id:"tijol", n:"Centro Comercial do Tijolinho", b:"Andaraí", r:"norte", t:"rua", a:"Rua Vega", lat:-22.9301, lng:-43.2561},
+ {id:"pband", n:"Praça da Bandeira", b:"Praça da Bandeira", r:"norte", t:"praca", a:"Praça da Bandeira, no meio da praça", lat:-22.9106, lng:-43.2126},
+ {id:"encresp", n:"Pagode do Encrespou", b:"Abolição", r:"norte", t:"rua", a:"Alameda Alberto Flôres, 240", lat:-22.8861, lng:-43.2989},
+ {id:"engenho", n:"Praça do Trem (Engenhão)", b:"Engenho de Dentro", r:"norte", t:"praca", a:"Praça do Trem, armazéns do Engenhão", lat:-22.8964, lng:-43.2936},
+ {id:"arpo", n:"Parque Garota de Ipanema", b:"Arpoador", r:"sul", t:"praca", a:"Parque Garota de Ipanema", lat:-22.9879, lng:-43.1911},
+ {id:"alvor", n:"Rua Felipe Camarão", b:"Vila Isabel", r:"norte", t:"rua", a:"Rua Felipe Camarão, 12 · entre o Bar Mané Vizinhando e a Praça Maracanã", lat:-22.9134, lng:-43.2311},
+ {id:"harm", n:"Praça da Harmonia", b:"Gamboa", r:"centro", t:"praca", a:"Praça Coronel Assunção", lat:-22.8964, lng:-43.1926},
+ {id:"camoes", n:"Praça Luís de Camões", b:"Glória", r:"centro", t:"praca", a:"Rua do Russel", lat:-22.9226, lng:-43.1744},
+ {id:"deod", n:"Praça Marechal Deodoro", b:"Glória", r:"centro", t:"praca", a:"Praça Marechal Deodoro", lat:-22.9213, lng:-43.1763},
+ {id:"edgar", n:"Rua Edgar Gordilho", b:"Saúde", r:"centro", t:"rua", a:"Rua Edgar Gordilho", lat:-22.8962, lng:-43.1873},
+ {id:"batuk", n:"Batuk D'Gueto", b:"Padre Miguel", r:"oeste", t:"rua", a:"Rua Olímpia Esteves, 1050", lat:-22.8789, lng:-43.4452},
+ {id:"falapovo", n:"Projeto Fala Meu Povo", b:"Realengo", r:"oeste", t:"rua", a:"Rua Frei Miguel, 479", lat:-22.8801, lng:-43.4288},
+ {id:"demo", n:"Clube dos Democráticos", b:"Lapa", r:"centro", t:"clube", a:"Rua do Riachuelo, 91", lat:-22.9139, lng:-43.1816,
+   var:"Noites de forró em dias de semana há anos; o dia muda (já foi terça e quarta). Confira antes.", cats:["forro"], src:"forro"},
+ {id:"sarreufa", n:"Sarreufa", b:"Botafogo", r:"sul", t:"bar", a:"Rua Bambina", lat:-22.9497, lng:-43.1873,
+   var:"Sinuca e karaokê madrugada adentro. Dias variam.", cats:["karaoke"], src:"karaoke"},
+ {id:"galeria", n:"Galeria Café", b:"Ipanema", r:"sul", t:"bar", a:"Rua Teixeira de Melo, 31", lat:-22.9849, lng:-43.1993,
+   var:"Bar LGBTQIA+ com DJs. Programação muda toda semana.", cats:["rock"], src:"lgbt"},
+ {id:"comedy", n:"Rio Café Comedy Club", b:"Centro", r:"centro", t:"bar", a:"Rua Buenos Aires, 53", lat:-22.9021, lng:-43.1776,
+   var:"Stand-up, improviso e música ao vivo em casarão de três andares. Programação no perfil da casa.", cats:[], src:"comedy"}
+];
+
+// Eventos recorrentes. d = dias (0 dom … 6 sáb); n = semanas do mês (1º, 2º…); ap = horário aproximado; ck = "confira".
+const E = [
+ {id:"pedra", v:"pedra", t:"Roda de Samba da Pedra do Sal", c:["samba"], d:[1], h:"19:00", p:"Grátis", f:1, dur:5, s:"mapa", x:"A roda tradicional das segundas, ao ar livre no largo onde o samba carioca nasceu. Barracas de comida e bebida em volta; costuma lotar."},
+ {id:"pedrafds", v:"pedra", t:"Samba na Pedra (sexta a domingo)", c:["samba"], d:[5,6,0], h:"20:00", ap:1, p:"Grátis", f:1, ck:1, dur:5, s:"ig:rodadesambadapedradosal", x:"Segundo o perfil da roda, a Pedra tem samba de sexta a segunda e em vésperas de feriado. Nas noites fora da segunda, grupos variam."},
+ {id:"trab", v:"renas", t:"Samba do Trabalhador com Moacyr Luz", c:["samba"], d:[1], h:"16:30", p:"R$ 40", dur:5, s:"trab", x:"A roda da folga dos músicos, desde 2005. Segunda com cara de domingo; chegue cedo."},
+ {id:"arlindinho", v:"beco", t:"Arlindinho das Antigas", c:["samba"], d:[1], h:"21:00", p:"Ingresso", dur:4, s:"becoSeg", x:"Roda fixa das segundas, entre as mais votadas pelo júri do GLOBO em 2026. Casa abre às 18h."},
+ {id:"casuais", v:"beco", t:"Encontros Casuais com Inácio Rios e Mosquito", c:["samba"], d:[4], h:"19:00", p:"Ingresso", dur:5, s:"ig:becodorato", x:"3º lugar no ranking das rodas do GLOBO 2026. Repertório nunca se repete e sempre aparece alguém para dar canja."},
+ {id:"becoqua", v:"beco", t:"Samba do Xoxó", c:["samba"], d:[3], h:"18:00", p:"Ingresso", dur:5, s:"ig:becodorato", x:"A quarta do Beco é do Samba do Xoxó. Ingressos antecipados limitados no link da bio; local coberto em caso de chuva."},
+ {id:"becosab", v:"beco", t:"Roda de samba com feijoada", c:["samba","feijoada"], d:[6], h:"14:00", p:"Ingresso", dur:4, s:"ig:becodorato", x:"Feijoada a partir das 12h; roda às 14h. Atrações mudam a cada sábado."},
+ {id:"becosabnoite", v:"beco", t:"Sábado à noite no Beco", c:["samba"], d:[6], h:"19:00", p:"Ingresso", dur:5, s:"ig:becodorato", x:"Grupos convidados a cada semana."},
+ {id:"becodom", v:"beco", t:"Domingo com feijoada e roda", c:["samba","feijoada"], d:[0], h:"16:00", p:"Ingresso", dur:5, s:"ig:becodorato", x:"Bar e feijoada abrem às 12h; roda às 16h."},
+ {id:"joaomartins", v:"beco", t:"João Martins", c:["samba"], d:[5], n:[1], h:"22:00", ap:1, p:"Ingresso", dur:3, s:"becoProg", x:"Toda primeira sexta do mês."},
+ {id:"bipsamba", v:"bip", t:"Roda do Bip Bip", c:["samba"], d:[4,0], h:"21:00", p:"Grátis", f:1, dur:4, s:"bip26", x:"18 m² desde 1968. Você mesmo pega a cerveja na geladeira e anota. Durante a música, silêncio."},
+ {id:"bipchoro", v:"bip", t:"Roda de choro", c:["choro"], d:[2], h:"20:00", ap:1, p:"Grátis", f:1, dur:4, s:"bip", x:"Terça é dia de choro no Bip."},
+ {id:"bipbossa", v:"bip", t:"Noite de bossa nova", c:["bossa"], d:[3], h:"20:00", ap:1, p:"Grátis", f:1, dur:4, s:"bip", x:"Quarta é dia de bossa no Bip."},
+ {id:"teles", v:"teles", t:"Samba do Teles", c:["samba"], d:[4], h:"18:00", p:"Grátis", f:1, ck:1, dur:4, s:"mapa", x:"Roda de quinta sob o arco colonial, entre os bares da travessa. Está no Mapa das Rodas da Prefeitura, mas o Instagram da roda não é atualizado desde 2019."},
+ {id:"tacomtempo", v:"lsf", t:"Samba Tá Com Tempo?!", c:["samba"], d:[5], h:"17:00", p:"Grátis", f:1, dur:4, s:"mapa", x:"Happy hour de sexta no Centro."},
+ {id:"garagem", v:"tira", t:"Pagode da Garagem", c:["pagode"], d:[2], h:"18:00", p:"Grátis", f:1, dur:4, s:"mapa", x:"Pagode de terça na praça."},
+ {id:"pedeteresa", v:"tira", t:"Roda Pedeteresa", c:["samba"], d:[5], n:[1,3], h:"17:00", p:"Grátis", f:1, dur:4, s:"mapa", x:"1ª e 3ª sexta do mês."},
+ {id:"malraiz", v:"ouv", t:"Mal de Raiz", c:["samba"], d:[6], h:"14:00", p:"Grátis", f:1, dur:4, s:"mapa", x:"Samba de raiz no sábado à tarde, no meio da rua."},
+ {id:"peixe", v:"alfa", t:"Samba do Peixe", c:["samba"], d:[6], n:[2], h:"14:00", p:"Grátis", f:1, dur:5, s:"ig:alfa_bar_e_cultura", x:"Chico Alves, Pratinha, Ernesto Pires e convidados, ao ar livre na entrada do Boulevard Olímpico. Esteve na agenda de outubro do Alfa no 2º sábado."},
+ {id:"senado", v:"sen", t:"Samba no Armazém Senado", c:["samba"], d:[6], h:"14:00", p:"Grátis", f:1, dur:4, s:"mapa", x:"Roda na calçada do armazém, um dos botecos mais antigos do Centro."},
+ {id:"omarsem", v:"omar", t:"Pagode na birosca", c:["pagode","samba"], d:[4,5], h:"19:00", p:"Entrada franca", f:1, dur:5, s:"ig:bardoomar", x:"Antes, das 17h às 20h, tem o Happy Hour Nota 10: smash burger, caipirinha, Amstel 600 ml e outros itens a R$ 10. Varanda com vista para a Zona Portuária."},
+ {id:"omarsab", v:"omar", t:"Sábado de samba no Omar", c:["samba"], d:[6], h:"19:00", p:"Consulte", dur:5, s:"ig:bardoomar", x:"Casa abre às 15h."},
+ {id:"omardom1", v:"omar", t:"Roda de domingo à tarde", c:["samba"], d:[0], h:"16:00", p:"Consulte", dur:3, s:"ig:bardoomar", x:"Casa abre às 15h."},
+ {id:"omardom2", v:"omar", t:"Missa de domingo: Marcelinho Moreira e o Canto do Batuqueiro", c:["samba"], d:[0], h:"19:00", p:"Consulte", dur:4, s:"ig:bardoomar", x:"A roda fixa de domingo à noite do Omar, começando pontualmente às 19h."},
+ {id:"vacaqui", v:"vaca", t:"Alma de Sambista", c:["samba"], d:[4], h:"21:00", ap:1, p:"Consulte", ck:1, dur:6, s:"vaca", x:"Quinta é o dia preferido de quem frequenta. Vai até de manhã."},
+ {id:"vacacasa", v:"vaca", t:"Samba da casa", c:["samba"], d:[2,3,5,6], h:"21:00", ap:1, p:"Consulte", ck:1, dur:6, s:"vaca", x:"Se a Vaca está aberta, tem samba."},
+ {id:"gema", v:"gema", t:"Samba ao vivo no casarão", c:["samba"], d:[2,3,4,5,6], h:"21:00", ap:1, p:"Ingresso", dur:4, s:"ig:barcariocadagema", x:"Casa de samba da Mem de Sá desde 2000. Um grupo diferente a cada noite; programação da semana sai no perfil às terças."},
+ {id:"trap", v:"trap", t:"Roda de samba e jongo", c:["samba"], d:[4,5,6], h:"20:30", ap:1, p:"Até ~R$ 30", ck:1, dur:4, s:"trap", x:"Sobrado do século XIX entre a Pedra do Sal e a Praça Mauá. As quintas eram do grupo Razões Africanas. Não achamos perfil ativo da casa no Instagram; confira antes de ir."},
+ {id:"cacique", v:"cac", t:"Roda do Cacique de Ramos com o Grupo Caciqueando", c:["pagode","samba"], d:[0], h:"17:00", p:"Grátis", f:1, dur:5, skip:["2026-10-25"], s:"ig:cacique_de_ramos", x:"A tamarineira onde nasceram Fundo de Quintal, Zeca Pagodinho e Jorge Aragão. Todo domingo, das 17h às 22h, com convidados. Fechado em 25/10 por causa das eleições."},
+ {id:"caciquefeij", v:"cac", t:"Feijoada do Cacique", c:["samba","feijoada"], d:[0], n:[3], h:"13:00", p:"Grátis", f:1, dur:9, s:"ig:cacique_de_ramos", x:"Todo 3º domingo do mês, das 13h às 22h."},
+ {id:"mangueira", v:"mang", t:"Terreiro de Mangueira", c:["samba"], d:[6], n:[3], h:"15:00", p:"A partir de R$ 15", dur:5, s:"ig:terreirodemangueira", x:"Na laje da subida do morro. 4º lugar no ranking do GLOBO 2026. Ingressos esgotam rápido."},
+ {id:"gloriosa", v:"glo", t:"Gloriosa Roda de Samba com Paulão 7 Cordas", c:["samba"], d:[0], n:[3], h:"13:00", p:"Grátis", f:1, dur:5, s:"ig:gloriosa_rodasamba", x:"Junto da Feira da Glória, com área kids e comida."},
+ {id:"chorogloria", v:"glo", t:"Chorinho na Praça da Glória", c:["choro"], d:[0], n:[1], h:"12:00", p:"Grátis", f:1, dur:3, s:"mapa", x:"Choro na hora da feira, 1º domingo do mês."},
+ {id:"crioulo", v:"crioulo", t:"Terreiro de Crioulo", c:["samba"], d:[6], n:[1], h:"16:00", p:"Consulte", ck:1, dur:5, s:"mapa", x:"Campeão do ranking do GLOBO 2026. Chão de terra batida, samba de raiz e comida de quintal, das 17h às 22h."},
+ {id:"quintalterr", v:"crioulo", t:"Quintal do Terreiro", c:["samba"], d:[0], h:"13:00", p:"Consulte", dur:5, s:"mapa", x:"Roda de domingo no mesmo quintal de Realengo."},
+ {id:"pixin", v:"glic", t:"Choro na feira com Pixin Bodega", c:["choro","samba"], d:[6], h:"12:00", p:"Grátis", f:1, dur:3, s:"mapa", x:"Roda de choro e samba na feira de rua da General Glicério. Cancela com chuva forte."},
+ {id:"chorogavea", v:"gavea", t:"Choro da Gávea", c:["choro"], d:[6], n:[1], h:"15:00", p:"Grátis", f:1, dur:3, s:"mapa", x:"1º sábado do mês, em frente aos bares da praça."},
+ {id:"coreto", v:"ssalv", t:"Batuque no Coreto", c:["samba"], d:[6], h:"18:00", p:"Grátis", f:1, dur:4, s:"mapa", x:"Sábado no coreto da praça, rodeado de botecos."},
+ {id:"forrossalv", v:"ssalv", t:"Forró da Praça", c:["forro"], d:[5], h:"20:00", ap:1, p:"Grátis", f:1, ck:1, dur:4, s:"ssalv", x:"Sexta é dia de forró: a praça enche de pares dançando em volta do chafariz."},
+ {id:"sambantero", v:"santero", t:"Sambantero", c:["samba"], d:[5], h:"19:00", p:"Consulte", dur:4, s:"mapa", x:"Roda de sexta no Leblon."},
+ {id:"bossaeassim", v:"bottle", t:"Bossa Nova é Assim, com Marcos Ariel", c:["bossa","jazz"], d:[2], h:"21:00", p:"Couvert", dur:2, s:"ig:becodasgarrafas", x:"Toda terça no Bottles Bar. O pianista apresenta repertório de Tom Jobim e conversa com a plateia em português e inglês."},
+ {id:"bottle", v:"bottle", t:"Show no Beco das Garrafas", c:["bossa","jazz"], d:[3,4,5,6,0], h:"20:00", ap:1, p:"Couvert", ck:1, dur:3, s:"ig:becodasgarrafas", x:"O beco onde a bossa nova ganhou palco. Atração muda a cada noite; veja o perfil."},
+ {id:"bigben", v:"bigben", t:"Karaokê com banda", c:["karaoke"], d:[3,4,5,6], h:"21:00", ap:1, p:"A partir de R$ 15", ck:1, dur:4, s:"karaoke", x:"Pub inglês de 1992. Banda ao vivo acompanha quem sobe no palco."},
+ {id:"buko", v:"buko", t:"Noite de rock: bandas e DJs", c:["rock"], d:[5,6], h:"21:00", ap:1, p:"~R$ 30 até 22h", dur:7, s:"ig:barbukowski", x:"O bar de rock de Botafogo há quase 30 anos. Duas pistas com DJs até o amanhecer."},
+ {id:"feira", v:"feira", t:"Forró e karaokês da Feira", c:["forro","karaoke"], d:[5,6], h:"21:00", ap:1, p:"Entrada paga", ck:1, dur:6, s:"feira", x:"Palcos de forró e dezenas de bares com karaokê no pavilhão nordestino."},
+ {id:"rangell", v:"amend", t:"Rangell & Batucada", c:["samba"], d:[4], h:"19:00", p:"Consulte", dur:4, s:"mapa", x:"Roda de quinta no Bar da Amendoeira."},
+ {id:"divino", v:"divino", t:"Divino Samba", c:["samba"], d:[5], h:"16:00", p:"Grátis", f:1, dur:5, s:"mapa", x:"Sexta no subúrbio."},
+ {id:"alvinho", v:"alvinho", t:"Quintal do Alvinho", c:["samba"], d:[5], h:"18:00", p:"Consulte", dur:5, s:"mapa", x:"Sexta na Estrada do Portela."},
+ {id:"calcada", v:"calcada", t:"Samba na Calçada de Madureira", c:["samba"], d:[5], h:"14:00", p:"Grátis", f:1, dur:5, s:"mapa", x:"Sexta à tarde no coração de Madureira."},
+ {id:"tijolinho", v:"tijol", t:"Samba do Tijolinho", c:["samba"], d:[6], h:"15:00", p:"Grátis", f:1, dur:4, s:"mapa", x:"Sábado no Andaraí."},
+ {id:"delas", v:"pband", t:"Samba Delas na Roda", c:["samba"], d:[0], h:"14:00", p:"Grátis", f:1, dur:4, s:"mapa", x:"Domingo no meio da Praça da Bandeira."},
+ {id:"encrespou", v:"encresp", t:"Pagode do Encrespou", c:["pagode"], d:[0], h:"10:00", p:"Grátis", f:1, dur:5, s:"mapa", x:"Pagode de domingo cedo."},
+ {id:"sambafeira", v:"engenho", t:"Samba da Feira RJ", c:["samba"], d:[6], h:"18:00", p:"Grátis", f:1, dur:4, s:"mapa", x:"Sábado nos armazéns do Engenhão."},
+ {id:"levianas", v:"arpo", t:"Samba das Levianas", c:["samba"], d:[0], n:[2,4], h:"14:00", p:"Grátis", f:1, dur:4, s:"mapa", x:"2º e 4º domingo, de frente para o Arpoador."},
+ {id:"alvorada", v:"alvor", t:"Samba da Alvorada", c:["samba"], d:[0], n:[1,3], h:"16:00", p:"Grátis", f:1, dur:4, s:"mapa", x:"1º e 3º domingo em Vila Isabel."},
+ {id:"honesto", v:"harm", t:"Samba Honesto", c:["samba"], d:[6], n:[2], h:"17:00", p:"Grátis", f:1, dur:4, s:"mapa", x:"2º sábado do mês na Gamboa."},
+ {id:"sambastiao", v:"camoes", t:"Roda do Sambastião", c:["samba"], d:[6], n:[2], h:"16:00", p:"Grátis", f:1, dur:4, s:"mapa", x:"2º sábado do mês na Glória."},
+ {id:"diretoria", v:"deod", t:"Roda da Mesa da Diretoria", c:["samba"], d:[6], n:[1], h:"15:00", p:"Grátis", f:1, dur:4, s:"mapa", x:"O grupo de Paulão 7 Cordas, 1º sábado do mês."},
+ {id:"mocaprosa", v:"edgar", t:"Moça Prosa", c:["samba"], d:[6], n:[3], h:"14:00", p:"Grátis", f:1, dur:4, s:"mapa", x:"Roda de mulheres na Pequena África, 3º sábado do mês."},
+ {id:"batuk", v:"batuk", t:"Batuk D'Gueto", c:["samba"], d:[1], h:"19:00", p:"Grátis", f:1, dur:4, s:"mapa", x:"Segunda em Padre Miguel."},
+ {id:"falapovo", v:"falapovo", t:"Projeto Fala Meu Povo", c:["samba"], d:[6], h:"17:00", p:"Grátis", f:1, dur:4, s:"mapa", x:"Sábado em Realengo."}
+];
+
+// Datas avulsas lidas nos perfis do Instagram em 15/10/2026. rep = eventos fixos que essa data substitui; tbd = horário não divulgado.
+const D = [
+ {id:"d-beco-1017a", dt:"2026-10-17", v:"beco", t:"Cacá Nascimento com feijoada", c:["samba","feijoada"], h:"14:00", p:"Ingresso", rep:["becosab"], dur:4, s:"ig:becodorato", x:"Bar e feijoada abrem às 12h; roda às 14h."},
+ {id:"d-beco-1017b", dt:"2026-10-17", v:"beco", t:"Grupo Favelou e Grupo Arruda", c:["samba"], h:"19:00", p:"Ingresso", rep:["becosabnoite"], dur:5, s:"ig:becodorato", x:"Noite de sábado com dois grupos. Ingresso antecipado no link da bio do Beco."},
+ {id:"d-beco-1018", dt:"2026-10-18", v:"beco", t:"Sede de Samba com feijoada", c:["samba","feijoada"], h:"16:00", p:"Ingresso", rep:["becodom"], dur:5, s:"ig:becodorato", x:"Bar e feijoada abrem às 12h; roda às 16h."},
+ {id:"d-omar-1015", dt:"2026-10-15", v:"omar", t:"Pagode do Feijão", c:["pagode"], h:"19:00", p:"Entrada franca", f:1, rep:["omarsem"], dur:5, s:"ig:bardoomar", x:"Happy Hour Nota 10 das 17h às 20h, itens a R$ 10."},
+ {id:"d-omar-1016", dt:"2026-10-16", v:"omar", t:"Pagode do Vitú", c:["pagode"], h:"19:00", p:"Entrada franca", f:1, rep:["omarsem"], dur:5, s:"ig:bardoomar", x:"Vitor Art desce da Mangueira para comandar a roda. Happy hour das 17h às 20h."},
+ {id:"d-omar-1017", dt:"2026-10-17", v:"omar", t:"Misturadinho do Compasso", c:["samba","pagode"], h:"19:00", p:"Consulte", rep:["omarsab"], dur:5, s:"ig:bardoomar", x:"Grupo Compasso do Tempo misturando ritmos. Casa abre às 15h."},
+ {id:"d-omar-1018", dt:"2026-10-18", v:"omar", t:"Grupo Compasso do Tempo", c:["samba"], h:"16:00", p:"Consulte", rep:["omardom1"], dur:3, s:"ig:bardoomar", x:"Abre o domingo antes da missa de Marcelinho Moreira, às 19h."},
+ {id:"d-gema-1015", dt:"2026-10-15", v:"gema", t:"Roda de Samba do Turbilhão", c:["samba"], h:"21:00", ap:1, p:"Ingresso", rep:["gema"], dur:4, s:"ig:barcariocadagema", x:"Programação da semana publicada pela casa."},
+ {id:"d-gema-1016", dt:"2026-10-16", v:"gema", t:"Leonardo Bessa", c:["samba"], h:"21:00", ap:1, p:"Ingresso", rep:["gema"], dur:4, s:"ig:barcariocadagema", x:"Intérprete do Salgueiro."},
+ {id:"d-gema-1017", dt:"2026-10-17", v:"gema", t:"Flavia Saoli", c:["samba"], h:"21:00", ap:1, p:"Ingresso", rep:["gema"], dur:4, s:"ig:barcariocadagema", x:"Programação da semana publicada pela casa."},
+ {id:"d-gema-1018", dt:"2026-10-18", v:"gema", t:"Dani Coimbra", c:["samba"], h:"21:00", ap:1, p:"Ingresso", dur:4, s:"ig:barcariocadagema", x:"Domingo não é dia habitual da casa; esta semana abre."},
+ {id:"d-gema-1023", dt:"2026-10-23", v:"gema", t:"MandacaRio, com abertura de João Bragança", c:[], h:"21:00", ap:1, p:"Ingresso", rep:["gema"], dur:4, s:"ig:barcariocadagema", x:"João Bragança abre a noite com voz e violão."},
+ {id:"d-alfa-1016", dt:"2026-10-16", v:"alfa", t:"Choro do Alfa com Roberta Nistra e convidados", c:["choro"], h:"18:00", tbd:1, p:"Consulte", dur:4, s:"ig:alfa_bar_e_cultura", x:"Noite de samba e choro; Chico Alves e Julia Gallotti estão entre os convidados anunciados."},
+ {id:"d-alfa-1017", dt:"2026-10-17", v:"alfa", t:"Tomaz Miranda", c:["samba"], h:"18:00", tbd:1, p:"Consulte", dur:4, s:"ig:alfa_bar_e_cultura", x:"Agenda de outubro do Alfa."},
+ {id:"d-alfa-1018", dt:"2026-10-18", v:"alfa", t:"Samba do Theo Bial", c:["samba"], h:"18:00", tbd:1, p:"Consulte", dur:4, s:"ig:alfa_bar_e_cultura", x:"Agenda de outubro do Alfa."},
+ {id:"d-alfa-1023", dt:"2026-10-23", v:"alfa", t:"Chico Alves convida Marquinhos Diniz: homenagem ao Trio Calafrio", c:["samba"], h:"18:00", tbd:1, p:"Consulte", dur:4, s:"ig:alfa_bar_e_cultura", x:"Agenda de outubro do Alfa."},
+ {id:"d-alfa-1024", dt:"2026-10-24", v:"alfa", t:"Mãe Boêmia e lançamento de livros", c:["samba"], h:"14:00", ap:1, p:"Consulte", dur:5, s:"ig:alfa_bar_e_cultura", x:"Encontro com música, cerveja e oficinas para crianças."},
+ {id:"d-alfa-1025", dt:"2026-10-25", v:"alfa", t:"Candongueiro", c:["samba"], h:"16:00", p:"Consulte", dur:4, s:"ig:alfa_bar_e_cultura", x:"Agenda de outubro do Alfa."},
+ {id:"d-alfa-1030", dt:"2026-10-30", v:"alfa", t:"Marcelle Britto", c:["samba"], h:"18:00", tbd:1, p:"Consulte", dur:4, s:"ig:alfa_bar_e_cultura", x:"Agenda de outubro do Alfa."},
+ {id:"d-alfa-1031", dt:"2026-10-31", v:"alfa", t:"Mulheres no Compasso homenageiam Cristina Buarque", c:["samba"], h:"18:00", tbd:1, p:"Consulte", dur:4, s:"ig:alfa_bar_e_cultura", x:"Agenda de outubro do Alfa."},
+ {id:"d-mang-1017", dt:"2026-10-17", v:"mang", t:"Terreiro de Mangueira: homenagem a Cartola", c:["samba"], h:"15:00", p:"R$ 15 antecipado", rep:["mangueira"], dur:5, s:"ig:terreirodemangueira", x:"A roda publicou uma playlist com o repertório para o público ensaiar."},
+ {id:"d-cac-1018", dt:"2026-10-18", v:"cac", t:"155ª Feijoada do Cacique, com Flávia Saolli", c:["samba","feijoada"], h:"13:00", p:"Grátis", f:1, rep:["caciquefeij"], dur:9, s:"ig:cacique_de_ramos", x:"Flávia Saolli comemora aniversário com o show Meu Doce Refúgio; outros convidados ao longo da tarde."},
+ {id:"d-crioulo-1023", dt:"2026-10-23", v:"clementina", t:"Terreiro de Crioulo no Quintal da Clementina", c:["samba"], h:"18:00", tbd:1, p:"Consulte", dur:5, s:"ig:terreirodecrioulo", x:"A roda campeã do ranking do GLOBO 2026 desce de Realengo para o Centro."},
+ {id:"d-bdg-1015", dt:"2026-10-15", v:"bottle", t:"Ela é Carioca, com Francesca Lo Cicero", c:["bossa"], h:"20:00", p:"Couvert", rep:["bottle"], dur:2, s:"ig:becodasgarrafas", x:"Clássicos da bossa nova no lugar onde ela ganhou palco."},
+ {id:"d-bdg-1016", dt:"2026-10-16", v:"bottle", t:"MPB entre amigos, com Andréia Pedroso", c:["bossa"], h:"20:00", p:"Couvert", rep:["bottle"], dur:2, s:"ig:becodasgarrafas", x:"Gustavo Martins, Zé Luiz Maia e Marcio Bahia acompanham a cantora em Caetano, Djavan, Gil, Chico e outros."},
+ {id:"d-bdg-1017", dt:"2026-10-17", v:"bottle", t:"Bossa Mais celebra a Bossa Nova", c:["bossa"], h:"21:00", p:"Couvert", rep:["bottle"], dur:2, s:"ig:becodasgarrafas", x:"Tom, Vinicius, Carlos Lyra, Marcos Valle, João Donato e Menescal."},
+ {id:"d-bdg-1019", dt:"2026-10-19", v:"bottle", t:"Segundas do Little Club: Lu Oliveira e Rogério Guimarães", c:["bossa"], h:"20:00", p:"Couvert", dur:2, s:"ig:becodasgarrafas", x:"Voz e violão no palco pequeno do Little Club, nas segundas de outubro."},
+ {id:"d-bdg-1026", dt:"2026-10-26", v:"bottle", t:"Segundas do Little Club: Lu Oliveira e Rogério Guimarães", c:["bossa"], h:"20:00", p:"Couvert", dur:2, s:"ig:becodasgarrafas", x:"Voz e violão no palco pequeno do Little Club, nas segundas de outubro."},
+ {id:"d-buko-1017", dt:"2026-10-17", v:"buko", t:"Karaokê, River Raid e DJs até o amanhecer", c:["rock","karaoke"], h:"20:00", p:"Ingresso", rep:["buko"], dur:9, s:"ig:barbukowski", x:"Karaokê a partir das 20h, show de rock dos anos 80 com a River Raid e duas pistas de DJs. Depois da 1h, entrada livre para quem estiver na lista."},
+ {id:"d-buko-1030", dt:"2026-10-30", v:"buko", t:"Halloween do Bukowski", c:["rock"], h:"21:00", ap:1, p:"Ingresso", rep:["buko"], dur:8, s:"ig:barbukowski", x:"Maquiadores na casa e concurso de fantasias com prêmios."}
+];
+const ALL = E.concat(D);
+const VBY = Object.fromEntries(V.map(v=>[v.id,v]));
+function srcUrl(s){ if(!s) return ""; if(s.startsWith("ig:")) return "https://www.instagram.com/"+s.slice(3)+"/"; return SRC[s]||""; }
+const WD = ["domingo","segunda","terça","quarta","quinta","sexta","sábado"];
+const WDS = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
+const MON = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+const DAYS_AHEAD = 17;
+
+// ---------- storage ----------
+function load(k){ try{ const r = localStorage.getItem("esquina."+k); return r ? JSON.parse(r) : null; }catch(e){ return null; } }
+function save(k,v){ try{ localStorage.setItem("esquina."+k, JSON.stringify(v)); }catch(e){} }
+const S = { saved:new Set(load("saved")||[]), going:new Set(load("going")||[]), hidden:new Set(load("hidden")||[]) };
+function persist(){ save("saved",[...S.saved]); save("going",[...S.going]); save("hidden",[...S.hidden]); }
+
+// ---------- time ----------
+function nowSP(){
+  const parts = new Intl.DateTimeFormat("en-CA",{timeZone:TZ, year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit", hour12:false}).formatToParts(new Date());
+  const o = {}; parts.forEach(p=>o[p.type]=p.value);
+  let hh = +o.hour; if(hh===24) hh = 0;
+  return {y:+o.year, m:+o.month, d:+o.day, mins: hh*60 + (+o.minute), hh, mm:+o.minute};
+}
+function toMin(h){ const [a,b] = h.split(":").map(Number); return a*60+b; }
+function hhmm(m){ const h = Math.floor(m/60), mm = m%60; return String(h).padStart(2,"0")+":"+String(mm).padStart(2,"0"); }
+
+function buildDays(){
+  const n = nowSP(); const out = [];
+  for(let i=0;i<DAYS_AHEAD;i++){
+    const dt = new Date(Date.UTC(n.y, n.m-1, n.d+i));
+    const dom = dt.getUTCDate();
+    out.push({i, wd:dt.getUTCDay(), dom, mon:dt.getUTCMonth(), iso:dt.toISOString().slice(0,10), nth:Math.ceil(dom/7)});
+  }
+  return {now:n, days:out};
+}
+
+function instances(){
+  const {now, days} = buildDays();
+  const list = [];
+  const replaced = new Set();
+  D.forEach(x=> (x.rep||[]).forEach(r=> replaced.add(r+"@"+x.dt)));
+  const push = (e, day)=>{
+    const start = toMin(e.h), end = start + (e.dur||4)*60;
+    let state = "next";
+    if(day.i===0){
+      if(now.mins >= end) return;
+      if(now.mins >= start && !e.tbd) state = "now";
+    }
+    list.push({key:e.id+"@"+day.iso, e, v:VBY[e.v], day, start, state});
+  };
+  for(const day of days){
+    for(const e of E){
+      if(!e.d.includes(day.wd)) continue;
+      if(e.n && !e.n.includes(day.nth)) continue;
+      if(e.skip && e.skip.includes(day.iso)) continue;
+      if(replaced.has(e.id+"@"+day.iso)) continue;
+      push(e, day);
+    }
+    for(const e of D){ if(e.dt===day.iso) push(e, day); }
+  }
+  list.sort((a,b)=> a.day.i-b.day.i || a.start-b.start || a.e.t.localeCompare(b.e.t));
+  return {now, days, list};
+}
+
+// ---------- describe schedule ----------
+function joinPt(arr){ return arr.length<2 ? arr.join("") : arr.slice(0,-1).join(", ")+" e "+arr[arr.length-1]; }
+function sched(e){
+  if(e.dt){ const [y,m,d] = e.dt.split("-").map(Number); const wd = new Date(Date.UTC(y,m-1,d)).getUTCDay(); return WDS[wd]+" "+d+" "+MON[m-1]+" (data avulsa)"; }
+  if(e.n){
+    const fem = e.d.every(d=>d>=1 && d<=5);
+    const o = e.n.map(n=> n+(fem?"ª":"º"));
+    return joinPt(o)+" "+joinPt(e.d.map(d=>WD[d]))+" do mês";
+  }
+  if(e.d.length===1){ const d=e.d[0]; return (d===0||d===6 ? "Todo " : "Toda ")+WD[d]; }
+  if(e.d.length>=5){ return WDS[e.d[0]]+" a "+WDS[e.d[e.d.length-1]].toLowerCase(); }
+  return joinPt(e.d.map(d=>WDS[d]));
+}
+function dayLabel(day){
+  if(day.i===0) return "Hoje";
+  if(day.i===1) return "Amanhã";
+  return WDS[day.wd]+" "+day.dom+" "+MON[day.mon];
+}
+function esc(s){ return String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function mapsUrl(v){ return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(v.a+", "+v.b.split(" · ")[0]+", Rio de Janeiro"); }
+
+// ---------- state ----------
+const ST = { tab:"agenda", when:"prox", free:false, cat:null, reg:null, open:new Set(), mapZoom:"perto", mapSel:null };
+try{ const t = load("tab"); if(t && ["agenda","voce","mapa","lugares"].includes(t)) ST.tab = t; }catch(e){}
+const WHEN = [["prox","Próximos"],["agora","Agora"],["hoje","Hoje"],["amanha","Amanhã"],["fds","Fim de semana"],["7d","7 dias"]];
+
+function passWhen(x){
+  const w = ST.when, i = x.day.i;
+  if(w==="agora") return x.state==="now";
+  if(w==="hoje") return i===0;
+  if(w==="amanha") return i===1;
+  if(w==="7d") return i<7;
+  if(w==="fds"){
+    if(i>=7) return false;
+    if(x.day.wd===6 || x.day.wd===0) return true;
+    return x.day.wd===5;
+  }
+  return true;
+}
+function passFilters(x, ignoreHidden){
+  if(!ignoreHidden && S.hidden.has(x.e.id)) return false;
+  if(ST.free && !x.e.f) return false;
+  if(ST.cat && !x.e.c.includes(ST.cat)) return false;
+  if(ST.reg && x.v.r!==ST.reg) return false;
+  return true;
+}
+
+// ---------- render: bar ----------
+function renderBar(){
+  const bar = document.getElementById("bar");
+  bar.hidden = (ST.tab==="lugares" || ST.tab==="voce");
+  const wr = document.getElementById("whenRow");
+  wr.innerHTML = WHEN.map(([k,l])=>`<button class="chip when" data-when="${k}" aria-pressed="${ST.when===k}">${l}</button>`).join("")
+    + `<span class="sep"></span><button class="chip free" id="freeBtn" aria-pressed="${ST.free}">Grátis</button>`;
+  wr.hidden = ST.tab==="mapa";
+  const cr = document.getElementById("catRow");
+  cr.innerHTML = Object.entries(CATS).map(([k,c])=>`<button class="chip sm" data-cat="${k}" aria-pressed="${ST.cat===k}" style="--cc:var(${c.c})"><span class="dot"></span>${c.n}</button>`).join("")
+    + `<span class="sep"></span>` + Object.entries(REGS).map(([k,l])=>`<button class="chip sm" data-reg="${k}" aria-pressed="${ST.reg===k}">${l}</button>`).join("");
+}
+
+// ---------- render: event row ----------
+function evRow(x){
+  const e = x.e, v = x.v;
+  const sv = S.saved.has(x.key), gg = S.going.has(x.key), op = ST.open.has(x.key);
+  const cats = e.c.map(k=>`<span class="tagp" style="--cc:var(${CATS[k].c})"><span class="dot"></span>${CATS[k].n}</span>`).join("");
+  const price = `<span class="tagp ${e.f?"free":""}">${esc(e.p)}</span>`;
+  const ck = e.ck ? `<span class="tagp chk">confira</span>` : "";
+  const conf = e.dt ? `<span class="tagp ok">anunciado no Instagram</span>` : "";
+  const src = srcUrl(e.s);
+  const ig = v.ig ? `<a href="https://www.instagram.com/${v.ig}/" target="_blank" rel="noopener">@${esc(v.ig)}</a>` : "";
+  const timeHtml = e.tbd ? `<span class="tbd" title="horário ainda não divulgado">a&nbsp;def.</span>` : `${e.ap?'<span class="ap" title="horário aproximado">≈</span>':""}${hhmm(x.start)}`;
+  return `<article class="ev ${gg?"going":""}" data-key="${x.key}">
+    <div class="time">${timeHtml}</div>
+    <div class="main">
+      <button class="title" data-open="${x.key}" aria-expanded="${op}">${esc(e.t)}</button>
+      <div class="venue"><b>${esc(v.n)}</b> · ${esc(v.b)}</div>
+      <div class="meta">${price}${cats}${conf}${ck}</div>
+    </div>
+    <div class="acts">
+      <button class="act" data-save="${x.key}" aria-pressed="${sv}">${sv?"Salvo":"Salvar"}</button>
+      <button class="act vou" data-going="${x.key}" aria-pressed="${gg}">Vou</button>
+      <button class="act x" data-hide="${e.id}" title="Ocultar este evento em todas as datas">Não curto</button>
+    </div>
+    ${op ? `<div class="det">
+      <p>${esc(e.x)}</p>
+      <p><b>${esc(sched(e))}</b>, ${e.tbd?"horário ainda não divulgado":(e.ap?"por volta das ":"a partir das ")+hhmm(x.start)} · ${esc(v.a)}, ${esc(v.b)}</p>
+      <div class="links"><a href="${mapsUrl(v)}" target="_blank" rel="noopener">Abrir no Google Maps</a>${ig}${src && !src.includes("instagram.com")?`<a href="${src}" target="_blank" rel="noopener">Fonte</a>`:""}</div>
+    </div>` : ""}
+  </article>`;
+}
+
+function renderSections(list, emptyMsg){
+  if(!list.length) return `<div class="empty"><b>Nada por aqui</b>${emptyMsg}</div>`;
+  const groups = [];
+  const nowItems = list.filter(x=>x.state==="now");
+  if(nowItems.length) groups.push({label:"Rolando agora", cls:"now", items:nowItems});
+  const rest = list.filter(x=>x.state!=="now");
+  let cur = null;
+  for(const x of rest){
+    if(!cur || cur.i!==x.day.i){ cur = {i:x.day.i, label:dayLabel(x.day), items:[]}; groups.push(cur); }
+    cur.items.push(x);
+  }
+  return groups.map(g=>`<section class="day ${g.cls||""}"><h2>${g.label}<span class="c">${g.items.length}</span></h2>${g.items.map(evRow).join("")}</section>`).join("");
+}
+
+// ---------- views ----------
+function viewAgenda(data){
+  let list = data.list.filter(x=>passWhen(x) && passFilters(x));
+  if(ST.when==="prox"){ /* all days */ }
+  const hiddenCount = S.hidden.size;
+  const note = `<p class="note"><b>Atualizado com o Instagram das casas em 15/10.</b> Linhas com o selo <b>anunciado no Instagram</b> vieram de posts com data; as demais seguem a programação fixa da roda ou do bar. ≈ é horário aproximado; <b>confira</b> pede checagem no perfil antes de sair.</p>`;
+  const msg = ST.when==="agora" ? "Nenhuma roda no ar agora com esses filtros. Tente “Hoje” ou “Próximos”." : "Tire algum filtro para ver mais.";
+  return note + renderSections(list, msg) +
+    (hiddenCount ? `<p class="hiddeninfo">${hiddenCount} evento${hiddenCount>1?"s":""} oculto${hiddenCount>1?"s":""}. <button class="linkbtn" data-unhide="all">Mostrar de novo</button></p>` : "");
+}
+
+function viewVoce(data){
+  const list = data.list.filter(x=> S.saved.has(x.key) || S.going.has(x.key));
+  const head = `<p class="note">Aqui ficam os eventos que você salvou ou marcou “Vou”, nas próximas duas semanas.</p>`;
+  const hid = [...S.hidden].map(id=>ALL.find(e=>e.id===id)).filter(Boolean);
+  const hidHtml = hid.length ? `<section class="day"><h2>Ocultos<span class="c">${hid.length}</span></h2>${hid.map(e=>`<div class="place"><h3>${esc(e.t)}</h3><div class="sub">${esc(VBY[e.v].n)} · ${esc(sched(e))}</div><div class="links"><button class="linkbtn" data-unhide="${e.id}">Mostrar de novo</button></div></div>`).join("")}</section>` : "";
+  return head + renderSections(list, "Toque em “Salvar” ou “Vou” na agenda para montar a sua lista.") + hidHtml;
+}
+
+function viewLugares(){
+  let html = `<p class="note">${V.length} lugares. Endereços e dias vêm das fontes linkadas; posições no mapa são aproximadas.</p>`;
+  for(const [rk, rl] of Object.entries(REGS)){
+    const vs = V.filter(v=>v.r===rk).sort((a,b)=>a.n.localeCompare(b.n,"pt"));
+    html += `<div class="reg"><h2>${rl}</h2>`;
+    for(const v of vs){
+      const evs = E.filter(e=>e.v===v.id);
+      const today = buildDays().days[0].iso;
+      const dts = D.filter(e=>e.v===v.id && e.dt>=today).sort((a,b)=>a.dt.localeCompare(b.dt));
+      const items = evs.map(e=>`<li><span><b>${esc(e.t)}</b> <span class="when">· ${esc(sched(e))}, ${e.ap?"≈":""}${e.h} · ${esc(e.p)}</span></span></li>`).join("");
+      const ditems = dts.map(e=>`<li><span><b>${esc(e.t)}</b> <span class="when">· ${esc(sched(e).replace(" (data avulsa)",""))}${e.tbd?"":", "+(e.ap?"≈":"")+e.h} · ${esc(e.p)}</span></span></li>`).join("");
+      const varTxt = v.var ? `<li><span class="when">${esc(v.var)}</span></li>` : "";
+      const srcKey = v.src || (evs[0] && evs[0].s) || "";
+      const src = srcUrl(srcKey);
+      const ig = v.ig ? `<a href="https://www.instagram.com/${v.ig}/" target="_blank" rel="noopener">@${esc(v.ig)}</a>` : "";
+      html += `<div class="place" id="p-${v.id}"><h3>${esc(v.n)}</h3>
+        <div class="sub">${TIPO[v.t]} · ${esc(v.b)} · ${esc(v.a)}</div>
+        <ul>${items}${varTxt}${ditems?`<li><span class="when"><b>Próximas datas anunciadas</b></span></li>`+ditems:""}</ul>
+        <div class="links"><a href="${mapsUrl(v)}" target="_blank" rel="noopener">Google Maps</a>${ig}${src && !src.includes("instagram.com")?`<a href="${src}" target="_blank" rel="noopener">Fonte</a>`:""}</div></div>`;
+    }
+    html += `</div>`;
+  }
+  return html;
+}
+
+// Map
+const BAIRROS = [
+  ["Centro",-22.9045,-43.1795],["Lapa",-22.9160,-43.1868],["Saúde",-22.8945,-43.1855],["Santo Cristo",-22.8975,-43.2065],
+  ["Glória",-22.9235,-43.1795],["Laranjeiras",-22.9375,-43.1975],["Botafogo",-22.9500,-43.1820],["Copacabana",-22.9705,-43.1875],
+  ["Ipanema",-22.9830,-43.2055],["Leblon",-22.9805,-43.2215],["Gávea",-22.9730,-43.2315],["Estácio",-22.9150,-43.2040],
+  ["Tijuca",-22.9255,-43.2335],["Vila Isabel",-22.9175,-43.2440],["Andaraí",-22.9290,-43.2560],["São Cristóvão",-22.8935,-43.2240],
+  ["Olaria",-22.8470,-43.2700],["Madureira",-22.8690,-43.3400],["Méier",-22.9000,-43.2800],["Realengo",-22.8740,-43.4300],["Padre Miguel",-22.8830,-43.4470]
+];
+const EXT = {
+  perto:{lng:[-43.250,-43.163], lat:[-22.992,-22.890], W:600},
+  cidade:{lng:[-43.470,-43.150], lat:[-22.998,-22.830], W:900}
+};
+function proj(ext, lat, lng){
+  const k = Math.cos(22.9*Math.PI/180);
+  const W = ext.W, H = Math.round(W*(ext.lat[1]-ext.lat[0])/((ext.lng[1]-ext.lng[0])*k));
+  return {x:(lng-ext.lng[0])/(ext.lng[1]-ext.lng[0])*W, y:(ext.lat[1]-lat)/(ext.lat[1]-ext.lat[0])*H, W, H};
+}
+function viewMapa(data){
+  const ext = EXT[ST.mapZoom];
+  const dims = proj(ext, ext.lat[0], ext.lng[0]);
+  const W = dims.W, H = dims.H;
+  const inExt = (lat,lng)=> lat>=ext.lat[0] && lat<=ext.lat[1] && lng>=ext.lng[0] && lng<=ext.lng[1];
+  const fs = ST.mapZoom==="perto" ? 13 : 15;
+  const r = ST.mapZoom==="perto" ? 7 : 8;
+  // which venues pass filters
+  const vis = V.filter(v=>{
+    if(ST.reg && v.r!==ST.reg) return false;
+    const evs = ALL.filter(e=>e.v===v.id && !S.hidden.has(e.id));
+    if(!evs.length) return !ST.free && (!ST.cat || (v.cats||[]).includes(ST.cat)) && !!v.var;
+    return evs.some(e=> (!ST.free || e.f) && (!ST.cat || e.c.includes(ST.cat))) ;
+  });
+  let grid = "";
+  for(let gx=1; gx<8; gx++) grid += `<line x1="${W*gx/8}" y1="0" x2="${W*gx/8}" y2="${H}"/>`;
+  for(let gy=1; gy<8; gy++) grid += `<line x1="0" y1="${H*gy/8}" x2="${W}" y2="${H*gy/8}"/>`;
+  const labels = BAIRROS.filter(b=>inExt(b[1],b[2])).map(b=>{ const p=proj(ext,b[1],b[2]); return `<text class="mlabel" x="${p.x.toFixed(1)}" y="${p.y.toFixed(1)}" font-size="${fs}" text-anchor="middle">${b[0]}</text>`; }).join("");
+  const water = ST.mapZoom==="perto"
+    ? `<text class="water" x="${W-12}" y="${H*0.30}" font-size="14" text-anchor="end">Baía de Guanabara</text><text class="water" x="${W*0.55}" y="${H-14}" font-size="14" text-anchor="middle">Oceano Atlântico</text>`
+    : `<text class="water" x="${W-12}" y="${H*0.22}" font-size="16" text-anchor="end">Baía de Guanabara</text><text class="water" x="${W*0.45}" y="${H-14}" font-size="16" text-anchor="middle">Oceano Atlântico</text>`;
+  const pins = vis.filter(v=>inExt(v.lat,v.lng)).map(v=>{
+    const p = proj(ext, v.lat, v.lng);
+    const hasEv = ALL.some(e=>e.v===v.id);
+    const sel = ST.mapSel===v.id;
+    return `<g class="pin ${hasEv?"":"vazio"} ${sel?"sel":""}" data-pin="${v.id}" tabindex="0" role="button" aria-label="${esc(v.n)}"><title>${esc(v.n)}</title><circle class="b" cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${sel?r+3:r}"/></g>`;
+  }).join("");
+  const outside = vis.filter(v=>!inExt(v.lat,v.lng)).length;
+  let card = `<p class="note">Toque num ponto para ver o lugar e as próximas datas. Pontos vazados têm programação variável.</p>`;
+  if(ST.mapSel && VBY[ST.mapSel]){
+    const v = VBY[ST.mapSel];
+    const next = data.list.filter(x=>x.v.id===v.id && passFilters(x)).slice(0,4);
+    const items = next.map(x=>`<li><span><b>${x.state==="now"?"Agora":dayLabel(x.day)}, ${x.e.ap?"≈":""}${hhmm(x.start)}</b> · ${esc(x.e.t)} <span class="when">· ${esc(x.e.p)}</span></span></li>`).join("");
+    card = `<div class="place"><h3>${esc(v.n)}</h3><div class="sub">${TIPO[v.t]} · ${esc(v.b)} · ${esc(v.a)}</div>
+      <ul>${items || (v.var?`<li><span class="when">${esc(v.var)}</span></li>`:`<li><span class="when">Nada nas próximas duas semanas com esses filtros.</span></li>`)}</ul>
+      <div class="links"><a href="${mapsUrl(v)}" target="_blank" rel="noopener">Abrir no Google Maps</a><button class="linkbtn" data-goto="${v.id}">Ver em Lugares</button></div></div>`;
+  }
+  return `<div class="mapwrap">
+    <div class="maptools">
+      <button class="chip sm" data-zoom="perto" aria-pressed="${ST.mapZoom==="perto"}">Centro e Zona Sul</button>
+      <button class="chip sm" data-zoom="cidade" aria-pressed="${ST.mapZoom==="cidade"}">Cidade toda</button>
+      <span class="hint">${vis.length} lugares${outside?` · ${outside} fora deste recorte`:""} · posições aproximadas</span>
+    </div>
+    <div class="mapbox"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Mapa esquemático dos lugares">
+      <g class="grid">${grid}</g>${water}${labels}${pins}
+    </svg></div>
+    <div class="mapcard">${card}</div>
+  </div>`;
+}
+
+// ---------- main render ----------
+function render(){
+  const data = instances();
+  const n = data.now;
+  document.getElementById("clock").textContent = WD[new Date(Date.UTC(n.y,n.m-1,n.d)).getUTCDay()]+", "+String(n.hh).padStart(2,"0")+":"+String(n.mm).padStart(2,"0");
+  document.querySelectorAll("nav.tabs button").forEach(b=> b.setAttribute("aria-selected", String(b.dataset.tab===ST.tab)));
+  const nv = data.list.filter(x=>S.saved.has(x.key)||S.going.has(x.key)).length;
+  document.getElementById("n-voce").textContent = nv ? nv : "";
+  renderBar();
+  const view = document.getElementById("view");
+  view.innerHTML = ST.tab==="agenda" ? viewAgenda(data) : ST.tab==="voce" ? viewVoce(data) : ST.tab==="mapa" ? viewMapa(data) : viewLugares();
+}
+
+// ---------- events ----------
+document.addEventListener("click", ev=>{
+  const t = ev.target.closest("button, .pin");
+  if(!t) return;
+  const d = t.dataset;
+  if(d.tab){ ST.tab = d.tab; save("tab", ST.tab); render(); window.scrollTo({top:0}); return; }
+  if(d.when){ ST.when = d.when; render(); return; }
+  if(t.id==="freeBtn"){ ST.free = !ST.free; render(); return; }
+  if(d.cat){ ST.cat = ST.cat===d.cat ? null : d.cat; render(); return; }
+  if(d.reg){ ST.reg = ST.reg===d.reg ? null : d.reg; render(); return; }
+  if(d.open){ ST.open.has(d.open) ? ST.open.delete(d.open) : ST.open.add(d.open); render(); return; }
+  if(d.save){ S.saved.has(d.save) ? S.saved.delete(d.save) : S.saved.add(d.save); persist(); render(); return; }
+  if(d.going){ S.going.has(d.going) ? S.going.delete(d.going) : S.going.add(d.going); persist(); render(); return; }
+  if(d.hide){ S.hidden.add(d.hide); persist(); render(); return; }
+  if(d.unhide){ if(d.unhide==="all") S.hidden.clear(); else S.hidden.delete(d.unhide); persist(); render(); return; }
+  if(d.zoom){ ST.mapZoom = d.zoom; render(); return; }
+  if(d.goto){ ST.tab = "lugares"; render(); const el = document.getElementById("p-"+d.goto); if(el) el.scrollIntoView({block:"start"}); return; }
+  if(d.pin){ ST.mapSel = ST.mapSel===d.pin ? null : d.pin; render(); return; }
+});
+document.addEventListener("keydown", ev=>{
+  if((ev.key==="Enter"||ev.key===" ") && ev.target.classList && ev.target.classList.contains("pin")){ ev.preventDefault(); ev.target.dispatchEvent(new MouseEvent("click",{bubbles:true})); }
+});
+
+render();
+let lastMin = -1;
+setInterval(()=>{ const m = nowSP().mins; if(Math.floor(m/5)!==Math.floor(lastMin/5) && !document.activeElement.closest?.(".acts")){ lastMin = m; render(); } }, 30000);
+})();
+</script>
+
+</body>
+</html>
