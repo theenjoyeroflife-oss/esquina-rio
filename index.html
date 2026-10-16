@@ -205,7 +205,7 @@ footer p{margin:0 0 8px; max-width:68ch}
   <main id="view"></main>
 
   <footer>
-    <p><b>Como funciona.</b> A agenda junta duas coisas: a programação fixa de cada lugar (toda segunda, 1º sábado do mês etc.), recalculada todo dia, e as datas avulsas lidas nos perfis de Instagram das casas em 15/10/2026. Quando um post anuncia a atração de uma noite, ele substitui a linha genérica daquele dia. ≈ marca horário aproximado; "a def." é horário ainda não divulgado; "confira" marca programação de fontes mais antigas ou que varia muito.</p>
+    <p><b>Como funciona.</b> A agenda junta duas coisas: a programação fixa de cada lugar (toda segunda, 1º sábado do mês etc.), recalculada todo dia, e as datas avulsas lidas nos perfis de Instagram das casas em 15/10/2026. Quando um post anuncia a atração de uma noite, ele substitui a linha genérica daquele dia. ≈ marca horário aproximado; "a def." é horário ainda não divulgado; "necessário verificar" marca programação de fontes mais antigas ou que varia muito.</p>
     <p>Rodas de rua cancelam com chuva, mudam de dia e às vezes acabam. Antes de sair, veja o perfil da roda ou da casa. Fontes: Mapa das Rodas de Samba 2025 (Prefeitura do Rio), Riotur, Time Out Rio, Catraca Livre, Diário do Rio, Sopa Cultural, O Globo e outras, linkadas em cada evento.</p>
     <p>Salvos, "vou" e ocultos ficam guardados só neste navegador.</p>
   </footer>
@@ -313,7 +313,7 @@ const V = [
    var:"Stand-up, improviso e música ao vivo em casarão de três andares. Programação no perfil da casa.", cats:[], src:"comedy"}
 ];
 
-// Eventos recorrentes. d = dias (0 dom … 6 sáb); n = semanas do mês (1º, 2º…); ap = horário aproximado; ck = "confira".
+// Eventos recorrentes. d = dias (0 dom … 6 sáb); n = semanas do mês (1º, 2º…); ap = horário aproximado; ck = "necessário verificar".
 const E = [
  {id:"pedra", v:"pedra", t:"Roda de Samba da Pedra do Sal", c:["samba"], d:[1], h:"19:00", p:"Grátis", f:1, dur:5, s:"mapa", x:"A roda tradicional das segundas, ao ar livre no largo onde o samba carioca nasceu. Barracas de comida e bebida em volta; costuma lotar."},
  {id:"pedrafds", v:"pedra", t:"Samba na Pedra (sexta a domingo)", c:["samba"], d:[5,6,0], h:"20:00", ap:1, p:"Grátis", f:1, ck:1, dur:5, s:"ig:rodadesambadapedradosal", x:"Segundo o perfil da roda, a Pedra tem samba de sexta a segunda e em vésperas de feriado. Nas noites fora da segunda, grupos variam."},
@@ -539,7 +539,7 @@ function evRow(x){
   const sv = S.saved.has(x.key), gg = S.going.has(x.key), op = ST.open.has(x.key);
   const cats = e.c.map(k=>`<span class="tagp" style="--cc:var(${CATS[k].c})"><span class="dot"></span>${CATS[k].n}</span>`).join("");
   const price = `<span class="tagp ${e.f?"free":""}">${esc(e.p)}</span>`;
-  const ck = e.ck ? `<span class="tagp chk">confira</span>` : "";
+  const ck = e.ck ? `<span class="tagp chk">necessário verificar</span>` : "";
   const conf = e.dt ? `<span class="tagp ok">anunciado no Instagram</span>` : "";
   const src = srcUrl(e.s);
   const ig = v.ig ? `<a href="https://www.instagram.com/${v.ig}/" target="_blank" rel="noopener">@${esc(v.ig)}</a>` : "";
@@ -589,7 +589,7 @@ function viewAgenda(data){
   let list = data.list.filter(x=>passWhen(x) && passFilters(x));
   if(ST.when==="prox"){ /* all days */ }
   const hiddenCount = S.hidden.size;
-  const note = `<p class="note"><b>Atualizado com o Instagram das casas em 15/10.</b> Linhas com o selo <b>anunciado no Instagram</b> vieram de posts com data; as demais seguem a programação fixa da roda ou do bar. ≈ é horário aproximado; <b>confira</b> pede checagem no perfil antes de sair.</p>`;
+  const note = `<p class="note"><b>Atualizado com o Instagram das casas em 15/10.</b> Linhas com o selo <b>anunciado no Instagram</b> vieram de posts com data; as demais seguem a programação fixa da roda ou do bar. ≈ é horário aproximado; <b>necessário verificar</b> pede checagem no perfil antes de sair.</p>`;
   const msg = ST.when==="agora" ? "Nenhuma roda no ar agora com esses filtros. Tente “Hoje” ou “Próximos”." : "Tire algum filtro para ver mais.";
   return note + renderSections(list, msg) +
     (hiddenCount ? `<p class="hiddeninfo">${hiddenCount} evento${hiddenCount>1?"s":""} oculto${hiddenCount>1?"s":""}. <button class="linkbtn" data-unhide="all">Mostrar de novo</button></p>` : "");
