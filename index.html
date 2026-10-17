@@ -161,15 +161,11 @@ a.act{text-decoration:none; color:var(--ink)}
 .maptools{display:flex; gap:6px; flex-wrap:wrap; align-items:center}
 .maptools .hint{color:var(--muted); font-size:13px; margin-left:auto}
 .mapbox{margin-top:10px; background:var(--surface); border:1px solid var(--line); border-radius:10px; overflow:hidden}
-.mapbox svg{display:block; width:100%; height:auto; max-height:76vh}
-.mlabel{fill:var(--muted); font-family:var(--f-display); font-weight:600; letter-spacing:.08em; text-transform:uppercase}
-.water{fill:var(--azul); opacity:.55; font-family:var(--f-body); font-style:italic}
-.grid line{stroke:var(--line); stroke-width:1}
-.pin{cursor:pointer}
-.pin circle.b{fill:var(--azul); stroke:var(--surface); stroke-width:2}
-.pin.vazio circle.b{fill:var(--surface); stroke:var(--muted); stroke-width:2}
-.pin.sel circle.b{fill:var(--gelada); stroke:var(--ink)}
-.pin:focus-visible circle.b{stroke:var(--ink); stroke-width:3}
+.mapbox iframe{display:block; width:100%; height:min(62vh,520px); border:0}
+.plist{margin-top:14px}
+.pgroup + .pgroup{margin-top:12px}
+.pgroup h4{margin:0 0 6px; font-family:var(--f-display); font-weight:600; letter-spacing:.08em; text-transform:uppercase; font-size:13px; color:var(--muted)}
+.pins{display:flex; flex-wrap:wrap; gap:6px}
 .mapcard{margin-top:12px}
 footer{margin-top:40px; padding-block:18px 32px; border-top:1px solid var(--line); color:var(--muted); font-size:13px}
 footer p{margin:0 0 8px; max-width:68ch}
@@ -629,29 +625,12 @@ function viewLugares(){
 }
 
 // Map
-const BAIRROS = [
-  ["Centro",-22.9045,-43.1795],["Lapa",-22.9160,-43.1868],["Saúde",-22.8945,-43.1855],["Santo Cristo",-22.8975,-43.2065],
-  ["Glória",-22.9235,-43.1795],["Laranjeiras",-22.9375,-43.1975],["Botafogo",-22.9500,-43.1820],["Copacabana",-22.9705,-43.1875],
-  ["Ipanema",-22.9830,-43.2055],["Leblon",-22.9805,-43.2215],["Gávea",-22.9730,-43.2315],["Estácio",-22.9150,-43.2040],
-  ["Tijuca",-22.9255,-43.2335],["Vila Isabel",-22.9175,-43.2440],["Andaraí",-22.9290,-43.2560],["São Cristóvão",-22.8935,-43.2240],
-  ["Olaria",-22.8470,-43.2700],["Madureira",-22.8690,-43.3400],["Méier",-22.9000,-43.2800],["Realengo",-22.8740,-43.4300],["Padre Miguel",-22.8830,-43.4470]
-];
-const EXT = {
-  perto:{lng:[-43.250,-43.163], lat:[-22.992,-22.890], W:600},
-  cidade:{lng:[-43.470,-43.150], lat:[-22.998,-22.830], W:900}
-};
-function proj(ext, lat, lng){
-  const k = Math.cos(22.9*Math.PI/180);
-  const W = ext.W, H = Math.round(W*(ext.lat[1]-ext.lat[0])/((ext.lng[1]-ext.lng[0])*k));
-  return {x:(lng-ext.lng[0])/(ext.lng[1]-ext.lng[0])*W, y:(ext.lat[1]-lat)/(ext.lat[1]-ext.lat[0])*H, W, H};
+function gmapSrc(v){
+  if(v) return "https://maps.google.com/maps?hl=pt-BR&z=16&output=embed&q="+encodeURIComponent(v.a+", "+v.b.split(" · ")[0]+", Rio de Janeiro");
+  const c = ST.mapZoom==="perto" ? {q:"Glória, Rio de Janeiro", z:13} : {q:"Rio de Janeiro", z:11};
+  return "https://maps.google.com/maps?hl=pt-BR&output=embed&z="+c.z+"&q="+encodeURIComponent(c.q);
 }
 function viewMapa(data){
-  const ext = EXT[ST.mapZoom];
-  const dims = proj(ext, ext.lat[0], ext.lng[0]);
-  const W = dims.W, H = dims.H;
-  const inExt = (lat,lng)=> lat>=ext.lat[0] && lat<=ext.lat[1] && lng>=ext.lng[0] && lng<=ext.lng[1];
-  const fs = ST.mapZoom==="perto" ? 13 : 15;
-  const r = ST.mapZoom==="perto" ? 7 : 8;
   // which venues pass filters
   const vis = V.filter(v=>{
     if(ST.reg && v.r!==ST.reg) return false;
@@ -659,39 +638,30 @@ function viewMapa(data){
     if(!evs.length) return !ST.free && (!ST.cat || (v.cats||[]).includes(ST.cat)) && !!v.var;
     return evs.some(e=> (!ST.free || e.f) && (!ST.cat || e.c.includes(ST.cat))) ;
   });
-  let grid = "";
-  for(let gx=1; gx<8; gx++) grid += `<line x1="${W*gx/8}" y1="0" x2="${W*gx/8}" y2="${H}"/>`;
-  for(let gy=1; gy<8; gy++) grid += `<line x1="0" y1="${H*gy/8}" x2="${W}" y2="${H*gy/8}"/>`;
-  const labels = BAIRROS.filter(b=>inExt(b[1],b[2])).map(b=>{ const p=proj(ext,b[1],b[2]); return `<text class="mlabel" x="${p.x.toFixed(1)}" y="${p.y.toFixed(1)}" font-size="${fs}" text-anchor="middle">${b[0]}</text>`; }).join("");
-  const water = ST.mapZoom==="perto"
-    ? `<text class="water" x="${W-12}" y="${H*0.30}" font-size="14" text-anchor="end">Baía de Guanabara</text><text class="water" x="${W*0.55}" y="${H-14}" font-size="14" text-anchor="middle">Oceano Atlântico</text>`
-    : `<text class="water" x="${W-12}" y="${H*0.22}" font-size="16" text-anchor="end">Baía de Guanabara</text><text class="water" x="${W*0.45}" y="${H-14}" font-size="16" text-anchor="middle">Oceano Atlântico</text>`;
-  const pins = vis.filter(v=>inExt(v.lat,v.lng)).map(v=>{
-    const p = proj(ext, v.lat, v.lng);
-    const hasEv = ALL.some(e=>e.v===v.id);
-    const sel = ST.mapSel===v.id;
-    return `<g class="pin ${hasEv?"":"vazio"} ${sel?"sel":""}" data-pin="${v.id}" tabindex="0" role="button" aria-label="${esc(v.n)}"><title>${esc(v.n)}</title><circle class="b" cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${sel?r+3:r}"/></g>`;
-  }).join("");
-  const outside = vis.filter(v=>!inExt(v.lat,v.lng)).length;
-  let card = `<p class="note">Toque num ponto para ver o lugar e as próximas datas. Pontos vazados têm programação variável.</p>`;
-  if(ST.mapSel && VBY[ST.mapSel]){
-    const v = VBY[ST.mapSel];
+  const selV = ST.mapSel && VBY[ST.mapSel] ? VBY[ST.mapSel] : null;
+  let card = `<p class="note">Escolha um lugar abaixo para vê-lo no mapa com as próximas datas.</p>`;
+  if(selV){
+    const v = selV;
     const next = data.list.filter(x=>x.v.id===v.id && passFilters(x)).slice(0,4);
     const items = next.map(x=>`<li><span><b>${x.state==="now"?"Agora":dayLabel(x.day)}, ${x.e.ap?"≈":""}${hhmm(x.start)}</b> · ${esc(x.e.t)} <span class="when">· ${esc(x.e.p)}</span></span></li>`).join("");
     card = `<div class="place"><h3>${esc(v.n)}</h3><div class="sub">${TIPO[v.t]} · ${esc(v.b)} · ${esc(v.a)}</div>
       <ul>${items || (v.var?`<li><span class="when">${esc(v.var)}</span></li>`:`<li><span class="when">Nada nas próximas duas semanas com esses filtros.</span></li>`)}</ul>
-      <div class="links"><a href="${mapsUrl(v)}" target="_blank" rel="noopener">Abrir no Google Maps</a><button class="linkbtn" data-goto="${v.id}">Ver em Lugares</button></div></div>`;
+      <div class="links"><a href="${mapsUrl(v)}" target="_blank" rel="noopener">Abrir no Google Maps</a><button class="linkbtn" data-goto="${v.id}">Ver em Lugares</button><button class="linkbtn" data-pin="${v.id}">Ver a região</button></div></div>`;
   }
+  const groups = Object.entries(REGS).map(([k,l])=>{
+    const vs = vis.filter(v=>v.r===k).sort((a,b)=>a.n.localeCompare(b.n,"pt"));
+    if(!vs.length) return "";
+    return `<div class="pgroup"><h4>${l}</h4><div class="pins">${vs.map(v=>`<button class="chip sm" data-pin="${v.id}" aria-pressed="${ST.mapSel===v.id}">${esc(v.n)}</button>`).join("")}</div></div>`;
+  }).join("");
   return `<div class="mapwrap">
     <div class="maptools">
-      <button class="chip sm" data-zoom="perto" aria-pressed="${ST.mapZoom==="perto"}">Centro e Zona Sul</button>
-      <button class="chip sm" data-zoom="cidade" aria-pressed="${ST.mapZoom==="cidade"}">Cidade toda</button>
-      <span class="hint">${vis.length} lugares${outside?` · ${outside} fora deste recorte`:""} · posições aproximadas</span>
+      <button class="chip sm" data-zoom="perto" aria-pressed="${!selV && ST.mapZoom==="perto"}">Centro e Zona Sul</button>
+      <button class="chip sm" data-zoom="cidade" aria-pressed="${!selV && ST.mapZoom==="cidade"}">Cidade toda</button>
+      <span class="hint">${vis.length} lugares</span>
     </div>
-    <div class="mapbox"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Mapa esquemático dos lugares">
-      <g class="grid">${grid}</g>${water}${labels}${pins}
-    </svg></div>
+    <div class="mapbox"><iframe title="${selV?esc(selV.n)+" no Google Maps":"Mapa do Rio no Google Maps"}" src="${gmapSrc(selV)}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>
     <div class="mapcard">${card}</div>
+    <div class="plist">${groups || `<p class="note">Nenhum lugar com esses filtros.</p>`}</div>
   </div>`;
 }
 
@@ -745,7 +715,7 @@ document.addEventListener("click", ev=>{
   if(d.going){ S.going.has(d.going) ? S.going.delete(d.going) : S.going.add(d.going); persist(); render(); return; }
   if(d.hide){ S.hidden.add(d.hide); persist(); render(); return; }
   if(d.unhide){ if(d.unhide==="all") S.hidden.clear(); else S.hidden.delete(d.unhide); persist(); render(); return; }
-  if(d.zoom){ ST.mapZoom = d.zoom; render(); return; }
+  if(d.zoom){ ST.mapZoom = d.zoom; ST.mapSel = null; render(); return; }
   if(d.goto){ ST.tab = "lugares"; render(); const el = document.getElementById("p-"+d.goto); if(el) el.scrollIntoView({block:"start"}); return; }
   if(d.pin){ ST.mapSel = ST.mapSel===d.pin ? null : d.pin; render(); return; }
 });
@@ -755,7 +725,7 @@ document.addEventListener("keydown", ev=>{
 
 render();
 let lastMin = -1;
-setInterval(()=>{ const m = nowSP().mins; if(Math.floor(m/5)!==Math.floor(lastMin/5) && !document.activeElement.closest?.(".acts")){ lastMin = m; render(); } }, 30000);
+setInterval(()=>{ const m = nowSP().mins; if(Math.floor(m/5)!==Math.floor(lastMin/5) && ST.tab!=="mapa" && !document.activeElement.closest?.(".acts")){ lastMin = m; render(); } }, 30000);
 })();
 </script>
 
