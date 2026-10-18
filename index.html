@@ -235,7 +235,16 @@ const SRC = {
   forro: "https://diariodorio.com/6-locais-para-dancar-forro-no-rio-de-janeiro/",
   lgbt: "https://all.accor.com/a/pt-br/limitless/thematics/lifestyle-trends/spots-lgbt-no-rio-de-janeiro.html",
   comedy: "https://www.riofilmcommission.com/en/?p=31159",
-  feira: "https://diariodorio.com/6-locais-para-dancar-forro-no-rio-de-janeiro/"
+  feira: "https://diariodorio.com/6-locais-para-dancar-forro-no-rio-de-janeiro/",
+  marchoro: "https://tasendo.com.br/festas/mar-de-choro",
+  scenarium: "https://www.rioscenarium.com.br/",
+  vuvu: "https://tasendo.com.br/festas/forro-do-vuvu",
+  tlt: "https://tasendo.com.br/rio-de-janeiro/festas/forro-as-quintas-no-tlt-bar-08-10-26",
+  pordosol: "https://tasendo.com.br/rio-de-janeiro/festas/forro-do-por-do-sol-30-09-26",
+  baixocopa: "https://tasendo.com.br/rio-de-janeiro/festas/forro-de-roda-no-baixo-copa-pub-06-06-26",
+  batuq: "https://www.sympla.com.br/evento/batuq/3515036",
+  imperio: "https://sopacultural.com/?p=112997",
+  nevada: "https://agendaculturalriodejaneiro.com/2026/07/18/karaoke-no-rio-de-janeiro/"
 };
 
 const CATS = {
@@ -304,7 +313,20 @@ const V = [
  {id:"galeria", n:"Galeria Café", b:"Ipanema", r:"sul", t:"bar", a:"Rua Teixeira de Melo, 31", lat:-22.9849, lng:-43.1993,
    var:"Bar LGBTQIA+ com DJs. Programação muda toda semana.", cats:["rock"], src:"lgbt"},
  {id:"comedy", n:"Rio Café Comedy Club", b:"Centro", r:"centro", t:"bar", a:"Rua Buenos Aires, 53", lat:-22.9021, lng:-43.1776,
-   var:"Stand-up, improviso e música ao vivo em casarão de três andares. Programação no perfil da casa.", cats:[], src:"comedy"}
+   var:"Stand-up, improviso e música ao vivo em casarão de três andares. Programação no perfil da casa.", cats:[], src:"comedy"},
+ {id:"labuta", n:"Labuta Mar", b:"Glória", r:"centro", t:"bar", a:"Rua do Russel, 450, loja B", lat:-22.9205, lng:-43.1746, ig:"labuta_mar"},
+ {id:"scenarium", n:"Rio Scenarium", b:"Lapa", r:"centro", t:"bar", a:"Rua do Lavradio, 20", lat:-22.9092, lng:-43.1826, ig:"rioscenarium",
+   var:"Casarão de três andares com música ao vivo de quarta a sábado à noite: samba, gafieira, choro e pop. Atrações mudam a cada semana; agenda no site e no Sympla.", cats:["samba","choro"], src:"scenarium"},
+ {id:"vuvu", n:"Vuvu", b:"Botafogo", r:"sul", t:"bar", a:"Rua Sorocaba, 601", lat:-22.9535, lng:-43.1925, ig:"forrodovuvu"},
+ {id:"tlt", n:"TLT Bar (Times Like These)", b:"Botafogo", r:"sul", t:"bar", a:"Rua Visconde de Silva, 14", lat:-22.9545, lng:-43.1952, ig:"tlt.bar"},
+ {id:"rayz", n:"Quiosque Rayz Beach Point", b:"Leme", r:"sul", t:"bar", a:"Av. Atlântica, em frente à Rua Martim Afonso", lat:-22.9636, lng:-43.1697, ig:"forrodopordosol"},
+ {id:"baixocopa", n:"Baixo Copa Pub", b:"Copacabana", r:"sul", t:"bar", a:"Rua Aires Saldanha, 13 D", lat:-22.9700, lng:-43.1858, ig:"baixocopapub"},
+ {id:"batuq", n:"Batuq Casa de Samba", b:"Penha", r:"norte", t:"quintal", a:"Rua Belizário Pena, 1141", lat:-22.8398, lng:-43.2830, ig:"batuqsamba",
+   var:"Casa de samba e pagode aberta aos sábados e domingos, da tarde à noite, com grupos convidados diferentes a cada fim de semana. Ingressos no Sympla.", cats:["samba","pagode"], src:"batuq"},
+ {id:"frutadope", n:"Centro de Cultura Negra Fruta do Pé", b:"Inhoaíba", r:"oeste", t:"quintal", a:"Av. Cesário de Melo, 6300", lat:-22.9030, lng:-43.5870},
+ {id:"imperio", n:"Quadra do Império Serrano", b:"Madureira", r:"norte", t:"quadra", a:"Av. Ministro Edgard Romero, 114", lat:-22.8726, lng:-43.3379,
+   var:"Feijoada Imperial uma vez por mês, num sábado a partir das 13h, com convidados de outras escolas. O sábado muda a cada mês; confira antes.", cats:["samba","feijoada"], src:"imperio"},
+ {id:"nevada", n:"Nevada Bar (Bar da Marlene)", b:"Tijuca", r:"norte", t:"bar", a:"Rua General Espírito Santo Cardoso, 432", lat:-22.9222, lng:-43.2392, ig:"_nevadabar"}
 ];
 
 // Eventos recorrentes. d = dias (0 dom … 6 sáb); n = semanas do mês (1º, 2º…); ap = horário aproximado; ck = "necessário confirmar".
@@ -369,7 +391,15 @@ const E = [
  {id:"diretoria", v:"deod", t:"Roda da Mesa da Diretoria", c:["samba"], d:[6], n:[1], h:"15:00", p:"Grátis", f:1, dur:4, s:"mapa", x:"O grupo de Paulão 7 Cordas, 1º sábado do mês."},
  {id:"mocaprosa", v:"edgar", t:"Moça Prosa", c:["samba"], d:[6], n:[3], h:"14:00", p:"Grátis", f:1, dur:4, s:"mapa", x:"Roda de mulheres na Pequena África, 3º sábado do mês."},
  {id:"batuk", v:"batuk", t:"Batuk D'Gueto", c:["samba"], d:[1], h:"19:00", p:"Grátis", f:1, dur:4, s:"mapa", x:"Segunda em Padre Miguel."},
- {id:"falapovo", v:"falapovo", t:"Projeto Fala Meu Povo", c:["samba"], d:[6], h:"17:00", p:"Grátis", f:1, dur:4, s:"mapa", x:"Sábado em Realengo."}
+ {id:"falapovo", v:"falapovo", t:"Projeto Fala Meu Povo", c:["samba"], d:[6], h:"17:00", p:"Grátis", f:1, dur:4, s:"mapa", x:"Sábado em Realengo."},
+ {id:"marchoro", v:"labuta", t:"Mar de Choro", c:["choro"], d:[2], h:"19:00", p:"Grátis", f:1, dur:3, s:"marchoro", x:"Roda de choro toda terça, de graça, no bar de frutos do mar da Rua do Russel. Quem toca na semana sai nos stories do bar."},
+ {id:"scenfeij", v:"scenarium", t:"Samba & Feijoada", c:["samba","feijoada"], d:[6], h:"12:00", p:"Consulte", dur:6, s:"scenarium", x:"Todo sábado à tarde, música brasileira ao vivo e feijoada à vontade (servida das 13h às 16h) entre as antiguidades do casarão."},
+ {id:"vuvuforro", v:"vuvu", t:"Forró do Vuvu", c:["forro"], d:[2], h:"20:00", p:"R$ 12–15", dur:5, s:"vuvu", x:"Terça de forró em Botafogo: aula grátis às 20h30 e banda ao vivo por volta das 21h30, até cerca de 1h."},
+ {id:"tltforro", v:"tlt", t:"Forró às quintas", c:["forro"], d:[4], h:"20:00", p:"R$ 15–20", dur:4, s:"tlt", x:"Toda quinta no salão climatizado do segundo andar, com banda ao vivo ou DJ de forró em vinil, conforme a semana."},
+ {id:"pordosol", v:"rayz", t:"Forró do Pôr do Sol", c:["forro"], d:[3], h:"18:00", p:"R$ 15–20", ck:1, dur:4, s:"pordosol", x:"Forró de quarta na beira da praia do Leme: aulão às 18h30 e banda às 19h30. Entrada grátis até as 18h."},
+ {id:"forroroda", v:"baixocopa", t:"Forró de Roda", c:["forro"], d:[6], h:"20:00", p:"Couvert", ck:1, dur:4, s:"baixocopa", x:"Sábado à noite tem forró de roda no pub de Copacabana, com couvert que vai para os músicos."},
+ {id:"frutadope", v:"frutadope", t:"Roda de Samba de Raiz Fruta do Pé", c:["samba"], d:[6], n:[3], h:"16:00", ap:1, p:"Consulte", dur:5, s:"mapa", x:"Samba de raiz num quilombo cultural da Zona Oeste, reconhecido em 2025 como patrimônio imaterial do estado. Todo 3º sábado do mês."},
+ {id:"nevadakara", v:"nevada", t:"Karaokê do Nevada", c:["karaoke"], d:[3,4,5,6,0], h:"19:00", p:"Consulte", ck:1, dur:7, s:"nevada", x:"Conhecido como o maior karaokê da Tijuca, com sinuca e cerveja gelada, de quarta a domingo até as 2h."}
 ];
 
 // Datas avulsas lidas nos perfis do Instagram em 15/10/2026. rep = eventos fixos que essa data substitui; tbd = horário não divulgado.
