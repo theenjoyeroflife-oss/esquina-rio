@@ -199,7 +199,7 @@ footer p{margin:0 0 8px; max-width:68ch}
   <main id="view"></main>
 
   <footer>
-    <p><b>Como funciona.</b> A agenda junta duas coisas: a programação fixa de cada lugar (toda segunda, 1º sábado do mês etc.), recalculada todo dia, e as datas avulsas lidas nos perfis de Instagram das casas em 15/10/2026. Quando um post anuncia a atração de uma noite, ele substitui a linha genérica daquele dia. ≈ marca horário aproximado; "a def." é horário ainda não divulgado; "necessário confirmar" marca programação de fontes mais antigas ou que varia muito.</p>
+    <p><b>Como funciona.</b> A agenda junta duas coisas: a programação fixa de cada lugar (toda segunda, 1º sábado do mês etc.), recalculada todo dia, e as datas avulsas lidas nos perfis de Instagram das casas em 20/10/2026. Quando um post anuncia a atração de uma noite, ele substitui a linha genérica daquele dia. ≈ marca horário aproximado; "a def." é horário ainda não divulgado; "necessário confirmar" marca programação de fontes mais antigas ou que varia muito.</p>
     <p>Rodas de rua cancelam com chuva, mudam de dia e às vezes acabam. Antes de sair, veja o perfil da roda ou da casa. Fontes: Mapa das Rodas de Samba 2025 (Prefeitura do Rio), Riotur, Time Out Rio, Catraca Livre, Diário do Rio, Sopa Cultural, O Globo e outras, linkadas em cada evento.</p>
     <p>Salvos, "vou" e ocultos ficam guardados só neste navegador.</p>
   </footer>
@@ -276,14 +276,14 @@ const V = [
  {id:"mang", n:"Terreiro de Mangueira", b:"Mangueira", r:"norte", t:"laje", a:"Rua Visconde de Niterói, 512", lat:-22.9069, lng:-43.2301, ig:"terreirodemangueira"},
  {id:"glo", n:"Feira da Glória · Praça Edson Cortes", b:"Glória", r:"centro", t:"feira", a:"Av. Augusto Severo", lat:-22.9196, lng:-43.1752, ig:"gloriosa_rodasamba"},
  {id:"volta", n:"Espaço Luiz Gama", b:"Centro", r:"centro", t:"rua", a:"Rua da Constituição, 54", lat:-22.9059, lng:-43.1841, ig:"osambadavolta",
-   var:"Samba da Volta: domingos alternados, a cada três semanas, a partir das 15h. A última foi em 11/10 e a próxima ainda não foi anunciada no perfil.", cats:["samba"], src:"volta"},
+   var:"Samba da Volta: edições a cada duas ou três semanas, com portões às 18h e ingresso na porta. Depois de 10/10, a próxima é no sábado 24/10.", cats:["samba"], src:"volta"},
  {id:"crioulo", n:"Terreiro de Crioulo", b:"Realengo", r:"oeste", t:"quintal", a:"Rua do Imperador, 1075", lat:-22.8781, lng:-43.4301, ig:"terreirodecrioulo"},
  {id:"glic", n:"Praça do Choro (General Glicério)", b:"Laranjeiras", r:"sul", t:"feira", a:"Rua General Glicério, em frente ao 224", lat:-22.9378, lng:-43.1921},
  {id:"gavea", n:"Praça Santos Dumont", b:"Gávea", r:"sul", t:"praca", a:"Praça Santos Dumont", lat:-22.9757, lng:-43.2266},
  {id:"ssalv", n:"Praça São Salvador", b:"Laranjeiras", r:"sul", t:"praca", a:"Praça São Salvador (coreto)", lat:-22.9331, lng:-43.1808},
  {id:"santero", n:"Sambantero", b:"Leblon", r:"sul", t:"bar", a:"Av. Ataulfo de Paiva, 802", lat:-22.9842, lng:-43.2201},
  {id:"blue", n:"Blue Note Rio", b:"Copacabana", r:"sul", t:"bar", a:"Av. Atlântica, 1910", lat:-22.9678, lng:-43.1808, ig:"bluenoterio",
-   var:"Fechado para reforma desde o início de outubro de 2026, sem data de reabertura anunciada.", cats:["jazz","bossa"]},
+   var:"Fechado para reforma desde 5/10/2026. Até 20/10 o perfil não anunciou data de reabertura nem programação nova.", cats:["jazz","bossa"]},
  {id:"bottle", n:"Bottles Bar e Little Club · Beco das Garrafas", b:"Copacabana", r:"sul", t:"bar", a:"Rua Duvivier, 37", lat:-22.9652, lng:-43.1793, ig:"becodasgarrafas"},
  {id:"maze", n:"The Maze", b:"Catete · Tavares Bastos", r:"sul", t:"bar", a:"Rua Tavares Bastos, 414, casa 66", lat:-22.9292, lng:-43.1803, ig:"themaze_rio",
    var:"Hoje funciona como centro cultural, mirante e hostel (visitação qua e sex a dom, 12h–17h). As noites de jazz mensais não aparecem mais na programação.", cats:["jazz"]},
@@ -326,16 +326,20 @@ const V = [
  {id:"frutadope", n:"Centro de Cultura Negra Fruta do Pé", b:"Inhoaíba", r:"oeste", t:"quintal", a:"Av. Cesário de Melo, 6300", lat:-22.9030, lng:-43.5870},
  {id:"imperio", n:"Quadra do Império Serrano", b:"Madureira", r:"norte", t:"quadra", a:"Av. Ministro Edgard Romero, 114", lat:-22.8726, lng:-43.3379,
    var:"Feijoada Imperial uma vez por mês, num sábado a partir das 13h, com convidados de outras escolas. O sábado muda a cada mês; confira antes.", cats:["samba","feijoada"], src:"imperio"},
- {id:"nevada", n:"Nevada Bar (Bar da Marlene)", b:"Tijuca", r:"norte", t:"bar", a:"Rua General Espírito Santo Cardoso, 432", lat:-22.9222, lng:-43.2392, ig:"_nevadabar"}
+ {id:"nevada", n:"Nevada Bar (Bar da Marlene)", b:"Tijuca", r:"norte", t:"bar", a:"Rua General Espírito Santo Cardoso, 432", lat:-22.9222, lng:-43.2392, ig:"_nevadabar"},
+ {id:"paulao", n:"Espaço Cultural Paulão 7 Cordas", b:"Lapa", r:"centro", t:"bar", a:"Rua do Lavradio, 11", lat:-22.9122, lng:-43.1812, ig:"gloriosa_rodasamba"},
+ {id:"arua", n:"A Rua", b:"Santo Cristo · Morro do Pinto", r:"centro", t:"bar", a:"Rua Sara, 34", lat:-22.9003, lng:-43.2024, ig:"_____arua"},
+ {id:"ssenado", n:"Samba do Senado", b:"Centro", r:"centro", t:"bar", a:"Rua do Senado, 1", lat:-22.9072, lng:-43.1822}
 ];
 
 // Eventos recorrentes. d = dias (0 dom … 6 sáb); n = semanas do mês (1º, 2º…); ap = horário aproximado; ck = "necessário confirmar".
 const E = [
  {id:"pedra", v:"pedra", t:"Roda de Samba da Pedra do Sal", c:["samba"], d:[1], h:"19:00", p:"Grátis", f:1, dur:5, s:"mapa", x:"A roda tradicional das segundas, ao ar livre no largo onde o samba carioca nasceu. Barracas de comida e bebida em volta; costuma lotar."},
  {id:"pedrafds", v:"pedra", t:"Samba na Pedra (sexta a domingo)", c:["samba"], d:[5,6,0], h:"20:00", ap:1, p:"Grátis", f:1, ck:1, dur:5, s:"ig:rodadesambadapedradosal", x:"Segundo o perfil da roda, a Pedra tem samba de sexta a segunda e em vésperas de feriado. Nas noites fora da segunda, grupos variam."},
- {id:"trab", v:"renas", t:"Samba do Trabalhador com Moacyr Luz", c:["samba"], d:[1], h:"16:30", p:"R$ 40", dur:5, s:"trab", x:"A roda da folga dos músicos, desde 2005. Segunda com cara de domingo; chegue cedo."},
+ {id:"trab", v:"renas", t:"Samba do Trabalhador com Moacyr Luz", c:["samba"], d:[1], h:"16:30", p:"R$ 30 antecipado · R$ 40 na hora", dur:5, s:"trab", x:"A roda da folga dos músicos, desde 2005. Segunda com cara de domingo; chegue cedo."},
  {id:"arlindinho", v:"beco", t:"Arlindinho das Antigas", c:["samba"], d:[1], h:"21:00", p:"Ingresso", dur:4, s:"becoSeg", x:"Roda fixa das segundas, entre as mais votadas pelo júri do GLOBO em 2026. Casa abre às 18h."},
- {id:"casuais", v:"beco", t:"Encontros Casuais com Inácio Rios e Mosquito", c:["samba"], d:[4], h:"19:00", p:"Ingresso", dur:5, s:"ig:becodorato", x:"3º lugar no ranking das rodas do GLOBO 2026. Repertório nunca se repete e sempre aparece alguém para dar canja."},
+ {id:"casuais", v:"beco", t:"Encontros Casuais com Inácio Rios e Mosquito", c:["samba"], d:[4], h:"21:00", p:"Ingresso", dur:5, s:"ig:becodorato", x:"3º lugar no ranking das rodas do GLOBO 2026. Repertório nunca se repete e sempre aparece alguém para dar canja."},
+ {id:"delcio", v:"beco", t:"Terça com Délcio Luiz", c:["samba"], d:[2], h:"20:00", p:"Ingresso", ck:1, dur:4, s:"ig:becodorato", x:"O Beco passou a anunciar as terças com Délcio Luiz no comando da roda. Ingresso antecipado no link da bio."},
  {id:"becoqua", v:"beco", t:"Samba do Xoxó", c:["samba"], d:[3], h:"18:00", p:"Ingresso", dur:5, s:"ig:becodorato", x:"A quarta do Beco é do Samba do Xoxó. Ingressos antecipados limitados no link da bio; local coberto em caso de chuva."},
  {id:"becosab", v:"beco", t:"Roda de samba com feijoada", c:["samba","feijoada"], d:[6], h:"14:00", p:"Ingresso", dur:4, s:"ig:becodorato", x:"Feijoada a partir das 12h; roda às 14h. Atrações mudam a cada sábado."},
  {id:"becosabnoite", v:"beco", t:"Sábado à noite no Beco", c:["samba"], d:[6], h:"19:00", p:"Ingresso", dur:5, s:"ig:becodorato", x:"Grupos convidados a cada semana."},
@@ -372,7 +376,8 @@ const E = [
  {id:"forrossalv", v:"ssalv", t:"Forró da Praça", c:["forro"], d:[5], h:"20:00", ap:1, p:"Grátis", f:1, ck:1, dur:4, s:"ssalv", x:"Sexta é dia de forró: a praça enche de pares dançando em volta do chafariz."},
  {id:"sambantero", v:"santero", t:"Sambantero", c:["samba"], d:[5], h:"19:00", p:"Consulte", dur:4, s:"mapa", x:"Roda de sexta no Leblon."},
  {id:"bossaeassim", v:"bottle", t:"Bossa Nova é Assim, com Marcos Ariel", c:["bossa","jazz"], d:[2], h:"21:00", p:"Couvert", dur:2, s:"ig:becodasgarrafas", x:"Toda terça no Bottles Bar. O pianista apresenta repertório de Tom Jobim e conversa com a plateia em português e inglês."},
- {id:"bottle", v:"bottle", t:"Show no Beco das Garrafas", c:["bossa","jazz"], d:[3,4,5,6,0], h:"20:00", ap:1, p:"Couvert", ck:1, dur:3, s:"ig:becodasgarrafas", x:"O beco onde a bossa nova ganhou palco. Atração muda a cada noite; veja o perfil."},
+ {id:"bottle", v:"bottle", t:"Show no Beco das Garrafas", c:["bossa","jazz"], d:[3,4,5,6,0], h:"20:00", ap:1, p:"Couvert R$ 70", ck:1, dur:3, s:"ig:becodasgarrafas", x:"O beco onde a bossa nova ganhou palco. Atração muda a cada noite; veja o perfil."},
+ {id:"alison", v:"paulao", t:"A Melhor Segunda da Lapa: Alison Geraes e convidados", c:["samba"], d:[1], h:"18:30", p:"Entrada colaborativa", ck:1, dur:4, s:"ig:gloriosa_rodasamba", x:"Roda de segunda no espaço do Paulão 7 Cordas, ao lado da Feira do Lavradio, com o sambista da nova geração e convidados."},
  {id:"bigben", v:"bigben", t:"Karaokê com banda", c:["karaoke"], d:[3,4,5,6], h:"21:00", ap:1, p:"A partir de R$ 15", ck:1, dur:4, s:"karaoke", x:"Pub inglês de 1992. Banda ao vivo acompanha quem sobe no palco."},
  {id:"buko", v:"buko", t:"Noite de rock: bandas e DJs", c:["rock"], d:[5,6], h:"21:00", ap:1, p:"~R$ 30 até 22h", dur:7, s:"ig:barbukowski", x:"O bar de rock de Botafogo há quase 30 anos. Duas pistas com DJs até o amanhecer."},
  {id:"feira", v:"feira", t:"Forró e karaokês da Feira", c:["forro","karaoke"], d:[5,6], h:"21:00", ap:1, p:"Entrada paga", ck:1, dur:6, s:"feira", x:"Palcos de forró e dezenas de bares com karaokê no pavilhão nordestino."},
@@ -402,38 +407,28 @@ const E = [
  {id:"nevadakara", v:"nevada", t:"Karaokê do Nevada", c:["karaoke"], d:[3,4,5,6,0], h:"19:00", p:"Consulte", ck:1, dur:7, s:"nevada", x:"Conhecido como o maior karaokê da Tijuca, com sinuca e cerveja gelada, de quarta a domingo até as 2h."}
 ];
 
-// Datas avulsas lidas nos perfis do Instagram em 15/10/2026. rep = eventos fixos que essa data substitui; tbd = horário não divulgado.
+// Datas avulsas lidas nos perfis do Instagram em 20/10/2026. rep = eventos fixos que essa data substitui; tbd = horário não divulgado.
 const D = [
- {id:"d-beco-1017a", dt:"2026-10-17", v:"beco", t:"Cacá Nascimento com feijoada", c:["samba","feijoada"], h:"14:00", p:"Ingresso", rep:["becosab"], dur:4, s:"ig:becodorato", x:"Bar e feijoada abrem às 12h; roda às 14h."},
- {id:"d-beco-1017b", dt:"2026-10-17", v:"beco", t:"Grupo Favelou e Grupo Arruda", c:["samba"], h:"19:00", p:"Ingresso", rep:["becosabnoite"], dur:5, s:"ig:becodorato", x:"Noite de sábado com dois grupos. Ingresso antecipado no link da bio do Beco."},
- {id:"d-beco-1018", dt:"2026-10-18", v:"beco", t:"Sede de Samba com feijoada", c:["samba","feijoada"], h:"16:00", p:"Ingresso", rep:["becodom"], dur:5, s:"ig:becodorato", x:"Bar e feijoada abrem às 12h; roda às 16h."},
- {id:"d-omar-1015", dt:"2026-10-15", v:"omar", t:"Pagode do Feijão", c:["pagode"], h:"19:00", p:"Entrada franca", f:1, rep:["omarsem"], dur:5, s:"ig:bardoomar", x:"Happy Hour Nota 10 das 17h às 20h, itens a R$ 10."},
- {id:"d-omar-1016", dt:"2026-10-16", v:"omar", t:"Pagode do Vitú", c:["pagode"], h:"19:00", p:"Entrada franca", f:1, rep:["omarsem"], dur:5, s:"ig:bardoomar", x:"Vitor Art desce da Mangueira para comandar a roda. Happy hour das 17h às 20h."},
- {id:"d-omar-1017", dt:"2026-10-17", v:"omar", t:"Misturadinho do Compasso", c:["samba","pagode"], h:"19:00", p:"Consulte", rep:["omarsab"], dur:5, s:"ig:bardoomar", x:"Grupo Compasso do Tempo misturando ritmos. Casa abre às 15h."},
- {id:"d-omar-1018", dt:"2026-10-18", v:"omar", t:"Grupo Compasso do Tempo", c:["samba"], h:"16:00", p:"Consulte", rep:["omardom1"], dur:3, s:"ig:bardoomar", x:"Abre o domingo antes da missa de Marcelinho Moreira, às 19h."},
- {id:"d-gema-1015", dt:"2026-10-15", v:"gema", t:"Roda de Samba do Turbilhão", c:["samba"], h:"21:00", ap:1, p:"Ingresso", rep:["gema"], dur:4, s:"ig:barcariocadagema", x:"Programação da semana publicada pela casa."},
- {id:"d-gema-1016", dt:"2026-10-16", v:"gema", t:"Leonardo Bessa", c:["samba"], h:"21:00", ap:1, p:"Ingresso", rep:["gema"], dur:4, s:"ig:barcariocadagema", x:"Intérprete do Salgueiro."},
- {id:"d-gema-1017", dt:"2026-10-17", v:"gema", t:"Flavia Saoli", c:["samba"], h:"21:00", ap:1, p:"Ingresso", rep:["gema"], dur:4, s:"ig:barcariocadagema", x:"Programação da semana publicada pela casa."},
- {id:"d-gema-1018", dt:"2026-10-18", v:"gema", t:"Dani Coimbra", c:["samba"], h:"21:00", ap:1, p:"Ingresso", dur:4, s:"ig:barcariocadagema", x:"Domingo não é dia habitual da casa; esta semana abre."},
- {id:"d-gema-1023", dt:"2026-10-23", v:"gema", t:"MandacaRio, com abertura de João Bragança", c:[], h:"21:00", ap:1, p:"Ingresso", rep:["gema"], dur:4, s:"ig:barcariocadagema", x:"João Bragança abre a noite com voz e violão."},
- {id:"d-alfa-1016", dt:"2026-10-16", v:"alfa", t:"Choro do Alfa com Roberta Nistra e convidados", c:["choro"], h:"18:00", tbd:1, p:"Consulte", dur:4, s:"ig:alfa_bar_e_cultura", x:"Noite de samba e choro; Chico Alves e Julia Gallotti estão entre os convidados anunciados."},
- {id:"d-alfa-1017", dt:"2026-10-17", v:"alfa", t:"Tomaz Miranda", c:["samba"], h:"18:00", tbd:1, p:"Consulte", dur:4, s:"ig:alfa_bar_e_cultura", x:"Agenda de outubro do Alfa."},
- {id:"d-alfa-1018", dt:"2026-10-18", v:"alfa", t:"Samba do Theo Bial", c:["samba"], h:"18:00", tbd:1, p:"Consulte", dur:4, s:"ig:alfa_bar_e_cultura", x:"Agenda de outubro do Alfa."},
+ {id:"d-beco-1020", dt:"2026-10-20", v:"beco", t:"Terça com Délcio Luiz", c:["samba"], h:"20:00", p:"Ingresso", rep:["delcio"], dur:4, s:"ig:becodorato", x:"Délcio Luiz no comando da roda de terça. Ingresso antecipado no link da bio."},
+ {id:"d-gema-1020", dt:"2026-10-20", v:"gema", t:"Três a Varejo", c:["samba"], h:"21:00", ap:1, p:"Ingresso", rep:["gema"], dur:4, s:"ig:barcariocadagema", x:"Programação da semana publicada pela casa."},
+ {id:"d-bdg-1020", dt:"2026-10-20", v:"bottle", t:"Terças do Little Club: Flávia Dantas e Bernardo Dantas", c:["bossa"], h:"20:00", p:"Couvert R$ 70 · meia carioca R$ 35", dur:2, s:"ig:becodasgarrafas", x:"Voz e violão passeando por Chico, Caetano, Tom, Vinicius, Carlos Lyra, Cartola e Caymmi, além de músicas próprias."},
+ {id:"d-gema-1021", dt:"2026-10-21", v:"gema", t:"Grupo Carioca", c:["samba"], h:"21:00", ap:1, p:"Ingresso", rep:["gema"], dur:4, s:"ig:barcariocadagema", x:"Programação da semana publicada pela casa."},
+ {id:"d-beco-1022", dt:"2026-10-22", v:"beco", t:"Encontros Casuais com Inácio Rios e Mosquito", c:["samba"], h:"21:00", p:"Ingresso", rep:["casuais"], dur:4, s:"ig:becodorato", x:"A roda de quinta começa às 21h; o Beco abre antes."},
+ {id:"d-gema-1022", dt:"2026-10-22", v:"gema", t:"Samba de Lei", c:["samba"], h:"21:00", ap:1, p:"Ingresso", rep:["gema"], dur:4, s:"ig:barcariocadagema", x:"Programação da semana publicada pela casa."},
+ {id:"d-gema-1023", dt:"2026-10-23", v:"gema", t:"MandacaRio, com abertura de João Bragança", c:[], h:"21:00", ap:1, p:"Ingresso", rep:["gema"], dur:4, s:"ig:barcariocadagema", x:"Estreia da banda na casa: samba, ijexá, maracatu e pagodão com muita percussão. João Bragança abre a noite com voz e violão."},
  {id:"d-alfa-1023", dt:"2026-10-23", v:"alfa", t:"Chico Alves convida Marquinhos Diniz: homenagem ao Trio Calafrio", c:["samba"], h:"18:00", tbd:1, p:"Consulte", dur:4, s:"ig:alfa_bar_e_cultura", x:"Agenda de outubro do Alfa."},
- {id:"d-alfa-1024", dt:"2026-10-24", v:"alfa", t:"Mãe Boêmia e lançamento de livros", c:["samba"], h:"14:00", ap:1, p:"Consulte", dur:5, s:"ig:alfa_bar_e_cultura", x:"Encontro com música, cerveja e oficinas para crianças."},
- {id:"d-alfa-1025", dt:"2026-10-25", v:"alfa", t:"Candongueiro", c:["samba"], h:"16:00", p:"Consulte", dur:4, s:"ig:alfa_bar_e_cultura", x:"Agenda de outubro do Alfa."},
- {id:"d-alfa-1030", dt:"2026-10-30", v:"alfa", t:"Marcelle Britto", c:["samba"], h:"18:00", tbd:1, p:"Consulte", dur:4, s:"ig:alfa_bar_e_cultura", x:"Agenda de outubro do Alfa."},
- {id:"d-alfa-1031", dt:"2026-10-31", v:"alfa", t:"Mulheres no Compasso homenageiam Cristina Buarque", c:["samba"], h:"18:00", tbd:1, p:"Consulte", dur:4, s:"ig:alfa_bar_e_cultura", x:"Agenda de outubro do Alfa."},
- {id:"d-mang-1017", dt:"2026-10-17", v:"mang", t:"Terreiro de Mangueira: homenagem a Cartola", c:["samba"], h:"15:00", p:"R$ 15 antecipado", rep:["mangueira"], dur:5, s:"ig:terreirodemangueira", x:"A roda publicou uma playlist com o repertório para o público ensaiar."},
- {id:"d-cac-1018", dt:"2026-10-18", v:"cac", t:"155ª Feijoada do Cacique, com Flávia Saolli", c:["samba","feijoada"], h:"13:00", p:"Grátis", f:1, rep:["caciquefeij"], dur:9, s:"ig:cacique_de_ramos", x:"Flávia Saolli comemora aniversário com o show Meu Doce Refúgio; outros convidados ao longo da tarde."},
- {id:"d-crioulo-1023", dt:"2026-10-23", v:"clementina", t:"Terreiro de Crioulo no Quintal da Clementina", c:["samba"], h:"18:00", tbd:1, p:"Consulte", dur:5, s:"ig:terreirodecrioulo", x:"A roda campeã do ranking do GLOBO 2026 desce de Realengo para o Centro."},
- {id:"d-bdg-1015", dt:"2026-10-15", v:"bottle", t:"Ela é Carioca, com Francesca Lo Cicero", c:["bossa"], h:"20:00", p:"Couvert", rep:["bottle"], dur:2, s:"ig:becodasgarrafas", x:"Clássicos da bossa nova no lugar onde ela ganhou palco."},
- {id:"d-bdg-1016", dt:"2026-10-16", v:"bottle", t:"MPB entre amigos, com Andréia Pedroso", c:["bossa"], h:"20:00", p:"Couvert", rep:["bottle"], dur:2, s:"ig:becodasgarrafas", x:"Gustavo Martins, Zé Luiz Maia e Marcio Bahia acompanham a cantora em Caetano, Djavan, Gil, Chico e outros."},
- {id:"d-bdg-1017", dt:"2026-10-17", v:"bottle", t:"Bossa Mais celebra a Bossa Nova", c:["bossa"], h:"21:00", p:"Couvert", rep:["bottle"], dur:2, s:"ig:becodasgarrafas", x:"Tom, Vinicius, Carlos Lyra, Marcos Valle, João Donato e Menescal."},
- {id:"d-bdg-1019", dt:"2026-10-19", v:"bottle", t:"Segundas do Little Club: Lu Oliveira e Rogério Guimarães", c:["bossa"], h:"20:00", p:"Couvert", dur:2, s:"ig:becodasgarrafas", x:"Voz e violão no palco pequeno do Little Club, nas segundas de outubro."},
+ {id:"d-crioulo-1023", dt:"2026-10-23", v:"clementina", t:"Terreiro de Crioulo no Quintal da Clementina: Sexta-feira Veste Branco", c:["samba"], h:"17:00", p:"Ingresso", dur:5, s:"ig:terreirodecrioulo", x:"A roda campeã do ranking do GLOBO 2026 desce de Realengo para o Centro. A casa pede roupa branca; ingressos no link da bio."},
+ {id:"d-arua-1023", dt:"2026-10-23", v:"arua", t:"Morro de Samba e Pagode: Samba do Xoxó e Vou de Lado B", c:["samba","pagode"], h:"19:00", p:"Ingresso", dur:5, s:"ig:sambadoxoxo", x:"Estreia do projeto no Morro do Pinto, a poucos passos do Bar do Omar. Evento sujeito à lotação; ingressos no link da bio do Xoxó."},
+ {id:"d-beco-1024a", dt:"2026-10-24", v:"beco", t:"Nona Madeira Real com feijoada", c:["samba","feijoada"], h:"14:00", p:"Ingresso", rep:["becosab"], dur:4, s:"ig:becodorato", x:"Bar e feijoada abrem às 12h; roda às 14h."},
+ {id:"d-beco-1024b", dt:"2026-10-24", v:"beco", t:"Diogo 7 Cordas e Amanda Amado", c:["samba"], h:"19:00", p:"Ingresso", rep:["becosabnoite"], dur:5, s:"ig:becodorato", x:"Os dois dividem o comando da roda de sábado à noite."},
+ {id:"d-gema-1024", dt:"2026-10-24", v:"gema", t:"Família Moadir", c:["samba"], h:"21:00", ap:1, p:"Ingresso", rep:["gema"], dur:4, s:"ig:barcariocadagema", x:"O post da casa lista \"Sábado (25/10)\"; sábado é dia 24. Confira no perfil."},
+ {id:"d-bdg-1024", dt:"2026-10-24", v:"bottle", t:"Bossa Azul, com Rosana Sabença e Rodrigo de Jesus Trio", c:["bossa","jazz"], h:"20:00", p:"Couvert", rep:["bottle"], dur:2, s:"ig:becodasgarrafas", x:"No Little Club: Tom Jobim, Tito Madi, Marcos Valle, Durval Ferreira e Menescal. Reservas por WhatsApp."},
+ {id:"d-volta-1024", dt:"2026-10-24", v:"volta", t:"Samba da Volta levanta a Bandeira da Fé", c:["samba"], h:"18:00", p:"R$ 13 na porta", dur:5, s:"ig:osambadavolta", x:"Edição em homenagem a Luiz Carlos da Vila, que gravou \"Bandeira da Fé\". Portões às 18h; DJ Leo Black nos intervalos."},
  {id:"d-bdg-1026", dt:"2026-10-26", v:"bottle", t:"Segundas do Little Club: Lu Oliveira e Rogério Guimarães", c:["bossa"], h:"20:00", p:"Couvert", dur:2, s:"ig:becodasgarrafas", x:"Voz e violão no palco pequeno do Little Club, nas segundas de outubro."},
- {id:"d-buko-1017", dt:"2026-10-17", v:"buko", t:"Karaokê, River Raid e DJs até o amanhecer", c:["rock","karaoke"], h:"20:00", p:"Ingresso", rep:["buko"], dur:9, s:"ig:barbukowski", x:"Karaokê a partir das 20h, show de rock dos anos 80 com a River Raid e duas pistas de DJs. Depois da 1h, entrada livre para quem estiver na lista."},
- {id:"d-buko-1030", dt:"2026-10-30", v:"buko", t:"Halloween do Bukowski", c:["rock"], h:"21:00", ap:1, p:"Ingresso", rep:["buko"], dur:8, s:"ig:barbukowski", x:"Maquiadores na casa e concurso de fantasias com prêmios."}
+ {id:"d-alfa-1030", dt:"2026-10-30", v:"alfa", t:"Marcelle Britto", c:["samba"], h:"18:00", tbd:1, p:"Consulte", dur:4, s:"ig:alfa_bar_e_cultura", x:"Agenda de outubro do Alfa."},
+ {id:"d-buko-1030", dt:"2026-10-30", v:"buko", t:"Halloween do Bukowski", c:["rock"], h:"21:00", ap:1, p:"Ingresso", rep:["buko"], dur:8, s:"ig:barbukowski", x:"Maquiadores na casa e concurso de fantasias com prêmios."},
+ {id:"d-alfa-1031", dt:"2026-10-31", v:"alfa", t:"Mulheres no Compasso homenageiam Cristina Buarque", c:["samba"], h:"18:00", tbd:1, p:"Consulte", dur:4, s:"ig:alfa_bar_e_cultura", x:"Agenda de outubro do Alfa."},
+ {id:"d-ssen-1101", dt:"2026-11-01", v:"ssenado", t:"Pré-feriado do Samba do Senado", c:["samba","pagode"], h:"15:00", p:"Cortesia (retirar antes)", f:1, dur:6, s:"ig:sambadoxoxo", x:"Pagode da Garagem, Quintal da Magia, Samba do Xoxó e Arruda numa tarde só."}
 ];
 const ALL = E.concat(D);
 const VBY = Object.fromEntries(V.map(v=>[v.id,v]));
@@ -613,7 +608,7 @@ function viewAgenda(data){
   let list = data.list.filter(x=>passWhen(x) && passFilters(x));
   if(ST.when==="prox"){ /* all days */ }
   const hiddenCount = S.hidden.size;
-  const note = `<p class="note"><b>Atualizado com o Instagram das casas em 15/10.</b> Linhas com o selo <b>anunciado no Instagram</b> vieram de posts com data; as demais seguem a programação fixa da roda ou do bar. ≈ é horário aproximado; <b>necessário confirmar</b> pede checagem no perfil antes de sair.</p>`;
+  const note = `<p class="note"><b>Atualizado com o Instagram das casas em 20/10.</b> Linhas com o selo <b>anunciado no Instagram</b> vieram de posts com data; as demais seguem a programação fixa da roda ou do bar. ≈ é horário aproximado; <b>necessário confirmar</b> pede checagem no perfil antes de sair.</p>`;
   const msg = ST.when==="agora" ? "Nenhuma roda no ar agora com esses filtros. Tente “Hoje” ou “Próximos”." : "Tire algum filtro para ver mais.";
   return note + renderSections(list, msg) +
     (hiddenCount ? `<p class="hiddeninfo">${hiddenCount} evento${hiddenCount>1?"s":""} oculto${hiddenCount>1?"s":""}. <button class="linkbtn" data-unhide="all">Mostrar de novo</button></p>` : "");
