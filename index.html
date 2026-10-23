@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -10,7 +10,6 @@
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8397005000172113" crossorigin="anonymous"></script>
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)} body{margin:0;font:14px system-ui,sans-serif} img{max-width:100%} [hidden]{display:none!important}</style>
 <title>Exquina Rio</title>
-<script>try{var t=localStorage.getItem("tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}</script>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1104,7 +1103,6 @@ function syncTema(){ document.getElementById("tema").setAttribute("aria-checked"
 document.getElementById("tema").addEventListener("click", ()=>{
   const t = isDark() ? "light" : "dark";
   document.documentElement.dataset.theme = t;
-  try{ localStorage.setItem("tema", t); }catch(e){}
   syncTema();
   if(ST.tab==="mapa") render();
 });
