@@ -159,6 +159,7 @@ a.act{text-decoration:none; color:var(--ink)}
 .place ul{list-style:none; padding:0; margin:8px 0 0; display:grid; gap:4px}
 .place li{font-size:14px; display:grid; grid-template-columns:minmax(0,1fr); }
 .place li .when{color:var(--muted)}
+.cerva a{color:inherit}
 .place .links{display:flex; gap:14px; margin-top:8px; font-size:13px; flex-wrap:wrap}
 
 /* Mapa */
@@ -264,6 +265,10 @@ footer p{margin:0 0 8px; max-width:68ch}
 "use strict";
 const TZ = "America/Sao_Paulo";
 const SRC = {
+  cvBlue: "https://bluenoterio.com.br/wp-content/uploads/2025/06/Cardapio_BNRio_JUN25.pdf",
+  cvGema: "https://www.barcariocadagema.com.br/en/cardapio-1",
+  cvBeco: "https://www.timeout.com/pt/rio-de-janeiro/bares/beco-do-rato",
+  cvSen: "https://www.timeout.com/pt/rio-de-janeiro/coisas-para-fazer/os-melhores-lugares-da-rua-do-senado",
   mapa: "https://cultura.prefeitura.rio/wp-content/uploads/sites/38/2025/01/MAPA-DAS-RODAS-DE-SAMBA-2025-2.pdf",
   trab: "https://riotur.rio/?p=52027",
   becoSeg: "https://riotur.rio/editorial/confira-todos-os-sambas-de-segunda-feira-no-rio/",
@@ -313,7 +318,7 @@ const TIPO = {bar:"bar", rua:"roda de rua", praca:"praça", clube:"clube", quadr
 const V = [
  {id:"pedra", n:"Pedra do Sal", b:"Saúde", r:"centro", t:"rua", a:"Rua Argemiro Bulcão, aos pés da Pedra do Sal", lat:-22.8977, lng:-43.1857, ig:"rodadesambadapedradosal"},
  {id:"renas", n:"Renascença Clube", b:"Andaraí", r:"norte", t:"clube", a:"Rua Barão de São Francisco, 54", lat:-22.9246, lng:-43.2478, ig:"moacyrluzesambadotrabalhador"},
- {id:"beco", n:"Beco do Rato", b:"Lapa", r:"centro", t:"bar", a:"Rua Joaquim Silva, 11", lat:-22.9144, lng:-43.1794, ig:"becodorato"},
+ {id:"beco", n:"Beco do Rato", b:"Lapa", r:"centro", t:"bar", a:"Rua Joaquim Silva, 11", lat:-22.9144, lng:-43.1794, cv:{p:"chope Amstel ou Heineken ≈ R$ 10", s:"cvBeco", m:"Time Out, jul/2025"}, ig:"becodorato"},
  {id:"clementina", n:"Quintal da Clementina", b:"Centro", r:"centro", t:"quintal", a:"Rua do Senado, 20", lat:-22.9081, lng:-43.1835},
  {id:"bip", n:"Bip Bip", b:"Copacabana", r:"sul", t:"bar", a:"Rua Almirante Gonçalves, 50", lat:-22.9745, lng:-43.1885},
  {id:"teles", n:"Arco do Teles", b:"Centro · Praça XV", r:"centro", t:"rua", a:"Travessa do Comércio, 15", lat:-22.9031, lng:-43.1743, ig:"sambadoteles"},
@@ -321,10 +326,10 @@ const V = [
  {id:"tira", n:"Praça Tiradentes", b:"Centro", r:"centro", t:"praca", a:"Praça Tiradentes", lat:-22.9068, lng:-43.1826},
  {id:"ouv", n:"Rua do Ouvidor × Rua do Mercado", b:"Centro", r:"centro", t:"rua", a:"Rua do Ouvidor, esquina com Rua do Mercado", lat:-22.9024, lng:-43.1757},
  {id:"alfa", n:"Al Farabi (Alfa Bar)", b:"Centro · Boulevard Olímpico", r:"centro", t:"bar", a:"Rua do Mercado, 34", lat:-22.9013, lng:-43.1749, ig:"alfa_bar_e_cultura"},
- {id:"sen", n:"Armazém Senado", b:"Centro", r:"centro", t:"bar", a:"Rua do Senado, esquina com Av. Gomes Freire", lat:-22.9094, lng:-43.1848},
+ {id:"sen", n:"Armazém Senado", b:"Centro", r:"centro", t:"bar", a:"Rua do Senado, esquina com Av. Gomes Freire", lat:-22.9094, lng:-43.1848, cv:{p:"cerveja de garrafa R$ 13 a 18", s:"cvSen", m:"Time Out, nov/2025"}},
  {id:"omar", n:"Bar do Omar", b:"Santo Cristo", r:"centro", t:"bar", a:"Rua Sara, 114 · Morro do Pinto", lat:-22.9001, lng:-43.2028, ig:"bardoomar"},
  {id:"vaca", n:"Vaca Atolada", b:"Lapa", r:"centro", t:"bar", a:"Av. Gomes Freire, 533", lat:-22.9127, lng:-43.1859, ig:"vacaatolada.oficial"},
- {id:"gema", n:"Carioca da Gema", b:"Lapa", r:"centro", t:"bar", a:"Av. Mem de Sá, 79", lat:-22.9131, lng:-43.1812, ig:"barcariocadagema"},
+ {id:"gema", n:"Carioca da Gema", b:"Lapa", r:"centro", t:"bar", a:"Av. Mem de Sá, 79", lat:-22.9131, lng:-43.1812, cv:{p:"long neck R$ 15 a 16 · 600 ml R$ 17 a 19", s:"cvGema", m:"cardápio do site"}, ig:"barcariocadagema"},
  {id:"trap", n:"Trapiche Gamboa", b:"Saúde", r:"centro", t:"bar", a:"Rua Sacadura Cabral, 155", lat:-22.8984, lng:-43.1843},
  {id:"cac", n:"Cacique de Ramos", b:"Olaria", r:"norte", t:"quadra", a:"Rua Uranos, 1326", lat:-22.8456, lng:-43.2654, ig:"cacique_de_ramos"},
  {id:"mang", n:"Terreiro de Mangueira", b:"Mangueira", r:"norte", t:"laje", a:"Rua Visconde de Niterói, 512", lat:-22.9069, lng:-43.2301, ig:"terreirodemangueira"},
@@ -336,7 +341,7 @@ const V = [
  {id:"gavea", n:"Praça Santos Dumont", b:"Gávea", r:"sul", t:"praca", a:"Praça Santos Dumont", lat:-22.9757, lng:-43.2266},
  {id:"ssalv", n:"Praça São Salvador", b:"Laranjeiras", r:"sul", t:"praca", a:"Praça São Salvador (coreto)", lat:-22.9331, lng:-43.1808},
  {id:"santero", n:"Sambantero", b:"Leblon", r:"sul", t:"bar", a:"Av. Ataulfo de Paiva, 802", lat:-22.9842, lng:-43.2201},
- {id:"blue", n:"Blue Note Rio", b:"Copacabana", r:"sul", t:"bar", a:"Av. Atlântica, 1910", lat:-22.9678, lng:-43.1808, ig:"bluenoterio",
+ {id:"blue", n:"Blue Note Rio", b:"Copacabana", r:"sul", t:"bar", a:"Av. Atlântica, 1910", lat:-22.9678, lng:-43.1808, cv:{p:"long neck R$ 18 · chope R$ 12 a 14", s:"cvBlue", m:"cardápio de jun/2025"}, ig:"bluenoterio",
    var:"Fechado para reforma desde 5/10/2026. Até 20/10 o perfil não anunciou data de reabertura nem programação nova.", cats:["jazz","bossa"]},
  {id:"bottle", n:"Bottles Bar e Little Club · Beco das Garrafas", b:"Copacabana", r:"sul", t:"bar", a:"Rua Duvivier, 37", lat:-22.9652, lng:-43.1793, ig:"becodasgarrafas"},
  {id:"maze", n:"The Maze", b:"Catete · Tavares Bastos", r:"sul", t:"bar", a:"Rua Tavares Bastos, 414, casa 66", lat:-22.9292, lng:-43.1803, ig:"themaze_rio",
@@ -579,6 +584,12 @@ function fotoHtml(v){
   const f = FOTOS[v.id]; if(!f) return "";
   return `<figure class="foto"><img src="${esc(f.src)}" alt="${esc(v.n)}" loading="lazy" decoding="async" onerror="this.closest('figure').remove()"><figcaption>Foto: <a href="${esc(f.pag)}" target="_blank" rel="noopener">${esc(f.cred)}</a></figcaption></figure>`;
 }
+function cervaHtml(v, tag){
+  if(!v.cv) return "";
+  const u = srcUrl(v.cv.s);
+  const txt = `<span class="cerva">Cerveja: ${esc(v.cv.p)} <span class="when">(${u?`<a href="${u}" target="_blank" rel="noopener">${esc(v.cv.m)}</a>`:esc(v.cv.m)})</span></span>`;
+  return tag==="li" ? `<li>${txt}</li>` : `<p>${txt}</p>`;
+}
 function mapsUrl(v){ return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(v.a+", "+v.b.split(" · ")[0]+", Rio de Janeiro"); }
 
 // ---------- state ----------
@@ -653,6 +664,7 @@ function evRow(x){
       </div>
       <p><b>${esc(sched(e))}</b>, ${e.tbd?"horário ainda não divulgado":(e.ap?"por volta das ":"a partir das ")+hhmm(x.start)} · ${TIPO[v.t]}</p>
       <p>${esc(e.x)}</p>
+      ${cervaHtml(v)}
       ${(ig || (src && !src.includes("instagram.com"))) ? `<div class="links">${ig}${src && !src.includes("instagram.com")?`<a href="${src}" target="_blank" rel="noopener">Fonte</a>`:""}</div>` : ""}
     </div>
   </article>`;
@@ -708,7 +720,7 @@ function viewLugares(){
       const ig = v.ig ? `<a href="https://www.instagram.com/${v.ig}/" target="_blank" rel="noopener">@${esc(v.ig)}</a>` : "";
       html += `<div class="place" id="p-${v.id}"><h3>${esc(v.n)}</h3>
         <div class="sub">${TIPO[v.t]} · ${esc(v.b)} · ${esc(v.a)}</div>
-        <ul>${items}${varTxt}${ditems?`<li><span class="when"><b>Próximas datas anunciadas</b></span></li>`+ditems:""}</ul>
+        <ul>${items}${varTxt}${cervaHtml(v,"li")}${ditems?`<li><span class="when"><b>Próximas datas anunciadas</b></span></li>`+ditems:""}</ul>
         <div class="links"><a href="${mapsUrl(v)}" target="_blank" rel="noopener">Google Maps</a>${ig}${src && !src.includes("instagram.com")?`<a href="${src}" target="_blank" rel="noopener">Fonte</a>`:""}</div></div>`;
     }
     html += `</div>`;
@@ -795,7 +807,7 @@ function viewMapa(data){
     const next = data.list.filter(x=>x.v.id===v.id && passFilters(x)).slice(0,4);
     const items = next.map(x=>`<li><span><b>${x.state==="now"?"Agora":dayLabel(x.day)}, ${x.e.ap?"≈":""}${hhmm(x.start)}</b> · ${esc(x.e.t)} <span class="when">· ${esc(x.e.p)}</span></span></li>`).join("");
     card = `<div class="place"><h3>${esc(v.n)}</h3><div class="sub">${TIPO[v.t]} · ${esc(v.b)} · ${esc(v.a)}</div>
-      <ul>${items || (v.var?`<li><span class="when">${esc(v.var)}</span></li>`:`<li><span class="when">Nada nas próximas duas semanas com esses filtros.</span></li>`)}</ul>
+      <ul>${items || (v.var?`<li><span class="when">${esc(v.var)}</span></li>`:`<li><span class="when">Nada nas próximas duas semanas com esses filtros.</span></li>`)}${cervaHtml(v,"li")}</ul>
       <div class="links"><a href="${mapsUrl(v)}" target="_blank" rel="noopener">Abrir no Google Maps</a><button class="linkbtn" data-goto="${v.id}">Ver em Lugares</button></div></div>`;
   }
   return `<div class="mapwrap">
