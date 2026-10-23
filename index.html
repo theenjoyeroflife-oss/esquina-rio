@@ -6,6 +6,8 @@
 <meta name="description" content="Rodas de samba, choro, jazz, forró e karaokê em bares e botecos do Rio, organizadas por dia.">
 <meta property="og:title" content="Exquina Rio">
 <meta property="og:description" content="Tem roda rolando na esquina. Bares e botecos do Rio com música ao vivo, por dia.">
+<meta name="google-adsense-account" content="ca-pub-8397005000172113">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8397005000172113" crossorigin="anonymous"></script>
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)} body{margin:0;font:14px system-ui,sans-serif} img{max-width:100%} [hidden]{display:none!important}</style>
 <title>Exquina Rio</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -225,10 +227,10 @@ footer p{margin:0 0 8px; max-width:68ch}
   <div class="pub-box" id="pubBox"></div>
 </aside>
 <script>
-// Google AdSense: preencha o ID de editor (ca-pub-…) e o ID do bloco de anúncio.
-// Enquanto ficarem vazios, o espaço aparece reservado e o script do Google não é carregado.
+// Google AdSense: o script do editor fica no <head> (verificação do site).
+// Preencha slot com o ID do bloco de anúncio (data-ad-slot); enquanto estiver vazio, o espaço aparece reservado.
 (function(){
-  const ADSENSE = { client: "", slot: "" };
+  const ADSENSE = { client: "ca-pub-8397005000172113", slot: "" };
   const box = document.getElementById("pubBox");
   const largo = window.matchMedia("(min-width:1180px)");
   if(!ADSENSE.client || !ADSENSE.slot){
@@ -240,10 +242,6 @@ footer p{margin:0 0 8px; max-width:68ch}
   function carregar(){
     if(carregado || !largo.matches) return;
     carregado = true;
-    const s = document.createElement("script");
-    s.async = true; s.crossOrigin = "anonymous";
-    s.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=" + encodeURIComponent(ADSENSE.client);
-    document.head.appendChild(s);
     const ins = document.createElement("ins");
     ins.className = "adsbygoogle";
     ins.setAttribute("data-ad-client", ADSENSE.client);
