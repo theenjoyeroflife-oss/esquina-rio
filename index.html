@@ -127,6 +127,7 @@ a.act{text-decoration:none; color:var(--ink)}
 .meta{display:flex; flex-wrap:wrap; gap:6px; margin-top:7px}
 .tagp{font-size:12px; padding:2px 8px; border-radius:4px; background:var(--azul-soft); color:var(--ink); display:inline-flex; align-items:center; gap:5px; font-weight:500}
 .tagp.free{background:var(--gelada); color:var(--gelada-ink)}
+.tagp.bq{background:var(--ink); color:var(--bg)}
 .tagp.chk{background:transparent; border:1px solid var(--line); color:var(--muted)}
 .tagp.ok{background:transparent; border:1px solid var(--azul); color:var(--azul)}
 .time .tbd{font-size:15px; color:var(--muted); font-weight:600; letter-spacing:.02em}
@@ -321,23 +322,26 @@ const CATS = {
   karaoke:{n:"karaokê", c:"--c-karaoke"}, rock:{n:"rock / DJ", c:"--c-rock"}, feijoada:{n:"feijoada", c:"--c-feijoada"}
 };
 const REGS = {centro:"Centro e Lapa", sul:"Zona Sul", norte:"Zona Norte", oeste:"Zona Oeste"};
+// bq:1 marca os botequins (bar de bairro, pé-sujo), que aparecem primeiro nas listas.
+const bqOrd = v => v.bq ? 0 : 1;
+function tipo(v){ return v.bq ? "botequim" : TIPO[v.t]; }
 const TIPO = {bar:"bar", rua:"roda de rua", praca:"praça", clube:"clube", quadra:"quadra", feira:"feira", quintal:"quintal", laje:"laje"};
 
 // Lugares. Coordenadas aproximadas.
 const V = [
  {id:"pedra", n:"Pedra do Sal", b:"Saúde", r:"centro", t:"rua", a:"Rua Argemiro Bulcão, aos pés da Pedra do Sal", lat:-22.8977, lng:-43.1857, cv:{p:"lata de ambulante ≈ R$ 5 a 10", s:"cvRua", m:"preço sugerido no Carnaval 2026", est:1}, ig:"rodadesambadapedradosal"},
  {id:"renas", n:"Renascença Clube", b:"Andaraí", r:"norte", t:"clube", a:"Rua Barão de São Francisco, 54", lat:-22.9246, lng:-43.2478, cv:{p:"R$ 10 a 20", s:"cvNoite", m:"média de bar de bairro, Rio Times set/2026", est:1}, ig:"moacyrluzesambadotrabalhador"},
- {id:"beco", n:"Beco do Rato", b:"Lapa", r:"centro", t:"bar", a:"Rua Joaquim Silva, 11", lat:-22.9144, lng:-43.1794, cv:{p:"chope Amstel ou Heineken ≈ R$ 10", s:"cvBeco", m:"Time Out, jul/2025"}, ig:"becodorato"},
+ {id:"beco", n:"Beco do Rato", b:"Lapa", r:"centro", t:"bar", bq:1, a:"Rua Joaquim Silva, 11", lat:-22.9144, lng:-43.1794, cv:{p:"chope Amstel ou Heineken ≈ R$ 10", s:"cvBeco", m:"Time Out, jul/2025"}, ig:"becodorato"},
  {id:"clementina", n:"Quintal da Clementina", b:"Centro", r:"centro", t:"quintal", a:"Rua do Senado, 20", lat:-22.9081, lng:-43.1835, cv:{p:"R$ 15 a 30", s:"cvNoite", m:"média de casa de música, Rio Times set/2026", est:1}},
- {id:"bip", n:"Bip Bip", b:"Copacabana", r:"sul", t:"bar", a:"Rua Almirante Gonçalves, 50", lat:-22.9745, lng:-43.1885, cv:{p:"R$ 10 a 20", s:"cvNoite", m:"média de bar de bairro, Rio Times set/2026", est:1}},
+ {id:"bip", n:"Bip Bip", b:"Copacabana", r:"sul", t:"bar", bq:1, a:"Rua Almirante Gonçalves, 50", lat:-22.9745, lng:-43.1885, cv:{p:"R$ 10 a 20", s:"cvNoite", m:"média de bar de bairro, Rio Times set/2026", est:1}},
  {id:"teles", n:"Arco do Teles", b:"Centro · Praça XV", r:"centro", t:"rua", a:"Travessa do Comércio, 15", lat:-22.9031, lng:-43.1743, cv:{p:"lata de ambulante ≈ R$ 5 a 10", s:"cvRua", m:"preço sugerido no Carnaval 2026", est:1}, ig:"sambadoteles"},
  {id:"lsf", n:"Largo de São Francisco de Paula", b:"Centro", r:"centro", t:"rua", a:"Largo de São Francisco de Paula, s/n", lat:-22.9046, lng:-43.1812, cv:{p:"lata de ambulante ≈ R$ 5 a 10", s:"cvRua", m:"preço sugerido no Carnaval 2026", est:1}},
  {id:"tira", n:"Praça Tiradentes", b:"Centro", r:"centro", t:"praca", a:"Praça Tiradentes", lat:-22.9068, lng:-43.1826, cv:{p:"lata de ambulante ≈ R$ 5 a 10", s:"cvRua", m:"preço sugerido no Carnaval 2026", est:1}},
  {id:"ouv", n:"Rua do Ouvidor × Rua do Mercado", b:"Centro", r:"centro", t:"rua", a:"Rua do Ouvidor, esquina com Rua do Mercado", lat:-22.9024, lng:-43.1757, cv:{p:"lata de ambulante ≈ R$ 5 a 10", s:"cvRua", m:"preço sugerido no Carnaval 2026", est:1}},
  {id:"alfa", n:"Al Farabi (Alfa Bar)", b:"Centro · Boulevard Olímpico", r:"centro", t:"bar", a:"Rua do Mercado, 34", lat:-22.9013, lng:-43.1749, cv:{p:"R$ 15 a 30", s:"cvNoite", m:"média de casa de música, Rio Times set/2026", est:1}, ig:"alfa_bar_e_cultura"},
- {id:"sen", n:"Armazém Senado", b:"Centro", r:"centro", t:"bar", a:"Rua do Senado, esquina com Av. Gomes Freire", lat:-22.9094, lng:-43.1848, cv:{p:"cerveja de garrafa R$ 13 a 18", s:"cvSen", m:"Time Out, nov/2025"}},
- {id:"omar", n:"Bar do Omar", b:"Santo Cristo", r:"centro", t:"bar", a:"Rua Sara, 114 · Morro do Pinto", lat:-22.9001, lng:-43.2028, cv:{p:"R$ 10 a 20", s:"cvNoite", m:"média de bar de bairro, Rio Times set/2026", est:1}, ig:"bardoomar"},
- {id:"vaca", n:"Vaca Atolada", b:"Lapa", r:"centro", t:"bar", a:"Av. Gomes Freire, 533", lat:-22.9127, lng:-43.1859, cv:{p:"R$ 15 a 30", s:"cvNoite", m:"média de casa de música, Rio Times set/2026", est:1}, ig:"vacaatolada.oficial"},
+ {id:"sen", n:"Armazém Senado", b:"Centro", r:"centro", t:"bar", bq:1, a:"Rua do Senado, esquina com Av. Gomes Freire", lat:-22.9094, lng:-43.1848, cv:{p:"cerveja de garrafa R$ 13 a 18", s:"cvSen", m:"Time Out, nov/2025"}},
+ {id:"omar", n:"Bar do Omar", b:"Santo Cristo", r:"centro", t:"bar", bq:1, a:"Rua Sara, 114 · Morro do Pinto", lat:-22.9001, lng:-43.2028, cv:{p:"R$ 10 a 20", s:"cvNoite", m:"média de bar de bairro, Rio Times set/2026", est:1}, ig:"bardoomar"},
+ {id:"vaca", n:"Vaca Atolada", b:"Lapa", r:"centro", t:"bar", bq:1, a:"Av. Gomes Freire, 533", lat:-22.9127, lng:-43.1859, cv:{p:"R$ 15 a 30", s:"cvNoite", m:"média de casa de música, Rio Times set/2026", est:1}, ig:"vacaatolada.oficial"},
  {id:"gema", n:"Carioca da Gema", b:"Lapa", r:"centro", t:"bar", a:"Av. Mem de Sá, 79", lat:-22.9131, lng:-43.1812, cv:{p:"long neck R$ 15 a 16 · 600 ml R$ 17 a 19", s:"cvGema", m:"cardápio do site"}, ig:"barcariocadagema"},
  {id:"trap", n:"Trapiche Gamboa", b:"Saúde", r:"centro", t:"bar", a:"Rua Sacadura Cabral, 155", lat:-22.8984, lng:-43.1843, cv:{p:"R$ 15 a 30", s:"cvNoite", m:"média de casa de música, Rio Times set/2026", est:1}},
  {id:"cac", n:"Cacique de Ramos", b:"Olaria", r:"norte", t:"quadra", a:"Rua Uranos, 1326", lat:-22.8456, lng:-43.2654, cv:{p:"R$ 10 a 20", s:"cvNoite", m:"média de bar de bairro, Rio Times set/2026", est:1}, ig:"cacique_de_ramos"},
@@ -358,7 +362,7 @@ const V = [
  {id:"bigben", n:"Big Ben Pub", b:"Botafogo", r:"sul", t:"bar", a:"Rua Muniz Barreto, 374", lat:-22.9476, lng:-43.1836, cv:{p:"R$ 15 a 30", s:"cvNoite", m:"média de casa de música, Rio Times set/2026", est:1}},
  {id:"buko", n:"Bar Bukowski", b:"Botafogo", r:"sul", t:"bar", a:"Rua Álvaro Ramos, 270", lat:-22.9536, lng:-43.1881, cv:{p:"R$ 15 a 30", s:"cvNoite", m:"média de casa de música, Rio Times set/2026", est:1}, ig:"barbukowski"},
  {id:"feira", n:"Feira de São Cristóvão", b:"São Cristóvão", r:"norte", t:"feira", a:"Campo de São Cristóvão, s/n", lat:-22.8976, lng:-43.2216, cv:{p:"lata de ambulante ≈ R$ 5 a 10", s:"cvRua", m:"preço sugerido no Carnaval 2026", est:1}},
- {id:"amend", n:"Bar da Amendoeira", b:"Maria da Graça", r:"norte", t:"bar", a:"Rua Conde de Azambuja, 881", lat:-22.8856, lng:-43.2664, cv:{p:"R$ 10 a 20", s:"cvNoite", m:"média de bar de bairro, Rio Times set/2026", est:1}},
+ {id:"amend", n:"Bar da Amendoeira", b:"Maria da Graça", r:"norte", t:"bar", bq:1, a:"Rua Conde de Azambuja, 881", lat:-22.8856, lng:-43.2664, cv:{p:"R$ 10 a 20", s:"cvNoite", m:"média de bar de bairro, Rio Times set/2026", est:1}},
  {id:"divino", n:"Divino Samba", b:"Piedade", r:"norte", t:"rua", a:"Rua José Mariano, 48", lat:-22.8914, lng:-43.3091, cv:{p:"lata de ambulante ≈ R$ 5 a 10", s:"cvRua", m:"preço sugerido no Carnaval 2026", est:1}},
  {id:"alvinho", n:"Quintal do Alvinho", b:"Madureira", r:"norte", t:"quintal", a:"Estrada do Portela, 329", lat:-22.8708, lng:-43.3421, cv:{p:"R$ 10 a 20", s:"cvNoite", m:"média de bar de bairro, Rio Times set/2026", est:1}},
  {id:"calcada", n:"Samba na Calçada", b:"Madureira", r:"norte", t:"rua", a:"Rua Francisco Batista", lat:-22.8731, lng:-43.3369, cv:{p:"lata de ambulante ≈ R$ 5 a 10", s:"cvRua", m:"preço sugerido no Carnaval 2026", est:1}},
@@ -382,7 +386,7 @@ const V = [
    var:"Bar LGBTQIA+ com DJs. Programação muda toda semana.", cats:["rock"], src:"lgbt"},
  {id:"comedy", n:"Rio Café Comedy Club", b:"Centro", r:"centro", t:"bar", a:"Rua Buenos Aires, 53", lat:-22.9021, lng:-43.1776, cv:{p:"R$ 15 a 30", s:"cvNoite", m:"média de casa de música, Rio Times set/2026", est:1},
    var:"Stand-up, improviso e música ao vivo em casarão de três andares. Programação no perfil da casa.", cats:[], src:"comedy"},
- {id:"labuta", n:"Labuta Mar", b:"Glória", r:"centro", t:"bar", a:"Rua do Russel, 450, loja B", lat:-22.9205, lng:-43.1746, cv:{p:"R$ 15 a 30", s:"cvNoite", m:"média de casa de música, Rio Times set/2026", est:1}, ig:"labuta_mar"},
+ {id:"labuta", n:"Labuta Mar", b:"Glória", r:"centro", t:"bar", bq:1, a:"Rua do Russel, 450, loja B", lat:-22.9205, lng:-43.1746, cv:{p:"R$ 15 a 30", s:"cvNoite", m:"média de casa de música, Rio Times set/2026", est:1}, ig:"labuta_mar"},
  {id:"scenarium", n:"Rio Scenarium", b:"Lapa", r:"centro", t:"bar", a:"Rua do Lavradio, 20", lat:-22.9092, lng:-43.1826, cv:{p:"R$ 15 a 30", s:"cvNoite", m:"média de casa de música, Rio Times set/2026", est:1}, ig:"rioscenarium",
    var:"Casarão de três andares com música ao vivo de quarta a sábado à noite: samba, gafieira, choro e pop. Atrações mudam a cada semana; agenda no site e no Sympla.", cats:["samba","choro"], src:"scenarium"},
  {id:"vuvu", n:"Vuvu", b:"Botafogo", r:"sul", t:"bar", a:"Rua Sorocaba, 601", lat:-22.9535, lng:-43.1925, cv:{p:"R$ 15 a 30", s:"cvNoite", m:"média de casa de música, Rio Times set/2026", est:1}, ig:"forrodovuvu"},
@@ -394,10 +398,10 @@ const V = [
  {id:"frutadope", n:"Centro de Cultura Negra Fruta do Pé", b:"Inhoaíba", r:"oeste", t:"quintal", a:"Av. Cesário de Melo, 6300", lat:-22.9030, lng:-43.5870, cv:{p:"R$ 10 a 20", s:"cvNoite", m:"média de bar de bairro, Rio Times set/2026", est:1}},
  {id:"imperio", n:"Quadra do Império Serrano", b:"Madureira", r:"norte", t:"quadra", a:"Av. Ministro Edgard Romero, 114", lat:-22.8726, lng:-43.3379, cv:{p:"R$ 10 a 20", s:"cvNoite", m:"média de bar de bairro, Rio Times set/2026", est:1},
    var:"Feijoada Imperial uma vez por mês, num sábado a partir das 13h, com convidados de outras escolas. O sábado muda a cada mês; confira antes.", cats:["samba","feijoada"], src:"imperio"},
- {id:"nevada", n:"Nevada Bar (Bar da Marlene)", b:"Tijuca", r:"norte", t:"bar", a:"Rua General Espírito Santo Cardoso, 432", lat:-22.9222, lng:-43.2392, cv:{p:"R$ 10 a 20", s:"cvNoite", m:"média de bar de bairro, Rio Times set/2026", est:1}, ig:"_nevadabar"},
+ {id:"nevada", n:"Nevada Bar (Bar da Marlene)", b:"Tijuca", r:"norte", t:"bar", bq:1, a:"Rua General Espírito Santo Cardoso, 432", lat:-22.9222, lng:-43.2392, cv:{p:"R$ 10 a 20", s:"cvNoite", m:"média de bar de bairro, Rio Times set/2026", est:1}, ig:"_nevadabar"},
  {id:"paulao", n:"Espaço Cultural Paulão 7 Cordas", b:"Lapa", r:"centro", t:"bar", a:"Rua do Lavradio, 11", lat:-22.9122, lng:-43.1812, cv:{p:"R$ 15 a 30", s:"cvNoite", m:"média de casa de música, Rio Times set/2026", est:1}, ig:"gloriosa_rodasamba"},
- {id:"arua", n:"A Rua", b:"Santo Cristo · Morro do Pinto", r:"centro", t:"bar", a:"Rua Sara, 34", lat:-22.9003, lng:-43.2024, cv:{p:"R$ 10 a 20", s:"cvNoite", m:"média de bar de bairro, Rio Times set/2026", est:1}, ig:"_____arua"},
- {id:"ssenado", n:"Samba do Senado", b:"Centro", r:"centro", t:"bar", a:"Rua do Senado, 1", lat:-22.9072, lng:-43.1822, cv:{p:"R$ 10 a 20", s:"cvNoite", m:"média de bar de bairro, Rio Times set/2026", est:1}}
+ {id:"arua", n:"A Rua", b:"Santo Cristo · Morro do Pinto", r:"centro", t:"bar", bq:1, a:"Rua Sara, 34", lat:-22.9003, lng:-43.2024, cv:{p:"R$ 10 a 20", s:"cvNoite", m:"média de bar de bairro, Rio Times set/2026", est:1}, ig:"_____arua"},
+ {id:"ssenado", n:"Samba do Senado", b:"Centro", r:"centro", t:"bar", bq:1, a:"Rua do Senado, 1", lat:-22.9072, lng:-43.1822, cv:{p:"R$ 10 a 20", s:"cvNoite", m:"média de bar de bairro, Rio Times set/2026", est:1}}
 ];
 
 // Fotos dos lugares (aparecem no dropdown). Chave = id do lugar em V.
@@ -566,7 +570,7 @@ function instances(){
     }
     for(const e of D){ if(e.dt===day.iso) push(e, day); }
   }
-  list.sort((a,b)=> a.day.i-b.day.i || a.start-b.start || a.e.t.localeCompare(b.e.t));
+  list.sort((a,b)=> a.day.i-b.day.i || bqOrd(a.v)-bqOrd(b.v) || a.start-b.start || a.e.t.localeCompare(b.e.t));
   return {now, days, list};
 }
 
@@ -664,7 +668,7 @@ function nearNote(){
   if(GEO.status==="err") return `<p class="note"><b>Sem localização.</b> ${esc(GEO.msg)}</p>`;
   if(!ST.near || !GEO.pos) return "";
   const longe = V.every(v=>kmTo(v)>40);
-  return `<p class="note"><b>Perto de você:</b> lugares até ${fmtKm(GEO.radius)}, do mais perto ao mais longe em cada dia. Distância em linha reta, com posições aproximadas.${longe?" Você parece estar longe do Rio, então tudo aparece bem distante.":""}</p>`;
+  return `<p class="note"><b>Perto de você:</b> lugares até ${fmtKm(GEO.radius)}, com os botequins primeiro e depois do mais perto ao mais longe em cada dia. Distância em linha reta, com posições aproximadas.${longe?" Você parece estar longe do Rio, então tudo aparece bem distante.":""}</p>`;
 }
 
 function passWhen(x){
@@ -720,7 +724,7 @@ function evRow(x){
     <div class="main">
       <button class="title" data-open="${x.key}" aria-expanded="${op}" aria-controls="${did}">${esc(e.t)}</button>
       <button class="venue" data-open="${x.key}" aria-expanded="${op}" aria-controls="${did}"><b>${esc(v.n)}</b> · ${esc(v.b)}${ST.near&&GEO.pos?` · <span class="km">${fmtKm(kmTo(v))}</span>`:""} <span class="chev" aria-hidden="true">▾</span><span class="sr">mostrar endereço</span></button>
-      <div class="meta">${price}${cats}${conf}${ck}</div>
+      <div class="meta">${v.bq?`<span class="tagp bq">botequim</span>`:""}${price}${cats}${conf}${ck}</div>
     </div>
     <div class="acts">
       ${cervaCurta(v)}
@@ -734,7 +738,7 @@ function evRow(x){
         <div class="addr-txt"><span class="lbl">Endereço</span><strong>${esc(v.a)}</strong><span>${esc(v.b)}, Rio de Janeiro</span></div>
         <div class="addr-btns"><a class="act" href="${mapsUrl(v)}" target="_blank" rel="noopener">Abrir no mapa</a><button class="act" data-copy="${esc(full)}">Copiar</button></div>
       </div>
-      <p><b>${esc(sched(e))}</b>, ${e.tbd?"horário ainda não divulgado":(e.ap?"por volta das ":"a partir das ")+hhmm(x.start)} · ${TIPO[v.t]}</p>
+      <p><b>${esc(sched(e))}</b>, ${e.tbd?"horário ainda não divulgado":(e.ap?"por volta das ":"a partir das ")+hhmm(x.start)} · ${tipo(v)}</p>
       <p>${esc(e.x)}</p>
       ${cervaHtml(v)}
       ${(ig || (src && !src.includes("instagram.com"))) ? `<div class="links">${ig}${src && !src.includes("instagram.com")?`<a href="${src}" target="_blank" rel="noopener">Fonte</a>`:""}</div>` : ""}
@@ -759,9 +763,9 @@ function renderSections(list, emptyMsg){
 // ---------- views ----------
 function viewAgenda(data){
   let list = data.list.filter(x=>passWhen(x) && passFilters(x));
-  if(ST.near && GEO.pos) list = list.filter(x=>kmTo(x.v)<=GEO.radius).sort((a,b)=> a.day.i-b.day.i || kmTo(a.v)-kmTo(b.v) || a.start-b.start);
+  if(ST.near && GEO.pos) list = list.filter(x=>kmTo(x.v)<=GEO.radius).sort((a,b)=> a.day.i-b.day.i || bqOrd(a.v)-bqOrd(b.v) || kmTo(a.v)-kmTo(b.v) || a.start-b.start);
   const hiddenCount = S.hidden.size;
-  const note = `<p class="note"><b>Atualizado com o Instagram das casas em 20/10.</b> Linhas com o selo <b>anunciado no Instagram</b> vieram de posts com data; as demais seguem a programação fixa da roda ou do bar. ≈ é horário aproximado; <b>necessário confirmar</b> pede checagem no perfil antes de sair.</p>`;
+  const note = `<p class="note"><b>Atualizado com o Instagram das casas em 20/10.</b> Linhas com o selo <b>anunciado no Instagram</b> vieram de posts com data; as demais seguem a programação fixa da roda ou do bar. ≈ é horário aproximado; <b>necessário confirmar</b> pede checagem no perfil antes de sair. Em cada dia, os <b>botequins</b> vêm primeiro.</p>`;
   const msg = ST.when==="agora" ? "Nenhuma roda no ar agora com esses filtros. Tente “Hoje” ou “Em breve”." : "Tire algum filtro para ver mais.";
   return note + nearNote() + renderSections(list, msg) +
     (hiddenCount ? `<p class="hiddeninfo">${hiddenCount} evento${hiddenCount>1?"s":""} oculto${hiddenCount>1?"s":""}. <button class="linkbtn" data-unhide="all">Mostrar de novo</button></p>` : "");
@@ -781,8 +785,8 @@ function viewLugares(){
     <button class="linkbtn" id="nearBtn">${byDist?"Voltar para a lista por região":GEO.status==="wait"?"Localizando…":"Ordenar pelo mais perto de mim"}</button></p>`;
   html += (GEO.status==="err" ? nearNote() : "");
   const groups = byDist
-    ? [["perto","Do mais perto ao mais longe", V.slice().sort((a,b)=>kmTo(a)-kmTo(b))]]
-    : Object.entries(REGS).map(([rk,rl])=>[rk, rl, V.filter(v=>v.r===rk).sort((a,b)=>a.n.localeCompare(b.n,"pt"))]);
+    ? [["perto","Mais perto de você", V.slice().sort((a,b)=>bqOrd(a)-bqOrd(b) || kmTo(a)-kmTo(b))]]
+    : Object.entries(REGS).map(([rk,rl])=>[rk, rl, V.filter(v=>v.r===rk).sort((a,b)=>bqOrd(a)-bqOrd(b) || a.n.localeCompare(b.n,"pt"))]);
   for(const [rk, rl, vs] of groups){
     html += `<div class="reg"><h2>${rl}</h2>`;
     for(const v of vs){
@@ -796,7 +800,7 @@ function viewLugares(){
       const src = srcUrl(srcKey);
       const ig = v.ig ? `<a href="https://www.instagram.com/${v.ig}/" target="_blank" rel="noopener">@${esc(v.ig)}</a>` : "";
       html += `<div class="place" id="p-${v.id}"><h3>${esc(v.n)}</h3>
-        <div class="sub">${byDist?`<b class="km">${fmtKm(kmTo(v))}</b> · `:""}${TIPO[v.t]} · ${esc(v.b)} · ${esc(v.a)}</div>
+        <div class="sub">${byDist?`<b class="km">${fmtKm(kmTo(v))}</b> · `:""}${tipo(v)} · ${esc(v.b)} · ${esc(v.a)}</div>
         <ul>${items}${varTxt}${cervaHtml(v,"li")}${ditems?`<li><span class="when"><b>Próximas datas anunciadas</b></span></li>`+ditems:""}</ul>
         <div class="links"><a href="${mapsUrl(v)}" target="_blank" rel="noopener">Google Maps</a>${ig}${src && !src.includes("instagram.com")?`<a href="${src}" target="_blank" rel="noopener">Fonte</a>`:""}</div></div>`;
     }
@@ -891,7 +895,7 @@ function viewMapa(data){
     const v = VBY[ST.mapSel];
     const next = data.list.filter(x=>x.v.id===v.id && passFilters(x)).slice(0,4);
     const items = next.map(x=>`<li><span><b>${x.state==="now"?"Agora":dayLabel(x.day)}, ${x.e.ap?"≈":""}${hhmm(x.start)}</b> · ${esc(x.e.t)} <span class="when">· ${esc(x.e.p)}</span></span></li>`).join("");
-    card = `<div class="place"><h3>${esc(v.n)}</h3><div class="sub">${TIPO[v.t]} · ${esc(v.b)} · ${esc(v.a)}</div>
+    card = `<div class="place"><h3>${esc(v.n)}</h3><div class="sub">${tipo(v)} · ${esc(v.b)} · ${esc(v.a)}</div>
       <ul>${items || (v.var?`<li><span class="when">${esc(v.var)}</span></li>`:`<li><span class="when">Nada nas próximas duas semanas com esses filtros.</span></li>`)}${cervaHtml(v,"li")}</ul>
       <div class="links"><a href="${mapsUrl(v)}" target="_blank" rel="noopener">Abrir no Google Maps</a><button class="linkbtn" data-goto="${v.id}">Ver em Lugares</button></div></div>`;
   }
