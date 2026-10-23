@@ -133,6 +133,7 @@ a.act{text-decoration:none; color:var(--ink)}
 .act[aria-pressed="true"]{background:var(--ink); color:var(--bg); border-color:var(--ink)}
 .act.vou[aria-pressed="true"]{background:var(--gelada); color:var(--gelada-ink); border-color:var(--gelada)}
 .act.x{color:var(--muted)}
+.cvchip{font-size:13px; color:var(--muted); white-space:nowrap; padding:6px 4px 0}
 .det{grid-column:2 / -1; margin-top:8px; padding:10px 12px; background:var(--surface); border:1px solid var(--line); border-radius:8px; font-size:14px}
 .det p{margin:0 0 6px}
 .det .foto{margin:0 0 10px}
@@ -593,6 +594,14 @@ function cervaHtml(v, tag){
   const txt = `<span class="cerva">Cerveja: ${v.cv.est && v.cv.p.startsWith("R$")?"≈ ":""}${esc(v.cv.p)} <span class="when">(${v.cv.est?"estimativa, ":""}${u?`<a href="${u}" target="_blank" rel="noopener">${esc(v.cv.m)}</a>`:esc(v.cv.m)})</span></span>`;
   return tag==="li" ? `<li>${txt}</li>` : `<p>${txt}</p>`;
 }
+function cervaCurta(v){
+  if(!v.cv) return "";
+  const n = (v.cv.p.match(/\d+(?:,\d+)?/g)||[]).map(x=>+x.replace(",",".")).filter(x=>x>=3);
+  if(!n.length) return "";
+  const lo = Math.min(...n), hi = Math.max(...n);
+  const faixa = lo===hi ? (v.cv.p.includes("a partir")?"R$ "+lo+"+":"R$ "+lo) : "R$ "+lo+"–"+hi;
+  return `<span class="cvchip" title="Preço médio da cerveja${v.cv.est?" (estimativa)":""}">🍺 ${v.cv.est?"≈":""}${faixa}</span>`;
+}
 function mapsUrl(v){ return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(v.a+", "+v.b.split(" · ")[0]+", Rio de Janeiro"); }
 
 // ---------- state ----------
@@ -655,6 +664,7 @@ function evRow(x){
       <div class="meta">${price}${cats}${conf}${ck}</div>
     </div>
     <div class="acts">
+      ${cervaCurta(v)}
       <button class="act" data-save="${x.key}" aria-pressed="${sv}">${sv?"Salvo":"Salvar"}</button>
       <button class="act vou" data-going="${x.key}" aria-pressed="${gg}">Vou</button>
       <button class="act x" data-hide="${e.id}" title="Ocultar este evento em todas as datas">Não curto</button>
