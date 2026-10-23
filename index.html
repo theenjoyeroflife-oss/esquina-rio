@@ -210,6 +210,12 @@ footer p{margin:0 0 8px; max-width:68ch}
   background:var(--glass-bg); border:1px solid var(--glass-line); box-shadow:var(--glass-shadow);
   -webkit-backdrop-filter:blur(14px) saturate(1.2); backdrop-filter:blur(14px) saturate(1.2)}
 .pub-box .adsbygoogle{display:block; width:100%; min-height:600px}
+.adslot{margin:26px 0 0}
+.adslot .pub-lbl{display:block; margin:0 0 6px}
+.adslot-box{border-radius:12px; overflow:hidden; background:var(--glass-bg); border:1px solid var(--glass-line); box-shadow:var(--glass-shadow); -webkit-backdrop-filter:blur(14px) saturate(1.2); backdrop-filter:blur(14px) saturate(1.2)}
+.adslot-box .adsbygoogle{display:block; width:100%; min-height:100px}
+.adslot-box.vazio{min-height:90px; display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:13px; border-style:dashed}
+.adslot:has(ins[data-ad-status="unfilled"]){display:none}
 .pub-vazio{height:600px; display:flex; align-items:center; justify-content:center; text-align:center; padding:16px; color:var(--muted); font-size:13px; border-style:dashed}
 </style>
 </head>
@@ -257,8 +263,16 @@ footer p{margin:0 0 8px; max-width:68ch}
 <script>
 // Google AdSense: o script do editor fica no <head> (verificação do site).
 // Preencha slot com o ID do bloco de anúncio (data-ad-slot); enquanto estiver vazio, o espaço aparece reservado.
+// Blocos de anúncio criados no AdSense (Anúncios › Por bloco de anúncios):
+// - lateral: bloco de display vertical, só em telas largas;
+// - agenda: bloco "In-feed" (ou display) entre os dias da agenda. Para In-feed, preencha também layoutKey (data-ad-layout-key).
+window.EXQ_ADS = {
+  client: "ca-pub-8397005000172113",
+  lateral: { slot: "" },
+  agenda: { slot: "", layoutKey: "" }
+};
 (function(){
-  const ADSENSE = { client: "ca-pub-8397005000172113", slot: "" };
+  const ADSENSE = { client: EXQ_ADS.client, slot: EXQ_ADS.lateral.slot };
   const box = document.getElementById("pubBox");
   const largo = window.matchMedia("(min-width:1180px)");
   if(!ADSENSE.client || !ADSENSE.slot){
@@ -855,7 +869,11 @@ function evRow(x){
   </article>`;
 }
 
-function renderSections(list, emptyMsg){
+function adSlot(k){
+  const vazio = !EXQ_ADS.agenda.slot;
+  return `<div class="adslot" data-k="${k}" aria-label="Publicidade"><span class="pub-lbl">Publicidade</span><div class="adslot-box${vazio?" vazio":""}">${vazio?"Espaço reservado para anúncio":""}</div></div>`;
+}
+function renderSections(list, emptyMsg, ads){
   if(!list.length) return `<div class="empty"><b>Nada por aqui</b>${emptyMsg}</div>`;
   const groups = [];
   const nowItems = list.filter(x=>x.state==="now");
@@ -866,7 +884,7 @@ function renderSections(list, emptyMsg){
     if(!cur || cur.i!==x.day.i){ cur = {i:x.day.i, label:dayLabel(x.day), items:[]}; groups.push(cur); }
     cur.items.push(x);
   }
-  return groups.map(g=>`<section class="day ${g.cls||""}"><h2>${g.label}<span class="c">${g.items.length}</span></h2>${g.items.map(evRow).join("")}</section>`).join("");
+  return groups.map((g,i)=>`<section class="day ${g.cls||""}"><h2>${g.label}<span class="c">${g.items.length}</span></h2>${g.items.map(evRow).join("")}</section>` + (ads && i<groups.length-1 ? adSlot(i) : "")).join("");
 }
 
 // ---------- views ----------
@@ -876,7 +894,7 @@ function viewAgenda(data){
   const hiddenCount = S.hidden.size;
   const note = `<p class="note"><b>Atualizado com o Instagram das casas em 20/10.</b> Linhas com o selo <b>anunciado no Instagram</b> vieram de posts com data; as demais seguem a programação fixa da roda ou do bar. ≈ é horário aproximado; <b>necessário confirmar</b> pede checagem no perfil antes de sair. Em cada dia, os <b>botequins</b> vêm primeiro.</p>`;
   const msg = ST.when==="agora" ? "Nenhuma roda no ar agora com esses filtros. Tente “Hoje” ou “Em breve”." : "Tire algum filtro para ver mais.";
-  return nearNote() + note + renderSections(list, msg) +
+  return nearNote() + note + renderSections(list, msg, true) +
     (hiddenCount ? `<p class="hiddeninfo">${hiddenCount} evento${hiddenCount>1?"s":""} oculto${hiddenCount>1?"s":""}. <button class="linkbtn" data-unhide="all">Mostrar de novo</button></p>` : "");
 }
 
@@ -1021,6 +1039,43 @@ function viewMapa(data){
   </div>`;
 }
 
+// ---------- anúncios entre os dias ----------
+// A agenda é redesenhada a cada filtro e a cada 5 minutos. Para não recarregar os anúncios
+// (o AdSense não permite atualizar anúncio sem ação do visitante), os espaços já existentes
+// ficam no DOM e só o conteúdo em volta deles é trocado.
+function patchView(view, html){
+  const tpl = document.createElement("div"); tpl.innerHTML = html;
+  const novos = new Set([...tpl.children].filter(n=>n.classList.contains("adslot")).map(n=>n.dataset.k));
+  for(const n of [...view.childNodes]){
+    if(!(n.nodeType===1 && n.classList.contains("adslot") && novos.has(n.dataset.k))) n.remove();
+  }
+  const velhos = new Map([...view.children].map(n=>[n.dataset.k, n]));
+  let cur = view.firstChild;
+  for(const n of [...tpl.childNodes]){
+    if(n.nodeType===1 && n.classList.contains("adslot") && velhos.has(n.dataset.k)){ cur = velhos.get(n.dataset.k).nextSibling; continue; }
+    view.insertBefore(n, cur);
+  }
+}
+let adObs = null;
+function fillAds(){
+  const cfg = EXQ_ADS.agenda;
+  if(!cfg.slot) return;
+  const carregar = box=>{
+    if(box.dataset.ok) return; box.dataset.ok = "1";
+    const ins = document.createElement("ins");
+    ins.className = "adsbygoogle";
+    ins.setAttribute("data-ad-client", EXQ_ADS.client);
+    ins.setAttribute("data-ad-slot", cfg.slot);
+    if(cfg.layoutKey){ ins.setAttribute("data-ad-format", "fluid"); ins.setAttribute("data-ad-layout-key", cfg.layoutKey); }
+    else { ins.setAttribute("data-ad-format", "auto"); ins.setAttribute("data-full-width-responsive", "true"); }
+    box.appendChild(ins);
+    try{ (window.adsbygoogle = window.adsbygoogle || []).push({}); }catch(e){}
+  };
+  if(!("IntersectionObserver" in window)){ document.querySelectorAll(".adslot-box").forEach(carregar); return; }
+  if(!adObs) adObs = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ adObs.unobserve(e.target); carregar(e.target); } }), {rootMargin:"600px 0px"});
+  document.querySelectorAll(".adslot-box:not([data-ok])").forEach(b=>adObs.observe(b));
+}
+
 // ---------- main render ----------
 function render(){
   const data = instances();
@@ -1031,7 +1086,8 @@ function render(){
   document.getElementById("n-voce").textContent = nv ? nv : "";
   renderBar();
   const view = document.getElementById("view");
-  view.innerHTML = ST.tab==="agenda" ? viewAgenda(data) : ST.tab==="voce" ? viewVoce(data) : ST.tab==="mapa" ? viewMapa(data) : viewLugares();
+  patchView(view, ST.tab==="agenda" ? viewAgenda(data) : ST.tab==="voce" ? viewVoce(data) : ST.tab==="mapa" ? viewMapa(data) : viewLugares());
+  fillAds();
   if(ST.tab==="mapa") mountMap();
 }
 
