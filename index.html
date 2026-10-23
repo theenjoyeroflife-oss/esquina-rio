@@ -133,7 +133,9 @@ a.act{text-decoration:none; color:var(--ink)}
 .act[aria-pressed="true"]{background:var(--ink); color:var(--bg); border-color:var(--ink)}
 .act.vou[aria-pressed="true"]{background:var(--gelada); color:var(--gelada-ink); border-color:var(--gelada)}
 .act.x{color:var(--muted)}
-.cvchip{font-size:13px; color:var(--muted); white-space:nowrap; padding:6px 4px 0}
+.acts{flex-wrap:wrap; justify-content:flex-end}
+.cvchip{order:9; flex-basis:100%; text-align:right; font-size:17px; font-weight:600; color:var(--ink); white-space:nowrap; padding:6px 4px 0}
+.cvchip .emo{font-size:26px; vertical-align:-4px; margin-right:4px}
 .det{grid-column:2 / -1; margin-top:8px; padding:10px 12px; background:var(--surface); border:1px solid var(--line); border-radius:8px; font-size:14px}
 .det p{margin:0 0 6px}
 .det .foto{margin:0 0 10px}
@@ -143,7 +145,8 @@ a.act{text-decoration:none; color:var(--ink)}
 @media (max-width:560px){
   .ev{grid-template-columns:52px minmax(0,1fr)}
   .time{font-size:22px}
-  .acts{grid-column:2}
+  .acts{grid-column:2; justify-content:flex-start}
+  .cvchip{text-align:left}
   .det{grid-column:1 / -1}
 }
 .empty{padding:40px 0; color:var(--muted); text-align:center}
@@ -600,7 +603,7 @@ function cervaCurta(v){
   if(!n.length) return "";
   const lo = Math.min(...n), hi = Math.max(...n);
   const faixa = lo===hi ? (v.cv.p.includes("a partir")?"R$ "+lo+"+":"R$ "+lo) : "R$ "+lo+"–"+hi;
-  return `<span class="cvchip" title="Preço médio da cerveja${v.cv.est?" (estimativa)":""}">🍺 ${v.cv.est?"≈":""}${faixa}</span>`;
+  return `<span class="cvchip" title="Preço médio da cerveja${v.cv.est?" (estimativa)":""}"><span class="emo" aria-hidden="true">🍺</span>${v.cv.est?"≈":""}${faixa}</span>`;
 }
 function mapsUrl(v){ return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(v.a+", "+v.b.split(" · ")[0]+", Rio de Janeiro"); }
 
