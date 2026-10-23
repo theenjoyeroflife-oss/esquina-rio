@@ -135,6 +135,9 @@ a.act{text-decoration:none; color:var(--ink)}
 .act.x{color:var(--muted)}
 .det{grid-column:2 / -1; margin-top:8px; padding:10px 12px; background:var(--surface); border:1px solid var(--line); border-radius:8px; font-size:14px}
 .det p{margin:0 0 6px}
+.det .foto{margin:0 0 10px}
+.det .foto img{display:block; width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:6px; background:var(--line)}
+.det .foto figcaption{margin-top:4px; font-size:11px; color:var(--muted)}
 .det .links{display:flex; flex-wrap:wrap; gap:14px; margin-top:6px}
 @media (max-width:560px){
   .ev{grid-template-columns:52px minmax(0,1fr)}
@@ -383,6 +386,16 @@ const V = [
  {id:"ssenado", n:"Samba do Senado", b:"Centro", r:"centro", t:"bar", a:"Rua do Senado, 1", lat:-22.9072, lng:-43.1822}
 ];
 
+// Fotos dos lugares (aparecem no dropdown). Chave = id do lugar em V.
+// src: imagem ~640px; pag: página da foto (crédito); cred: autor e licença.
+// Só fotos de licença livre (Wikimedia Commons) ou enviadas/autorizadas. Se a imagem não carregar, o bloco some.
+const FOTOS = {
+  pedra:  {src:"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/2018_Rio_de_Janeiro_-_Pedra_do_Sal.jpg/640px-2018_Rio_de_Janeiro_-_Pedra_do_Sal.jpg", pag:"https://commons.wikimedia.org/wiki/File:2018_Rio_de_Janeiro_-_Pedra_do_Sal.jpg", cred:"Wikimedia Commons"},
+  teles:  {src:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Arco_do_Teles_01.JPG/640px-Arco_do_Teles_01.JPG", pag:"https://commons.wikimedia.org/wiki/File:Arco_do_Teles_01.JPG", cred:"Wikimedia Commons"},
+  harm:   {src:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/2018_Rio_de_Janeiro_-_Pra%C3%A7a_da_Harmonia.jpg/640px-2018_Rio_de_Janeiro_-_Pra%C3%A7a_da_Harmonia.jpg", pag:"https://commons.wikimedia.org/wiki/File:2018_Rio_de_Janeiro_-_Pra%C3%A7a_da_Harmonia.jpg", cred:"Wikimedia Commons"},
+  demo:   {src:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Clube_dos_Democr%C3%A1ticos_01.jpg/640px-Clube_dos_Democr%C3%A1ticos_01.jpg", pag:"https://commons.wikimedia.org/wiki/File:Clube_dos_Democr%C3%A1ticos_01.jpg", cred:"Wikimedia Commons"}
+};
+
 // Eventos recorrentes. d = dias (0 dom … 6 sáb); n = semanas do mês (1º, 2º…); ap = horário aproximado; ck = "necessário confirmar".
 const E = [
  {id:"pedra", v:"pedra", t:"Roda de Samba da Pedra do Sal", c:["samba"], d:[1], h:"19:00", p:"Grátis", f:1, dur:5, s:"mapa", x:"A roda tradicional das segundas, ao ar livre no largo onde o samba carioca nasceu. Barracas de comida e bebida em volta; costuma lotar."},
@@ -562,6 +575,10 @@ function dayLabel(day){
   return WDS[day.wd]+" "+day.dom+" "+MON[day.mon];
 }
 function esc(s){ return String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function fotoHtml(v){
+  const f = FOTOS[v.id]; if(!f) return "";
+  return `<figure class="foto"><img src="${esc(f.src)}" alt="${esc(v.n)}" loading="lazy" decoding="async" onerror="this.closest('figure').remove()"><figcaption>Foto: <a href="${esc(f.pag)}" target="_blank" rel="noopener">${esc(f.cred)}</a></figcaption></figure>`;
+}
 function mapsUrl(v){ return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(v.a+", "+v.b.split(" · ")[0]+", Rio de Janeiro"); }
 
 // ---------- state ----------
@@ -629,6 +646,7 @@ function evRow(x){
       <button class="act x" data-hide="${e.id}" title="Ocultar este evento em todas as datas">Não curto</button>
     </div>
     <div class="det" id="${did}" ${op?"":"hidden"}>
+      ${fotoHtml(v)}
       <div class="addr">
         <div class="addr-txt"><span class="lbl">Endereço</span><strong>${esc(v.a)}</strong><span>${esc(v.b)}, Rio de Janeiro</span></div>
         <div class="addr-btns"><a class="act" href="${mapsUrl(v)}" target="_blank" rel="noopener">Abrir no mapa</a><button class="act" data-copy="${esc(full)}">Copiar</button></div>
