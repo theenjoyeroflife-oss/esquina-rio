@@ -76,6 +76,8 @@ nav.tabs .n{font-variant-numeric:tabular-nums; font-size:12px; opacity:.8; margi
 .row{display:flex; gap:6px; overflow-x:auto; scrollbar-width:none; padding-bottom:2px}
 .row::-webkit-scrollbar{display:none}
 .row + .row{margin-top:8px}
+#catRow .two{display:flex; flex-wrap:wrap; align-items:center; align-content:flex-start; gap:6px; flex:none; padding-bottom:1px}
+.chip.rg{border-style:dashed}
 .chip{flex:none; border:1px solid color-mix(in srgb, var(--line) 80%, transparent); background:color-mix(in srgb, var(--surface) 55%, transparent); padding:6px 12px; border-radius:999px; cursor:pointer; font-size:14px; white-space:nowrap; display:inline-flex; align-items:center; gap:6px}
 .chip[aria-pressed="true"]{background:var(--ink); color:var(--bg); border-color:var(--ink)}
 .chip.when{font-weight:600}
@@ -702,9 +704,24 @@ function renderBar(){
     + `<span class="sep"></span><button class="chip free" id="freeBtn" aria-pressed="${ST.free}">Grátis</button>`;
   wr.hidden = ST.tab==="mapa";
   const cr = document.getElementById("catRow");
-  cr.innerHTML = Object.entries(CATS).map(([k,c])=>`<button class="chip sm" data-cat="${k}" aria-pressed="${ST.cat===k}" style="--cc:var(${c.c})"><span class="dot"></span>${c.n}</button>`).join("")
-    + `<span class="sep"></span>` + Object.entries(REGS).map(([k,l])=>`<button class="chip sm" data-reg="${k}" aria-pressed="${ST.reg===k}">${l}</button>`).join("");
+  cr.innerHTML = `<div class="two">` + Object.entries(CATS).map(([k,c])=>`<button class="chip sm" data-cat="${k}" aria-pressed="${ST.cat===k}" style="--cc:var(${c.c})"><span class="dot"></span>${c.n}</button>`).join("")
+    + Object.entries(REGS).map(([k,l])=>`<button class="chip sm rg" data-reg="${k}" aria-pressed="${ST.reg===k}">${l}</button>`).join("") + `</div>`;
+  fitTwo();
 }
+// Tipos e regiões em duas linhas: acha a menor largura em que os chips cabem em duas linhas.
+function fitTwo(){
+  const box = document.querySelector("#catRow .two");
+  if(!box || document.getElementById("bar").hidden) return;
+  const cs = [...box.children];
+  box.style.width = "max-content";
+  const gap = 6, total = cs.reduce((t,c)=>t+c.offsetWidth+gap, 0), widest = Math.max(...cs.map(c=>c.offsetWidth));
+  const two = cs[0].offsetHeight*2 + gap + 1;
+  let w = Math.max(widest, Math.ceil(total/2));
+  box.style.width = w+"px";
+  while(box.offsetHeight>two && w<total){ w += 12; box.style.width = w+"px"; }
+}
+window.addEventListener("resize", fitTwo);
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(fitTwo);
 
 // ---------- render: event row ----------
 function evRow(x){
