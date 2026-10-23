@@ -2,6 +2,7 @@
 <html lang="pt-BR" data-theme="dark">
 <head>
 <meta charset="utf-8">
+<meta name="color-scheme" content="dark light">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="Rodas de samba, choro, jazz, forró e karaokê em bares e botecos do Rio, organizadas por dia.">
 <meta property="og:title" content="Exquina Rio">
@@ -17,31 +18,23 @@
 <style>
 /* Layout: one narrow agenda column like a bar's chalkboard; calçadão wave band under the header; sticky "quando" bar. */
 :root{
+  --bg:#0c1217; --surface:#141c23; --ink:#e7edf0; --muted:#94a3ad; --line:#26323c;
+  --azul:#80a8ee; --azul-soft:#1a2a40; --gelada:#f1c232; --gelada-ink:#2b2000;
+  --c-samba:#80a8ee; --c-choro:#6cc490; --c-jazz:#b694e6; --c-bossa:#5cc6cf; --c-forro:#ec9a63;
+  --c-pagode:#ec84ad; --c-karaoke:#e2bb4c; --c-rock:#a9b5bd; --c-feijoada:#cfa47c;
+  --photo-op:.24;
+  --glass-bg:rgba(20,28,36,.38); --glass-line:rgba(255,255,255,.14); --glass-hi:rgba(255,255,255,.06); --glass-shadow:0 8px 28px rgba(0,0,0,.35);
+  --f-display:"Big Shoulders Display", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --f-body:"Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme:dark }
+:root[data-theme="light"]{
   --bg:#f2f4f3; --surface:#ffffff; --ink:#121a20; --muted:#58656d; --line:#d8dfe1;
   --azul:#1b4c9a; --azul-soft:#e2eaf6; --gelada:#f1c232; --gelada-ink:#3a2c00;
   --c-samba:#1b4c9a; --c-choro:#2f7d4f; --c-jazz:#6b3fa0; --c-bossa:#0f7c86; --c-forro:#b5541b;
   --c-pagode:#b03366; --c-karaoke:#a2780e; --c-rock:#454f57; --c-feijoada:#6d4a2b;
   --photo-op:.17;
   --glass-bg:rgba(255,255,255,.38); --glass-line:rgba(255,255,255,.75); --glass-hi:rgba(255,255,255,.55); --glass-shadow:0 8px 28px rgba(18,26,32,.12);
-  --f-display:"Big Shoulders Display", "Arial Narrow", "Roboto Condensed", sans-serif;
-  --f-body:"Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-}
-@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
-  --bg:#0c1217; --surface:#141c23; --ink:#e7edf0; --muted:#94a3ad; --line:#26323c;
-  --azul:#80a8ee; --azul-soft:#1a2a40; --gelada:#f1c232; --gelada-ink:#2b2000;
-  --c-samba:#80a8ee; --c-choro:#6cc490; --c-jazz:#b694e6; --c-bossa:#5cc6cf; --c-forro:#ec9a63;
-  --c-pagode:#ec84ad; --c-karaoke:#e2bb4c; --c-rock:#a9b5bd; --c-feijoada:#cfa47c;
-  --photo-op:.24;
-  --glass-bg:rgba(20,28,36,.38); --glass-line:rgba(255,255,255,.14); --glass-hi:rgba(255,255,255,.06); --glass-shadow:0 8px 28px rgba(0,0,0,.35);
-  color-scheme:dark }}
-:root[data-theme="dark"]{
-  --bg:#0c1217; --surface:#141c23; --ink:#e7edf0; --muted:#94a3ad; --line:#26323c;
-  --azul:#80a8ee; --azul-soft:#1a2a40; --gelada:#f1c232; --gelada-ink:#2b2000;
-  --c-samba:#80a8ee; --c-choro:#6cc490; --c-jazz:#b694e6; --c-bossa:#5cc6cf; --c-forro:#ec9a63;
-  --c-pagode:#ec84ad; --c-karaoke:#e2bb4c; --c-rock:#a9b5bd; --c-feijoada:#cfa47c;
-  --photo-op:.24;
-  --glass-bg:rgba(20,28,36,.38); --glass-line:rgba(255,255,255,.14); --glass-hi:rgba(255,255,255,.06); --glass-shadow:0 8px 28px rgba(0,0,0,.35);
-  color-scheme:dark }
+  color-scheme:light }
 
 *{box-sizing:border-box}
 body{background:var(--bg); color:var(--ink); font-family:var(--f-body); font-size:15px; line-height:1.45;
@@ -68,11 +61,10 @@ header.top > div:first-child{padding-right:86px}
 .tema svg{width:34px; height:20px; transition:opacity .2s}
 .tema .sol{color:var(--gelada)}
 .tema .lua{color:var(--ink)}
-.tema .lua, :root[data-theme="dark"] .tema .sol{opacity:.45}
-:root[data-theme="dark"] .tema .lua{opacity:1}
-:root[data-theme="dark"] .tema::before{transform:translateX(32px)}
-@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .tema::before{transform:translateX(32px)}
-  :root:not([data-theme="light"]) .tema .sol{opacity:.45} :root:not([data-theme="light"]) .tema .lua{opacity:1} }
+.tema .sol, :root[data-theme="light"] .tema .lua{opacity:.45}
+:root[data-theme="light"] .tema .sol{opacity:1}
+.tema::before{transform:translateX(32px)}
+:root[data-theme="light"] .tema::before{transform:none}
 @media (prefers-reduced-motion: reduce){ .tema::before, .tema svg{transition:none} }
 .brand{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap}
 .wordmark{font-family:var(--f-display); font-weight:800; font-size:clamp(44px, 9vw, 64px); line-height:.85; letter-spacing:.01em; margin:0; text-transform:lowercase}
@@ -973,9 +965,7 @@ function leafletReady(){
   return M.loading;
 }
 function isDark(){
-  const t = document.documentElement.dataset.theme;
-  if(t) return t==="dark";
-  return window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches;
+  return document.documentElement.dataset.theme!=="light";
 }
 function cssVar(n){ return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
 function mapVisible(){
@@ -1106,7 +1096,6 @@ document.getElementById("tema").addEventListener("click", ()=>{
   syncTema();
   if(ST.tab==="mapa") render();
 });
-if(window.matchMedia) matchMedia("(prefers-color-scheme: dark)").addEventListener("change", syncTema);
 syncTema();
 
 // ---------- main render ----------
