@@ -81,6 +81,8 @@ nav.tabs .n{font-variant-numeric:tabular-nums; font-size:12px; opacity:.8; margi
 .chip.when{font-weight:600}
 .chip.free[aria-pressed="true"]{background:var(--gelada); color:var(--gelada-ink); border-color:var(--gelada)}
 .chip.sm{font-size:13px; padding:4px 10px}
+.chip.near[aria-pressed="true"]{background:var(--azul); color:var(--bg); border-color:var(--azul)}
+.km{color:var(--azul); font-weight:600; font-variant-numeric:tabular-nums}
 .dot{width:8px; height:8px; border-radius:50%; background:var(--cc, var(--muted)); flex:none}
 .sep{flex:none; width:1px; background:var(--line); margin:4px 2px}
 
@@ -608,9 +610,62 @@ function cervaCurta(v){
 function mapsUrl(v){ return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(v.a+", "+v.b.split(" · ")[0]+", Rio de Janeiro"); }
 
 // ---------- state ----------
-const ST = { tab:"agenda", when:"prox", free:false, cat:null, reg:null, open:new Set(), mapZoom:"perto", mapSel:null };
+const ST = { tab:"agenda", when:"prox", free:false, near:false, cat:null, reg:null, open:new Set(), mapZoom:"perto", mapSel:null };
 try{ const t = load("tab"); if(t && ["agenda","voce","mapa","lugares"].includes(t)) ST.tab = t; }catch(e){}
-const WHEN = [["prox","Próximos"],["agora","Agora"],["hoje","Hoje"],["amanha","Amanhã"],["fds","Fim de semana"],["7d","7 dias"]];
+const WHEN = [["prox","Em breve"],["agora","Agora"],["hoje","Hoje"],["amanha","Amanhã"],["fds","Fim de semana"],["7d","7 dias"]];
+
+// ---------- perto de mim ----------
+// Localização real do usuário (navigator.geolocation), distância em linha reta até lat/lng de cada lugar.
+const GEO = { pos:null, status:"idle", msg:"", radius:0 };
+function kmTo(v){
+  if(!GEO.pos) return Infinity;
+  const R = 6371, rad = Math.PI/180;
+  const dLat = (v.lat-GEO.pos.lat)*rad, dLng = (v.lng-GEO.pos.lng)*rad;
+  const h = Math.sin(dLat/2)**2 + Math.cos(GEO.pos.lat*rad)*Math.cos(v.lat*rad)*Math.sin(dLng/2)**2;
+  return 2*R*Math.asin(Math.sqrt(h));
+}
+function fmtKm(k){
+  if(!isFinite(k)) return "";
+  if(k<1) return Math.max(50, Math.round(k*1000/50)*50)+" m";
+  return (k<10 ? k.toFixed(1).replace(".",",") : String(Math.round(k)))+" km";
+}
+// Raio: 5 km, ou até o 8º lugar mais perto se houver poucos lugares nesse raio.
+function nearRadius(){
+  const ds = V.map(kmTo).sort((a,b)=>a-b);
+  return Math.max(5, ds[Math.min(7, ds.length-1)] || 5);
+}
+function askGeo(after){
+  if(!navigator.geolocation || window.isSecureContext===false){
+    GEO.status = "err"; GEO.msg = "Este navegador não informa a localização. Use os filtros de região para achar o que fica perto.";
+    render(); return;
+  }
+  GEO.status = "wait"; render();
+  navigator.geolocation.getCurrentPosition(p=>{
+    GEO.pos = {lat:p.coords.latitude, lng:p.coords.longitude};
+    GEO.status = "ok"; GEO.msg = ""; GEO.radius = nearRadius();
+    ST.near = true;
+    if(after) after();
+    render();
+  }, err=>{
+    GEO.status = "err"; ST.near = false;
+    GEO.msg = err && err.code===1
+      ? "Você não liberou a localização. Para ver o que está perto, permita a localização deste site no navegador e toque de novo em “Perto de mim”. Enquanto isso, filtre por região."
+      : "Não deu para achar sua localização agora. Tente de novo em instantes ou filtre por região.";
+    render();
+  }, {enableHighAccuracy:false, timeout:12000, maximumAge:300000});
+}
+function toggleNear(after){
+  if(ST.near){ ST.near = false; render(); return; }
+  if(GEO.pos){ ST.near = true; if(after) after(); render(); return; }
+  if(GEO.status!=="wait") askGeo(after);
+}
+function nearNote(){
+  if(GEO.status==="wait") return `<p class="note">Procurando sua localização…</p>`;
+  if(GEO.status==="err") return `<p class="note"><b>Sem localização.</b> ${esc(GEO.msg)}</p>`;
+  if(!ST.near || !GEO.pos) return "";
+  const longe = V.every(v=>kmTo(v)>40);
+  return `<p class="note"><b>Perto de você:</b> lugares até ${fmtKm(GEO.radius)}, do mais perto ao mais longe em cada dia. Distância em linha reta, com posições aproximadas.${longe?" Você parece estar longe do Rio, então tudo aparece bem distante.":""}</p>`;
+}
 
 function passWhen(x){
   const w = ST.when, i = x.day.i;
@@ -638,7 +693,8 @@ function renderBar(){
   const bar = document.getElementById("bar");
   bar.hidden = (ST.tab==="lugares" || ST.tab==="voce");
   const wr = document.getElementById("whenRow");
-  wr.innerHTML = WHEN.map(([k,l])=>`<button class="chip when" data-when="${k}" aria-pressed="${ST.when===k}">${l}</button>`).join("")
+  wr.innerHTML = `<button class="chip near" id="nearBtn" aria-pressed="${ST.near}">${GEO.status==="wait"?"Localizando…":"📍 Perto de mim"}</button><span class="sep"></span>`
+    + WHEN.map(([k,l])=>`<button class="chip when" data-when="${k}" aria-pressed="${ST.when===k}">${l}</button>`).join("")
     + `<span class="sep"></span><button class="chip free" id="freeBtn" aria-pressed="${ST.free}">Grátis</button>`;
   wr.hidden = ST.tab==="mapa";
   const cr = document.getElementById("catRow");
@@ -663,7 +719,7 @@ function evRow(x){
     <div class="time">${timeHtml}</div>
     <div class="main">
       <button class="title" data-open="${x.key}" aria-expanded="${op}" aria-controls="${did}">${esc(e.t)}</button>
-      <button class="venue" data-open="${x.key}" aria-expanded="${op}" aria-controls="${did}"><b>${esc(v.n)}</b> · ${esc(v.b)} <span class="chev" aria-hidden="true">▾</span><span class="sr">mostrar endereço</span></button>
+      <button class="venue" data-open="${x.key}" aria-expanded="${op}" aria-controls="${did}"><b>${esc(v.n)}</b> · ${esc(v.b)}${ST.near&&GEO.pos?` · <span class="km">${fmtKm(kmTo(v))}</span>`:""} <span class="chev" aria-hidden="true">▾</span><span class="sr">mostrar endereço</span></button>
       <div class="meta">${price}${cats}${conf}${ck}</div>
     </div>
     <div class="acts">
@@ -703,11 +759,11 @@ function renderSections(list, emptyMsg){
 // ---------- views ----------
 function viewAgenda(data){
   let list = data.list.filter(x=>passWhen(x) && passFilters(x));
-  if(ST.when==="prox"){ /* all days */ }
+  if(ST.near && GEO.pos) list = list.filter(x=>kmTo(x.v)<=GEO.radius).sort((a,b)=> a.day.i-b.day.i || kmTo(a.v)-kmTo(b.v) || a.start-b.start);
   const hiddenCount = S.hidden.size;
   const note = `<p class="note"><b>Atualizado com o Instagram das casas em 20/10.</b> Linhas com o selo <b>anunciado no Instagram</b> vieram de posts com data; as demais seguem a programação fixa da roda ou do bar. ≈ é horário aproximado; <b>necessário confirmar</b> pede checagem no perfil antes de sair.</p>`;
-  const msg = ST.when==="agora" ? "Nenhuma roda no ar agora com esses filtros. Tente “Hoje” ou “Próximos”." : "Tire algum filtro para ver mais.";
-  return note + renderSections(list, msg) +
+  const msg = ST.when==="agora" ? "Nenhuma roda no ar agora com esses filtros. Tente “Hoje” ou “Em breve”." : "Tire algum filtro para ver mais.";
+  return note + nearNote() + renderSections(list, msg) +
     (hiddenCount ? `<p class="hiddeninfo">${hiddenCount} evento${hiddenCount>1?"s":""} oculto${hiddenCount>1?"s":""}. <button class="linkbtn" data-unhide="all">Mostrar de novo</button></p>` : "");
 }
 
@@ -720,9 +776,14 @@ function viewVoce(data){
 }
 
 function viewLugares(){
-  let html = `<p class="note">${V.length} lugares. Endereços e dias vêm das fontes linkadas; posições no mapa são aproximadas.</p>`;
-  for(const [rk, rl] of Object.entries(REGS)){
-    const vs = V.filter(v=>v.r===rk).sort((a,b)=>a.n.localeCompare(b.n,"pt"));
+  const byDist = ST.near && GEO.pos;
+  let html = `<p class="note">${V.length} lugares. Endereços e dias vêm das fontes linkadas; posições no mapa são aproximadas.
+    <button class="linkbtn" id="nearBtn">${byDist?"Voltar para a lista por região":GEO.status==="wait"?"Localizando…":"Ordenar pelo mais perto de mim"}</button></p>`;
+  html += (GEO.status==="err" ? nearNote() : "");
+  const groups = byDist
+    ? [["perto","Do mais perto ao mais longe", V.slice().sort((a,b)=>kmTo(a)-kmTo(b))]]
+    : Object.entries(REGS).map(([rk,rl])=>[rk, rl, V.filter(v=>v.r===rk).sort((a,b)=>a.n.localeCompare(b.n,"pt"))]);
+  for(const [rk, rl, vs] of groups){
     html += `<div class="reg"><h2>${rl}</h2>`;
     for(const v of vs){
       const evs = E.filter(e=>e.v===v.id);
@@ -735,7 +796,7 @@ function viewLugares(){
       const src = srcUrl(srcKey);
       const ig = v.ig ? `<a href="https://www.instagram.com/${v.ig}/" target="_blank" rel="noopener">@${esc(v.ig)}</a>` : "";
       html += `<div class="place" id="p-${v.id}"><h3>${esc(v.n)}</h3>
-        <div class="sub">${TIPO[v.t]} · ${esc(v.b)} · ${esc(v.a)}</div>
+        <div class="sub">${byDist?`<b class="km">${fmtKm(kmTo(v))}</b> · `:""}${TIPO[v.t]} · ${esc(v.b)} · ${esc(v.a)}</div>
         <ul>${items}${varTxt}${cervaHtml(v,"li")}${ditems?`<li><span class="when"><b>Próximas datas anunciadas</b></span></li>`+ditems:""}</ul>
         <div class="links"><a href="${mapsUrl(v)}" target="_blank" rel="noopener">Google Maps</a>${ig}${src && !src.includes("instagram.com")?`<a href="${src}" target="_blank" rel="noopener">Fonte</a>`:""}</div></div>`;
     }
@@ -794,7 +855,14 @@ function mountMap(){
       M.dark = dark;
     }
     M.map.invalidateSize();
-    if(M.zoomKey!==ST.mapZoom){ M.map.fitBounds(EXT[ST.mapZoom], {padding:[8,8]}); M.zoomKey = ST.mapZoom; }
+    if(M.zoomKey!==ST.mapZoom){
+      let ext = EXT[ST.mapZoom];
+      if(ST.mapZoom==="eu" && GEO.pos){
+        const pts = V.slice().sort((a,b)=>kmTo(a)-kmTo(b)).slice(0,8).map(v=>[v.lat,v.lng]).concat([[GEO.pos.lat,GEO.pos.lng]]);
+        ext = [[Math.min(...pts.map(p=>p[0])), Math.min(...pts.map(p=>p[1]))], [Math.max(...pts.map(p=>p[0])), Math.max(...pts.map(p=>p[1]))]];
+      }
+      if(ext){ M.map.fitBounds(ext, {padding:[24,24], maxZoom:16}); M.zoomKey = ST.mapZoom; }
+    }
     const azul = cssVar("--azul"), surf = cssVar("--surface"), muted = cssVar("--muted"), gel = cssVar("--gelada"), ink = cssVar("--ink");
     M.layer.clearLayers();
     const vis = mapVisible();
@@ -808,6 +876,7 @@ function mountMap(){
       L.circleMarker([v.lat, v.lng], style).bindTooltip(v.n, {direction:"top", offset:[0,-6]})
         .on("click", ()=>{ ST.mapSel = ST.mapSel===v.id ? null : v.id; render(); }).addTo(M.layer);
     }
+    if(GEO.pos) L.circleMarker([GEO.pos.lat, GEO.pos.lng], {fillColor:ink, color:surf, weight:3, fillOpacity:1, radius:8}).bindTooltip("Você está aqui", {direction:"top", offset:[0,-6]}).addTo(M.layer);
     const sv = ST.mapSel && VBY[ST.mapSel];
     if(sv && !M.map.getBounds().pad(-0.1).contains([sv.lat, sv.lng])) M.map.panTo([sv.lat, sv.lng]);
   }).catch(()=>{
@@ -830,8 +899,10 @@ function viewMapa(data){
     <div class="maptools">
       <button class="chip sm" data-zoom="perto" aria-pressed="${ST.mapZoom==="perto"}">Centro e Zona Sul</button>
       <button class="chip sm" data-zoom="cidade" aria-pressed="${ST.mapZoom==="cidade"}">Cidade toda</button>
+      <button class="chip sm" data-zoom="eu" aria-pressed="${ST.mapZoom==="eu" && !!GEO.pos}">${GEO.status==="wait"?"Localizando…":"📍 Perto de mim"}</button>
       <span class="hint">${vis.length} lugares · posições aproximadas</span>
     </div>
+    ${GEO.status==="err"||GEO.status==="wait" ? nearNote() : ""}
     <div class="mapbox" id="mapslot"></div>
     <div class="mapcard">${card}</div>
   </div>`;
@@ -881,6 +952,7 @@ document.addEventListener("click", ev=>{
   if(d.tab){ ST.tab = d.tab; save("tab", ST.tab); render(); window.scrollTo({top:0}); return; }
   if(d.when){ ST.when = d.when; render(); return; }
   if(t.id==="freeBtn"){ ST.free = !ST.free; render(); return; }
+  if(t.id==="nearBtn"){ toggleNear(); return; }
   if(d.cat){ ST.cat = ST.cat===d.cat ? null : d.cat; render(); return; }
   if(d.reg){ ST.reg = ST.reg===d.reg ? null : d.reg; render(); return; }
   if(d.open){ toggleRow(d.open); return; }
@@ -888,6 +960,7 @@ document.addEventListener("click", ev=>{
   if(d.going){ S.going.has(d.going) ? S.going.delete(d.going) : S.going.add(d.going); persist(); render(); return; }
   if(d.hide){ S.hidden.add(d.hide); persist(); render(); return; }
   if(d.unhide){ if(d.unhide==="all") S.hidden.clear(); else S.hidden.delete(d.unhide); persist(); render(); return; }
+  if(d.zoom==="eu"){ const go = ()=>{ ST.mapZoom = "eu"; M.zoomKey = null; }; if(GEO.pos){ go(); render(); } else if(GEO.status!=="wait") askGeo(go); return; }
   if(d.zoom){ ST.mapZoom = d.zoom; M.zoomKey = null; render(); return; }
   if(d.goto){ ST.tab = "lugares"; render(); const el = document.getElementById("p-"+d.goto); if(el) el.scrollIntoView({block:"start"}); return; }
   if(d.pin){ ST.mapSel = ST.mapSel===d.pin ? null : d.pin; render(); return; }
