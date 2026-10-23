@@ -625,7 +625,7 @@ const WHEN = [["prox","Em breve"],["agora","Agora"],["hoje","Hoje"],["amanha","A
 
 // ---------- perto de mim ----------
 // Localização real do usuário (navigator.geolocation), distância em linha reta até lat/lng de cada lugar.
-const GEO = { pos:null, status:"idle", msg:"", radius:0, src:"", label:"", perm:"" };
+const GEO = { pos:null, status:"idle", msg:"", radius:0, src:"", label:"", perm:"", req:0 };
 // Centro aproximado dos bairros, para quando o navegador não passa a localização.
 const BAIRROS = [
   ["Centro",-22.9045,-43.1795],["Lapa",-22.9130,-43.1810],["Santa Teresa",-22.9200,-43.1890],["Glória",-22.9200,-43.1760],
@@ -658,6 +658,7 @@ function nearRadius(){
 }
 function useBairro(nome, after){
   const b = BAIRROS.find(x=>x[0]===nome); if(!b) return;
+  GEO.req++;
   GEO.pos = {lat:b[1], lng:b[2]}; GEO.src = "bairro"; GEO.label = b[0];
   GEO.status = "ok"; GEO.msg = ""; GEO.radius = nearRadius();
   ST.near = true; save("bairro", b[0]);
@@ -677,32 +678,44 @@ const MSG_SISTEMA = "O site tem permissão, mas o aparelho não está entregando
 function permAgora(){
   try{ return navigator.permissions.query({name:"geolocation"}).then(p=>p.state, ()=>""); }catch(e){ return Promise.resolve(""); }
 }
+// Computador sem GPS: a posição vem da rede Wi-Fi e pode demorar. Usa posição guardada se houver,
+// espera até 30 s e, se ainda não vier, tenta acompanhar a posição por mais 20 s.
 function askGeo(after){
   if(!navigator.geolocation || window.isSecureContext===false){
     geoFail("Este navegador não informa a localização. Escolha seu bairro aqui embaixo."); return;
   }
+  const req = ++GEO.req;
   GEO.status = "wait"; render();
-  let done = false;
-  const fim = setTimeout(()=>{ if(!done){ done = true; geoFail("A localização está demorando. Escolha seu bairro aqui embaixo ou tente de novo."); } }, 15000);
-  navigator.geolocation.getCurrentPosition(p=>{
-    if(done) return; done = true; clearTimeout(fim);
+  let watch = null;
+  const vivo = ()=> req===GEO.req && GEO.status==="wait";
+  const parar = ()=>{ if(watch!==null){ navigator.geolocation.clearWatch(watch); watch = null; } };
+  const ok = p=>{
+    if(!vivo()) return; parar();
     GEO.pos = {lat:p.coords.latitude, lng:p.coords.longitude}; GEO.src = "gps"; GEO.label = "";
     GEO.status = "ok"; GEO.msg = ""; GEO.radius = nearRadius();
     ST.near = true;
     if(after) after();
     render();
-  }, err=>{
-    if(done) return; done = true; clearTimeout(fim);
+  };
+  const falha = err=>{
+    if(!vivo()) return; parar();
     const cod = err ? err.code : 0;
     const det = ` (erro ${cod}${err && err.message ? ": "+err.message : ""})`;
     if(cod===1){
-      permAgora().then(st=>{ GEO.perm = st; geoFail((st==="granted" ? MSG_SISTEMA : st==="denied" ? MSG_BLOQ : MSG_SISTEMA) + det); });
+      permAgora().then(st=>{ if(req!==GEO.req) return; GEO.perm = st; geoFail((st==="denied" ? MSG_BLOQ : MSG_SISTEMA) + det); });
     } else if(cod===2){
       geoFail(MSG_SISTEMA + det);
     } else {
-      geoFail("A localização demorou demais. Tente de novo ou escolha seu bairro aqui embaixo." + det);
+      geoFail("A localização não chegou. Em computador ligado por cabo, sem Wi-Fi, o navegador costuma não achar a posição. Escolha seu bairro aqui embaixo ou tente de novo." + det);
     }
-  }, {enableHighAccuracy:false, timeout:12000, maximumAge:300000});
+  };
+  navigator.geolocation.getCurrentPosition(ok, err=>{
+    if(!vivo()) return;
+    if(err && err.code===3){
+      watch = navigator.geolocation.watchPosition(ok, e=>{ if(e && e.code!==3) falha(e); }, {enableHighAccuracy:false, maximumAge:Infinity});
+      setTimeout(()=>falha(err), 20000);
+    } else falha(err);
+  }, {enableHighAccuracy:false, timeout:30000, maximumAge:Infinity});
 }
 function toggleNear(after){
   if(ST.near){ ST.near = false; render(); return; }
@@ -715,7 +728,7 @@ function bairroPicker(){
   return `<span class="pick"><label for="bairroSel">Seu bairro:</label><select id="bairroSel"><option value="">Escolha…</option>${BAIRROS.map(b=>`<option${b[0]===salvo?" selected":""}>${b[0]}</option>`).join("")}</select><button class="linkbtn" id="geoRetry">Tentar localização de novo</button></span>`;
 }
 function nearNote(){
-  if(GEO.status==="wait") return `<p class="note nearbox">Procurando sua localização… Se o navegador perguntar, toque em Permitir.</p>`;
+  if(GEO.status==="wait") return `<div class="note nearbox">Procurando sua localização… Se o navegador perguntar, toque em Permitir. No computador pode levar até 30 segundos. Se preferir, escolha seu bairro:${bairroPicker()}</div>`;
   if(GEO.status==="err") return `<div class="note nearbox"><b>Sem localização.</b> ${esc(GEO.msg)}${bairroPicker()}</div>`;
   if(!ST.near || !GEO.pos) return "";
   const longe = V.every(v=>kmTo(v)>40);
