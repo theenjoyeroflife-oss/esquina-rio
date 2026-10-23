@@ -90,6 +90,9 @@ nav.tabs .n{font-variant-numeric:tabular-nums; font-size:12px; opacity:.8; margi
 
 .note{margin:16px 0 0; padding:10px 12px; border:1px dashed var(--line); border-radius:8px; color:var(--muted); font-size:13px}
 .note b{color:var(--ink); font-weight:600}
+.nearbox{border:1px solid var(--azul); border-style:solid; color:var(--ink)}
+.nearbox .pick{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:8px}
+.nearbox select{font:inherit; font-size:14px; padding:6px 10px; border-radius:8px; border:1px solid var(--line); background:var(--surface); color:var(--ink); max-width:100%}
 
 /* Agenda */
 section.day{margin-top:26px}
@@ -344,7 +347,7 @@ const V = [
  {id:"sen", n:"Armazém Senado", b:"Centro", r:"centro", t:"bar", bq:1, a:"Rua do Senado, esquina com Av. Gomes Freire", lat:-22.9094, lng:-43.1848, cv:{p:"cerveja de garrafa R$ 13 a 18", s:"cvSen", m:"Time Out, nov/2025"}},
  {id:"omar", n:"Bar do Omar", b:"Santo Cristo", r:"centro", t:"bar", bq:1, a:"Rua Sara, 114 · Morro do Pinto", lat:-22.9001, lng:-43.2028, cv:{p:"R$ 10 a 20", s:"cvNoite", m:"média de bar de bairro, Rio Times set/2026", est:1}, ig:"bardoomar"},
  {id:"vaca", n:"Vaca Atolada", b:"Lapa", r:"centro", t:"bar", bq:1, a:"Av. Gomes Freire, 533", lat:-22.9127, lng:-43.1859, cv:{p:"R$ 15 a 30", s:"cvNoite", m:"média de casa de música, Rio Times set/2026", est:1}, ig:"vacaatolada.oficial"},
- {id:"gema", n:"Carioca da Gema", b:"Lapa", r:"centro", t:"bar", a:"Av. Mem de Sá, 79", lat:-22.9131, lng:-43.1812, cv:{p:"long neck R$ 15 a 16 · 600 ml R$ 17 a 19", s:"cvGema", m:"cardápio do site"}, ig:"barcariocadagema"},
+ {id:"gema", n:"Carioca da Gema", b:"Lapa", r:"centro", t:"bar", a:"Av. Mem de Sá, 79", lat:-22.9131, lng:-43.1812, cv:{p:"R$ 15 a 30 · no cardápio: long neck R$ 15 a 16, garrafa de 600 ml R$ 17 a 19", s:"cvGema", m:"cardápio do site"}, ig:"barcariocadagema"},
  {id:"trap", n:"Trapiche Gamboa", b:"Saúde", r:"centro", t:"bar", a:"Rua Sacadura Cabral, 155", lat:-22.8984, lng:-43.1843, cv:{p:"R$ 15 a 30", s:"cvNoite", m:"média de casa de música, Rio Times set/2026", est:1}},
  {id:"cac", n:"Cacique de Ramos", b:"Olaria", r:"norte", t:"quadra", a:"Rua Uranos, 1326", lat:-22.8456, lng:-43.2654, cv:{p:"R$ 10 a 20", s:"cvNoite", m:"média de bar de bairro, Rio Times set/2026", est:1}, ig:"cacique_de_ramos"},
  {id:"mang", n:"Terreiro de Mangueira", b:"Mangueira", r:"norte", t:"laje", a:"Rua Visconde de Niterói, 512", lat:-22.9069, lng:-43.2301, cv:{p:"R$ 10 a 20", s:"cvNoite", m:"média de bar de bairro, Rio Times set/2026", est:1}, ig:"terreirodemangueira"},
@@ -607,7 +610,7 @@ function cervaHtml(v, tag){
 }
 function cervaCurta(v){
   if(!v.cv) return "";
-  const n = (v.cv.p.match(/\d+(?:,\d+)?/g)||[]).map(x=>+x.replace(",",".")).filter(x=>x>=3);
+  const n = (v.cv.p.replace(/\d+\s*ml/gi,"").match(/\d+(?:,\d+)?/g)||[]).map(x=>+x.replace(",",".")).filter(x=>x>=3 && x<200);
   if(!n.length) return "";
   const lo = Math.min(...n), hi = Math.max(...n);
   const faixa = lo===hi ? (v.cv.p.includes("a partir")?"R$ "+lo+"+":"R$ "+lo) : "R$ "+lo+"–"+hi;
@@ -622,7 +625,20 @@ const WHEN = [["prox","Em breve"],["agora","Agora"],["hoje","Hoje"],["amanha","A
 
 // ---------- perto de mim ----------
 // Localização real do usuário (navigator.geolocation), distância em linha reta até lat/lng de cada lugar.
-const GEO = { pos:null, status:"idle", msg:"", radius:0 };
+const GEO = { pos:null, status:"idle", msg:"", radius:0, src:"", label:"", perm:"" };
+// Centro aproximado dos bairros, para quando o navegador não passa a localização.
+const BAIRROS = [
+  ["Centro",-22.9045,-43.1795],["Lapa",-22.9130,-43.1810],["Santa Teresa",-22.9200,-43.1890],["Glória",-22.9200,-43.1760],
+  ["Catete",-22.9260,-43.1770],["Flamengo",-22.9330,-43.1760],["Laranjeiras",-22.9375,-43.1890],["Botafogo",-22.9510,-43.1840],
+  ["Humaitá",-22.9560,-43.1980],["Urca",-22.9500,-43.1650],["Copacabana",-22.9710,-43.1860],["Ipanema",-22.9840,-43.2050],
+  ["Leblon",-22.9840,-43.2240],["Lagoa",-22.9730,-43.2030],["Jardim Botânico",-22.9660,-43.2170],["Gávea",-22.9790,-43.2310],
+  ["São Conrado",-22.9990,-43.2620],["Saúde e Gamboa",-22.8960,-43.1880],["Santo Cristo",-22.8975,-43.2065],["Estácio",-22.9130,-43.2040],
+  ["Rio Comprido",-22.9220,-43.2120],["Tijuca",-22.9250,-43.2330],["Maracanã",-22.9120,-43.2300],["Vila Isabel",-22.9160,-43.2470],
+  ["Grajaú",-22.9220,-43.2600],["São Cristóvão",-22.8990,-43.2230],["Méier",-22.9020,-43.2800],["Penha e Olaria",-22.8430,-43.2780],
+  ["Madureira",-22.8730,-43.3390],["Ilha do Governador",-22.8030,-43.2000],["Jacarepaguá",-22.9600,-43.3500],["Barra da Tijuca",-23.0000,-43.3660],
+  ["Recreio",-23.0200,-43.4670],["Realengo",-22.8790,-43.4290],["Campo Grande",-22.9020,-43.5600]
+];
+try{ if(navigator.permissions && navigator.permissions.query){ navigator.permissions.query({name:"geolocation"}).then(p=>{ GEO.perm = p.state; p.onchange = ()=>{ GEO.perm = p.state; }; }).catch(()=>{}); } }catch(e){}
 function kmTo(v){
   if(!GEO.pos) return Infinity;
   const R = 6371, rad = Math.PI/180;
@@ -640,37 +656,61 @@ function nearRadius(){
   const ds = V.map(kmTo).sort((a,b)=>a-b);
   return Math.max(5, ds[Math.min(7, ds.length-1)] || 5);
 }
+function useBairro(nome, after){
+  const b = BAIRROS.find(x=>x[0]===nome); if(!b) return;
+  GEO.pos = {lat:b[1], lng:b[2]}; GEO.src = "bairro"; GEO.label = b[0];
+  GEO.status = "ok"; GEO.msg = ""; GEO.radius = nearRadius();
+  ST.near = true; save("bairro", b[0]);
+  if(after) after();
+  render();
+}
+function geoFail(msg){
+  GEO.status = "err"; ST.near = false; GEO.msg = msg;
+  render();
+  // Mostra o aviso logo abaixo do botão, mesmo se a página estiver rolada.
+  const box = document.querySelector(".nearbox");
+  if(box){ const r = box.getBoundingClientRect(); if(r.top<0 || r.bottom>innerHeight) box.scrollIntoView({block:"center", behavior:"smooth"}); }
+}
+const MSG_BLOQ = "O navegador está bloqueando a localização deste site. Para liberar, toque no cadeado (ou no ícone ao lado do endereço), vá em Localização e escolha Permitir. No iPhone, confira também em Ajustes › Privacidade › Serviços de Localização › Safari. Ou escolha seu bairro aqui embaixo.";
 function askGeo(after){
   if(!navigator.geolocation || window.isSecureContext===false){
-    GEO.status = "err"; GEO.msg = "Este navegador não informa a localização. Use os filtros de região para achar o que fica perto.";
-    render(); return;
+    geoFail("Este navegador não informa a localização. Escolha seu bairro aqui embaixo."); return;
   }
+  if(GEO.perm==="denied"){ geoFail(MSG_BLOQ); return; }
   GEO.status = "wait"; render();
+  let done = false;
+  const fim = setTimeout(()=>{ if(!done){ done = true; geoFail("A localização está demorando. Escolha seu bairro aqui embaixo ou tente de novo."); } }, 15000);
   navigator.geolocation.getCurrentPosition(p=>{
-    GEO.pos = {lat:p.coords.latitude, lng:p.coords.longitude};
+    if(done) return; done = true; clearTimeout(fim);
+    GEO.pos = {lat:p.coords.latitude, lng:p.coords.longitude}; GEO.src = "gps"; GEO.label = "";
     GEO.status = "ok"; GEO.msg = ""; GEO.radius = nearRadius();
     ST.near = true;
     if(after) after();
     render();
   }, err=>{
-    GEO.status = "err"; ST.near = false;
-    GEO.msg = err && err.code===1
-      ? "Você não liberou a localização. Para ver o que está perto, permita a localização deste site no navegador e toque de novo em “Perto de mim”. Enquanto isso, filtre por região."
-      : "Não deu para achar sua localização agora. Tente de novo em instantes ou filtre por região.";
-    render();
+    if(done) return; done = true; clearTimeout(fim);
+    geoFail(err && err.code===1 ? MSG_BLOQ : "Não deu para achar sua localização agora. Escolha seu bairro aqui embaixo ou tente de novo.");
   }, {enableHighAccuracy:false, timeout:12000, maximumAge:300000});
 }
 function toggleNear(after){
   if(ST.near){ ST.near = false; render(); return; }
   if(GEO.pos){ ST.near = true; if(after) after(); render(); return; }
+  const salvo = load("bairro");
+  if(GEO.perm==="denied" && salvo && BAIRROS.some(b=>b[0]===salvo)){ useBairro(salvo, after); return; }
   if(GEO.status!=="wait") askGeo(after);
 }
+function bairroPicker(){
+  const salvo = load("bairro");
+  return `<span class="pick"><label for="bairroSel">Seu bairro:</label><select id="bairroSel"><option value="">Escolha…</option>${BAIRROS.map(b=>`<option${b[0]===salvo?" selected":""}>${b[0]}</option>`).join("")}</select><button class="linkbtn" id="geoRetry">Tentar localização de novo</button></span>`;
+}
 function nearNote(){
-  if(GEO.status==="wait") return `<p class="note">Procurando sua localização…</p>`;
-  if(GEO.status==="err") return `<p class="note"><b>Sem localização.</b> ${esc(GEO.msg)}</p>`;
+  if(GEO.status==="wait") return `<p class="note nearbox">Procurando sua localização… Se o navegador perguntar, toque em Permitir.</p>`;
+  if(GEO.status==="err") return `<div class="note nearbox"><b>Sem localização.</b> ${esc(GEO.msg)}${bairroPicker()}</div>`;
   if(!ST.near || !GEO.pos) return "";
   const longe = V.every(v=>kmTo(v)>40);
-  return `<p class="note"><b>Perto de você:</b> lugares até ${fmtKm(GEO.radius)}, com os botequins primeiro e depois do mais perto ao mais longe em cada dia. Distância em linha reta, com posições aproximadas.${longe?" Você parece estar longe do Rio, então tudo aparece bem distante.":""}</p>`;
+  const onde = GEO.src==="bairro" ? `perto de ${esc(GEO.label)} (centro do bairro)` : "perto de você";
+  const trocar = GEO.src==="bairro" ? ` <button class="linkbtn" id="geoRetry">Usar minha localização</button>` : "";
+  return `<div class="note nearbox"><b>Mostrando ${onde}:</b> lugares até ${fmtKm(GEO.radius)}, com os botequins primeiro e depois do mais perto ao mais longe em cada dia. Distância em linha reta, com posições aproximadas.${longe?" Você parece estar longe do Rio, então tudo aparece bem distante.":""}${trocar}</div>`;
 }
 
 function passWhen(x){
@@ -784,7 +824,7 @@ function viewAgenda(data){
   const hiddenCount = S.hidden.size;
   const note = `<p class="note"><b>Atualizado com o Instagram das casas em 20/10.</b> Linhas com o selo <b>anunciado no Instagram</b> vieram de posts com data; as demais seguem a programação fixa da roda ou do bar. ≈ é horário aproximado; <b>necessário confirmar</b> pede checagem no perfil antes de sair. Em cada dia, os <b>botequins</b> vêm primeiro.</p>`;
   const msg = ST.when==="agora" ? "Nenhuma roda no ar agora com esses filtros. Tente “Hoje” ou “Em breve”." : "Tire algum filtro para ver mais.";
-  return note + nearNote() + renderSections(list, msg) +
+  return nearNote() + note + renderSections(list, msg) +
     (hiddenCount ? `<p class="hiddeninfo">${hiddenCount} evento${hiddenCount>1?"s":""} oculto${hiddenCount>1?"s":""}. <button class="linkbtn" data-unhide="all">Mostrar de novo</button></p>` : "");
 }
 
@@ -800,7 +840,7 @@ function viewLugares(){
   const byDist = ST.near && GEO.pos;
   let html = `<p class="note">${V.length} lugares. Endereços e dias vêm das fontes linkadas; posições no mapa são aproximadas.
     <button class="linkbtn" id="nearBtn">${byDist?"Voltar para a lista por região":GEO.status==="wait"?"Localizando…":"Ordenar pelo mais perto de mim"}</button></p>`;
-  html += (GEO.status==="err" ? nearNote() : "");
+  html += (GEO.status==="err" || (ST.near && GEO.pos) ? nearNote() : "");
   const groups = byDist
     ? [["perto","Mais perto de você", V.slice().sort((a,b)=>bqOrd(a)-bqOrd(b) || kmTo(a)-kmTo(b))]]
     : Object.entries(REGS).map(([rk,rl])=>[rk, rl, V.filter(v=>v.r===rk).sort((a,b)=>bqOrd(a)-bqOrd(b) || a.n.localeCompare(b.n,"pt"))]);
@@ -923,7 +963,7 @@ function viewMapa(data){
       <button class="chip sm" data-zoom="eu" aria-pressed="${ST.mapZoom==="eu" && !!GEO.pos}">${GEO.status==="wait"?"Localizando…":"📍 Perto de mim"}</button>
       <span class="hint">${vis.length} lugares · posições aproximadas</span>
     </div>
-    ${GEO.status==="err"||GEO.status==="wait" ? nearNote() : ""}
+    ${GEO.status==="err"||GEO.status==="wait"||(ST.mapZoom==="eu"&&GEO.src==="bairro") ? nearNote() : ""}
     <div class="mapbox" id="mapslot"></div>
     <div class="mapcard">${card}</div>
   </div>`;
@@ -974,6 +1014,7 @@ document.addEventListener("click", ev=>{
   if(d.when){ ST.when = d.when; render(); return; }
   if(t.id==="freeBtn"){ ST.free = !ST.free; render(); return; }
   if(t.id==="nearBtn"){ toggleNear(); return; }
+  if(t.id==="geoRetry"){ GEO.pos = null; GEO.src = ""; const z = ST.tab==="mapa" ? ()=>{ ST.mapZoom = "eu"; M.zoomKey = null; } : null; if(GEO.perm==="denied"){ geoFail(MSG_BLOQ); } else askGeo(z); return; }
   if(d.cat){ ST.cat = ST.cat===d.cat ? null : d.cat; render(); return; }
   if(d.reg){ ST.reg = ST.reg===d.reg ? null : d.reg; render(); return; }
   if(d.open){ toggleRow(d.open); return; }
@@ -985,6 +1026,9 @@ document.addEventListener("click", ev=>{
   if(d.zoom){ ST.mapZoom = d.zoom; M.zoomKey = null; render(); return; }
   if(d.goto){ ST.tab = "lugares"; render(); const el = document.getElementById("p-"+d.goto); if(el) el.scrollIntoView({block:"start"}); return; }
   if(d.pin){ ST.mapSel = ST.mapSel===d.pin ? null : d.pin; render(); return; }
+});
+document.addEventListener("change", ev=>{
+  if(ev.target.id==="bairroSel" && ev.target.value){ const z = ST.tab==="mapa" ? ()=>{ ST.mapZoom = "eu"; M.zoomKey = null; } : null; useBairro(ev.target.value, z); }
 });
 document.addEventListener("keydown", ev=>{
   if((ev.key==="Enter"||ev.key===" ") && ev.target.classList && ev.target.classList.contains("pin")){ ev.preventDefault(); ev.target.dispatchEvent(new MouseEvent("click",{bubbles:true})); }
