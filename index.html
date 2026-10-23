@@ -671,12 +671,16 @@ function geoFail(msg){
   const box = document.querySelector(".nearbox");
   if(box){ const r = box.getBoundingClientRect(); if(r.top<0 || r.bottom>innerHeight) box.scrollIntoView({block:"center", behavior:"smooth"}); }
 }
-const MSG_BLOQ = "O navegador está bloqueando a localização deste site. Para liberar, toque no cadeado (ou no ícone ao lado do endereço), vá em Localização e escolha Permitir. No iPhone, confira também em Ajustes › Privacidade › Serviços de Localização › Safari. Ou escolha seu bairro aqui embaixo.";
+const MSG_BLOQ = "O navegador está bloqueando a localização deste site. Para liberar, toque no cadeado ao lado do endereço, vá em Localização e escolha Permitir, depois toque de novo em “Perto de mim”. Ou escolha seu bairro aqui embaixo.";
+// Permissão do site liberada, mas o sistema não entrega a posição (no Windows o Chrome devolve "negado" quando a localização do sistema está desligada).
+const MSG_SISTEMA = "O site tem permissão, mas o aparelho não está entregando a localização. No Windows: Configurações › Privacidade e segurança › Localização, ligue “Serviços de localização” e “Permitir que aplicativos da área de trabalho acessem sua localização”. No Android, ligue a Localização no painel rápido. No iPhone: Ajustes › Privacidade › Serviços de Localização, ligado também para o Safari ou o Chrome. Ou escolha seu bairro aqui embaixo.";
+function permAgora(){
+  try{ return navigator.permissions.query({name:"geolocation"}).then(p=>p.state, ()=>""); }catch(e){ return Promise.resolve(""); }
+}
 function askGeo(after){
   if(!navigator.geolocation || window.isSecureContext===false){
     geoFail("Este navegador não informa a localização. Escolha seu bairro aqui embaixo."); return;
   }
-  if(GEO.perm==="denied"){ geoFail(MSG_BLOQ); return; }
   GEO.status = "wait"; render();
   let done = false;
   const fim = setTimeout(()=>{ if(!done){ done = true; geoFail("A localização está demorando. Escolha seu bairro aqui embaixo ou tente de novo."); } }, 15000);
@@ -689,14 +693,21 @@ function askGeo(after){
     render();
   }, err=>{
     if(done) return; done = true; clearTimeout(fim);
-    geoFail(err && err.code===1 ? MSG_BLOQ : "Não deu para achar sua localização agora. Escolha seu bairro aqui embaixo ou tente de novo.");
+    const cod = err ? err.code : 0;
+    const det = ` (erro ${cod}${err && err.message ? ": "+err.message : ""})`;
+    if(cod===1){
+      permAgora().then(st=>{ GEO.perm = st; geoFail((st==="granted" ? MSG_SISTEMA : st==="denied" ? MSG_BLOQ : MSG_SISTEMA) + det); });
+    } else if(cod===2){
+      geoFail(MSG_SISTEMA + det);
+    } else {
+      geoFail("A localização demorou demais. Tente de novo ou escolha seu bairro aqui embaixo." + det);
+    }
   }, {enableHighAccuracy:false, timeout:12000, maximumAge:300000});
 }
 function toggleNear(after){
   if(ST.near){ ST.near = false; render(); return; }
   if(GEO.pos){ ST.near = true; if(after) after(); render(); return; }
   const salvo = load("bairro");
-  if(GEO.perm==="denied" && salvo && BAIRROS.some(b=>b[0]===salvo)){ useBairro(salvo, after); return; }
   if(GEO.status!=="wait") askGeo(after);
 }
 function bairroPicker(){
@@ -1014,7 +1025,7 @@ document.addEventListener("click", ev=>{
   if(d.when){ ST.when = d.when; render(); return; }
   if(t.id==="freeBtn"){ ST.free = !ST.free; render(); return; }
   if(t.id==="nearBtn"){ toggleNear(); return; }
-  if(t.id==="geoRetry"){ GEO.pos = null; GEO.src = ""; const z = ST.tab==="mapa" ? ()=>{ ST.mapZoom = "eu"; M.zoomKey = null; } : null; if(GEO.perm==="denied"){ geoFail(MSG_BLOQ); } else askGeo(z); return; }
+  if(t.id==="geoRetry"){ GEO.pos = null; GEO.src = ""; const z = ST.tab==="mapa" ? ()=>{ ST.mapZoom = "eu"; M.zoomKey = null; } : null; askGeo(z); return; }
   if(d.cat){ ST.cat = ST.cat===d.cat ? null : d.cat; render(); return; }
   if(d.reg){ ST.reg = ST.reg===d.reg ? null : d.reg; render(); return; }
   if(d.open){ toggleRow(d.open); return; }
